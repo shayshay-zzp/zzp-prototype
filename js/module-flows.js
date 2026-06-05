@@ -1,20 +1,26 @@
 /* Quy trình tự động riêng từng module — 1:1 PRD, 4 lớp Data→Intelligence→Action→Automation */
 
-function buildModFlow(pageId, name, trigger, steps) {
+function buildModFlow(pageId, name, trigger, steps, opts = {}) {
   const primary = PAGE_PRIMARY_FLOW[pageId];
   const global = primary ? AUTOMATION_FLOWS.find(f => f.id === primary) : null;
   return {
     id: `MOD_${pageId.replace(/-/g, '_').toUpperCase()}`,
     name,
-    desc: `Quy trình tự động · ${viPage(pageId)}`,
+    desc: opts.desc || (global ? global.desc : `Tích hợp TikTok · ${viPage(pageId)}`),
+    platform: opts.platform || global?.platform || 'cross',
+    triggerType: opts.triggerType || global?.triggerType || 'rule',
     modules: global ? global.modules : [pageId],
     trigger,
     icon: global ? (FLOW_ICONS[global.id] || global.icon) : 'workflow',
     pageId,
     linkedFlow: primary || null,
+    ruleId: global?.ruleId || null,
     steps: steps.map((s, i) => ({
       id: `s${i + 1}`,
+      phase: s.phase || global?.steps?.[i]?.phase || ['event', 'sync', 'analyze', 'execute'][Math.min(i, 3)],
       layer: s.layer || ['data', 'intelligence', 'action', 'automation'][Math.min(i, 3)],
+      integration: s.integration || '',
+      detail: s.detail || '',
       ...s
     }))
   };
@@ -268,12 +274,12 @@ const MODULE_FLOWS = {
     { layer: 'action', label: 'Batch create actions', module: 'actions', action: '4 new actions in queue' },
     { layer: 'automation', label: 'FLOW_OPTIMIZE full', module: 'opportunities', action: 'Update opportunity status' }
   ]),
-  workflows: buildModFlow('workflows', 'Select flow → Run → Monitor → Complete', 'user hoặc auto trigger', [
-    { layer: 'data', label: 'Load 8 automation flows', module: 'workflows', action: 'AUTOMATION_FLOWS catalog' },
-    { layer: 'action', label: 'Run step-by-step', module: 'workflows', action: 'Modal runner · side effects' },
-    { layer: 'automation', label: 'Cross-module chain', module: 'workflows', action: 'Navigate steps · update data' },
-    { layer: 'data', label: 'Audit trail', module: 'audit', action: 'Log completion · notify' }
-  ]),
+  workflows: buildModFlow('workflows', 'Trung tâm tích hợp TikTok', 'Kích hoạt thủ công hoặc theo quy tắc', [
+    { phase: 'sync', label: 'Kiểm tra kết nối TikTok Shop & Ads', integration: 'OAuth + Webhook', module: 'settings', action: '3 nguồn live · độ trễ 2-5 giây · token còn hạn', detail: 'Seller Center · Ads Manager · Affiliate Center' },
+    { phase: 'analyze', label: 'Chọn quy trình theo tình huống', integration: 'Workflow Catalog', module: 'workflows', action: '8 luồng tích hợp · shop / ads / affiliate', detail: 'Mỗi luồng gắn quy tắc tự động hoặc lịch hẹn' },
+    { phase: 'execute', label: 'Thực thi từng bước trên TikTok', integration: 'Write-back', module: 'workflows', action: 'Pause Ads · cập nhật tồn · fulfillment · sample', detail: 'Chờ duyệt owner trước thay đổi budget lớn' },
+    { phase: 'confirm', label: 'Ghi audit & thông báo hoàn tất', integration: 'Audit', module: 'audit', action: 'Log · Zalo/In-App · cập nhật dashboard', detail: 'Theo dõi KPI 24-48h sau thực thi' }
+  ], { platform: 'cross', triggerType: 'scheduled' }),
   notifications: buildModFlow('notifications', 'Event → Route channel → Deliver', 'alert or system event', [
     { layer: 'data', label: 'Receive event payload', module: 'notifications', action: 'Alert, flow complete, report' },
     { layer: 'intelligence', label: 'Route by severity', module: 'notifications', action: 'Critical→Zalo · Info→In-App' },

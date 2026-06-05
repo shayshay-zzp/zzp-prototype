@@ -4,7 +4,8 @@ function icon(name, size = 16, cls = '') {
 }
 
 function iconBox(name, size = 18, boxCls = 'bg-slate-100 text-slate-600', iconCls = '') {
-  return `<span class="inline-flex items-center justify-center rounded-lg ${boxCls}" style="width:${size + 14}px;height:${size + 14}px">${icon(name, size, iconCls)}</span>`;
+  const dim = size + 14;
+  return `<span class="ui-icon-box ${boxCls}" style="width:${dim}px;height:${dim}px;min-width:${dim}px;min-height:${dim}px">${icon(name, size, iconCls)}</span>`;
 }
 
 function refreshIcons(root) {

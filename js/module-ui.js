@@ -187,7 +187,7 @@ function updateAutomationFab(pageId) {
   refreshIcons(root);
 }
 
-/** Giữ cho trang workflows / detail — không dùng inline trên module pages */
+/** Workflow card — dùng trên flow detail */
 function renderWorkflowCardInline(f, isPrimary, pageId) {
   return `
     <div class="rounded-xl border ${isPrimary ? 'border-zzp-300 bg-gradient-to-br from-zzp-50/80 to-white shadow-sm' : 'border-slate-200 bg-white'} overflow-hidden">
@@ -195,8 +195,9 @@ function renderWorkflowCardInline(f, isPrimary, pageId) {
         <div class="flex items-center gap-3">
           ${iconBox(FLOW_ICONS[f.id] || 'workflow', 22, 'bg-white text-zzp-600 border border-zzp-100')}
           <div>
-            <p class="font-semibold text-sm">${f.name}${isPrimary ? ' <span class="text-xs text-zzp-600 font-normal">· Ưu tiên</span>' : ''}</p>
+            <p class="font-semibold text-sm">${f.name}${isPrimary ? ' <span class="text-xs text-zzp-600 font-normal">· Tích hợp TikTok</span>' : ''}</p>
             <p class="text-xs text-slate-500 mt-0.5">${f.desc}</p>
+            <p class="text-[10px] text-amber-700 mt-1">${humanTrigger(f.trigger, f.triggerType)}</p>
           </div>
         </div>
         <div class="flex gap-2">

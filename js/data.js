@@ -211,10 +211,11 @@ const ZZP_DATA = {
   },
 
   automationRules: [
-    { id: 'R001', name: 'Cảnh báo tồn kho < 100 sp', trigger: 'stock < 100', action: 'Gửi alert + tạo task nhập hàng', active: true, runs: 12 },
-    { id: 'R002', name: 'Pause Ads khi ROAS < 1.5x', trigger: 'roas < 1.5', action: 'Tạm dừng campaign + notify', active: true, runs: 3 },
-    { id: 'R003', name: 'Báo cáo GMV hàng ngày 8h', trigger: 'cron 08:00', action: 'Email + Zalo report', active: true, runs: 156 },
-    { id: 'R004', name: 'Auto-approve sample cho KOC score > 80', trigger: 'koc.score > 80', action: 'Gửi mẫu tự động', active: false, runs: 0 }
+    { id: 'R001', name: 'Tồn kho Shop < 100 sp', trigger: 'inventory.available < 100', action: 'Webhook → cảnh báo + tạo PO nhập hàng', active: true, runs: 12, platform: 'shop', flowId: 'FLOW_STOCK' },
+    { id: 'R002', name: 'Pause Ads khi ROAS < 1.5x', trigger: 'campaign.roas < 1.5', action: 'Tạm dừng campaign TikTok Ads + notify', active: true, runs: 3, platform: 'ads', flowId: 'FLOW_ADS' },
+    { id: 'R003', name: 'Báo cáo GMV hàng ngày 8h', trigger: 'cron 08:00', action: 'Email + Zalo · dữ liệu TikTok Shop', active: true, runs: 156, platform: 'shop', flowId: null },
+    { id: 'R004', name: 'Auto duyệt sample · KOC score ≥ 80', trigger: 'creator.score >= 80', action: 'Gửi mẫu qua Affiliate Center', active: false, runs: 0, platform: 'affiliate', flowId: 'FLOW_SAMPLE' },
+    { id: 'R005', name: 'SLA giao hàng < 4 giờ', trigger: 'order.sla_hours < 4', action: 'Assign Ops + cập nhật fulfillment Shop', active: true, runs: 28, platform: 'shop', flowId: 'FLOW_ORDER_SLA' }
   ],
 
   actionQueue: [

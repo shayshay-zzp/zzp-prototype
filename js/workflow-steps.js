@@ -13,17 +13,22 @@ function selectWorkflowStep(flowId, stepIndex) {
 
 function renderWorkflowStepTabs(flow, pageId) {
   const active = getWorkflowStepIndex(flow.id);
+  const rule = typeof getFlowRule === 'function' ? getFlowRule(flow) : null;
   return `
     <div class="px-5 py-4">
-      <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Quy trình tự động · ${flow.name}</p>
-      <p class="text-[10px] text-slate-400 mb-3">Bấm từng bước để xem chi tiết và thực hiện</p>
+      <div class="flex flex-wrap items-center gap-2 mb-2">
+        ${typeof renderPlatformBadge === 'function' ? renderPlatformBadge(flow.platform || 'cross') : ''}
+        ${rule ? `<span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">${rule.name}</span>` : ''}
+      </div>
+      <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Tích hợp TikTok · ${flow.name}</p>
+      <p class="text-xs text-slate-500 mb-3">${humanTrigger(flow.trigger, flow.triggerType)} — bấm từng bước để xem chi tiết thực thi</p>
       <div class="flex flex-wrap gap-2">
         ${flow.steps.map((s, i) => `
-          <button type="button" onclick="selectWorkflowStep('${flow.id}', ${i})" class="group flex items-center gap-2 px-3 py-2 rounded-lg border text-left transition-all ${active === i ? 'border-zzp-500 bg-zzp-50 ring-1 ring-zzp-200 shadow-sm' : 'border-slate-200 bg-white hover:border-zzp-400 hover:bg-zzp-50'}">
+          <button type="button" onclick="selectWorkflowStep('${flow.id}', ${i})" class="group flex items-center gap-2 px-3 py-2 rounded-lg border text-left transition-all max-w-[200px] ${active === i ? 'border-zzp-500 bg-zzp-50 ring-1 ring-zzp-200 shadow-sm' : 'border-slate-200 bg-white hover:border-zzp-400 hover:bg-zzp-50'}">
             <span class="w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center shrink-0 ${active === i ? 'bg-zzp-600 text-white' : 'bg-slate-100 group-hover:bg-zzp-500 group-hover:text-white'}">${i + 1}</span>
-            <span class="text-xs">
-              <span class="font-medium block">${s.label}</span>
-              <span class="text-slate-400">${viPage(s.module)}</span>
+            <span class="text-xs min-w-0">
+              <span class="font-medium block truncate">${s.label}</span>
+              <span class="text-slate-400 truncate block">${s.integration || viPage(s.module)}</span>
             </span>
           </button>`).join('')}
       </div>
@@ -45,7 +50,8 @@ function renderWorkflowStepPreview(flow, stepIndex, pageId) {
           <button type="button" onclick="navigate('${step.module}')" class="text-xs text-zzp-600 hover:underline inline-flex items-center gap-1">${icon('external-link', 12)} ${viPage(step.module)}</button>
         </div>
       </div>
-      ${renderFlowStepPanel(flow, stepIndex, pageId || flow.pageId)}
+      ${renderFlowIntegrationStep(flow, stepIndex)}
+      <div class="mt-4">${renderModuleStepBody(step.module, step, flow)}</div>
     </div>`;
 }
 
@@ -293,11 +299,14 @@ function renderStepAffiliate(action) {
 }
 
 function renderStepRule(action) {
-  const r = ZZP_DATA.automationRules.find(x => action.includes(x.id)) || ZZP_DATA.automationRules[1];
+  const r = ZZP_DATA.automationRules.find(x => action.includes(x.id)) || ZZP_DATA.automationRules.find(x => action.includes('ROAS')) || ZZP_DATA.automationRules[1];
   return `
-    <div class="p-4 rounded-xl border border-slate-200 bg-white flex justify-between items-center">
-      <div><p class="font-medium text-sm">${r.name}</p><p class="text-xs text-slate-500">${r.trigger} → ${r.action}</p></div>
-      <span class="text-xs text-green-600 font-medium">${r.active ? 'Active' : 'Off'}</span>
+    <div class="p-4 rounded-xl border border-slate-200 bg-white">
+      <div class="flex flex-wrap items-center gap-2 mb-2">${renderPlatformBadge(r.platform || 'cross')}${badge(r.active ? 'Đang bật' : 'Tắt', r.active ? 'ok' : 'info')}</div>
+      <p class="font-medium text-sm">${r.name}</p>
+      <p class="text-xs text-slate-500 mt-1">Kích hoạt: ${r.trigger}</p>
+      <p class="text-xs text-slate-600 mt-1">→ ${r.action}</p>
+      ${r.flowId ? `<button type="button" onclick="runAutomationFlow('${r.flowId}')" class="mt-3 text-xs text-zzp-600 hover:underline inline-flex items-center gap-1">${icon('play', 12)} Chạy quy trình liên kết</button>` : ''}
     </div>`;
 }
 

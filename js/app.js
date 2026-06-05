@@ -47,7 +47,7 @@ function renderCurrentView() {
   const renderer = PAGES[currentPage];
   if (!renderer) return;
   let html = renderer();
-  const selfContextPages = ['dashboard', 'workflows'];
+  const selfContextPages = ['dashboard', 'workflows', 'settings', 'education'];
   if (!selfContextPages.includes(currentPage)) {
     const mb6 = html.indexOf('class="mb-6"');
     const splitIdx = mb6 > -1 ? html.indexOf('</div>', mb6) + 6 : html.indexOf('<div class="grid');

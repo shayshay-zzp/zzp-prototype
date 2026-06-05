@@ -577,7 +577,7 @@ function renderTtsBreakdownTable(pageId) {
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead><tr class="border-b border-slate-100 text-slate-500">
-            <th class="text-left py-2 px-3">Kênh content</th><th class="text-left py-2 px-3">GMV</th><th class="text-left py-2 px-3">% doanh thu</th><th class="text-left py-2 px-3">API</th>
+            <th class="text-left py-2 px-3">Kênh content</th><th class="text-left py-2 px-3">GMV</th><th class="text-left py-2 px-3">% doanh thu</th><th class="text-left py-2 px-3">Xu hướng</th>
           </tr></thead>
           <tbody>
             ${['VIDEO', 'LIVE', 'PRODUCT_CARD'].map(t => `
@@ -585,7 +585,7 @@ function renderTtsBreakdownTable(pageId) {
                 <td class="py-2 px-3 font-medium">${t === 'PRODUCT_CARD' ? 'Product Card' : t === 'LIVE' ? 'Livestream' : 'Video'}</td>
                 <td class="py-2 px-3">${fmt(b[t])}</td>
                 <td class="py-2 px-3">${pct[t]}%</td>
-                <td class="py-2 px-3 text-[10px] text-slate-400 font-mono">gmv_breakdown · ${t}</td>
+                <td class="py-2 px-3 text-xs text-slate-500">${pct[t] >= 25 ? '↑ Mạnh' : '→ Ổn định'}</td>
               </tr>`).join('')}
           </tbody>
         </table>

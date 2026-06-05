@@ -8,8 +8,10 @@ const LAYER_BADGE = {
 };
 
 function flowMetrics(items) {
-  return `<div class="grid grid-cols-2 sm:grid-cols-${Math.min(items.length, 4)} gap-2 mb-4">${items.map(m =>
-    `<div class="p-2.5 rounded-lg bg-white/90 border border-slate-100 text-center"><p class="text-lg font-bold ${m.color || 'text-slate-800'}">${m.v}</p><p class="text-[10px] text-slate-500">${m.l}</p></div>`
+  const n = Math.min(items.length, 4);
+  const gridCls = n <= 2 ? 'grid-cols-2' : n === 3 ? 'grid-cols-3' : 'grid-cols-2 sm:grid-cols-4';
+  return `<div class="grid ${gridCls} gap-2 mb-4">${items.map(m =>
+    `<div class="ui-metric-cell"><p class="val ${m.color || ''}">${m.v}</p><p class="lbl">${m.l}</p></div>`
   ).join('')}</div>`;
 }
 
@@ -48,11 +50,7 @@ function parseEntities(action) {
 function renderFlowStepPanel(flow, stepIndex, pageId) {
   const step = flow.steps[stepIndex];
   if (!step) return '';
-  const key = `${flow.id}:${step.id}`;
-  if (typeof FLOW_STEP_PANELS[key] === 'function') {
-    return FLOW_STEP_PANELS[key](step, flow, pageId, stepIndex);
-  }
-  return renderSmartFlowPanel(step, flow, pageId, stepIndex);
+  return renderFlowStepScreen(pageId || flow.pageId, stepIndex, step, flow);
 }
 
 const STEP_KINDS = ['collect', 'analyze', 'act', 'auto'];
@@ -196,10 +194,10 @@ function getFlowStepContent(pageId, stepIndex, step, flow) {
     default:
       if (stepIndex === 0) {
         out.metrics = getModuleMetrics(pid).slice(0, 4);
-        out.body = `<p class="text-sm text-slate-600">Đồng bộ từ TikTok Shop API · ${TTS_METRICS.shop.syncAt}</p>${renderTtsBreakdownTable(pid) ? `<div class="mt-3">${renderTtsBreakdownTable(pid)}</div>` : ''}`;
+        out.body = `<p class="text-sm text-slate-600">Đồng bộ từ TikTok · cập nhật ${TTS_METRICS.shop.syncAt}</p>${renderTtsBreakdownTable(pid) ? `<div class="mt-3">${renderTtsBreakdownTable(pid)}</div>` : ''}`;
       } else if (stepIndex === 1) {
         out.metrics = getModuleMetrics(pid).slice(4, 8).length ? getModuleMetrics(pid).slice(4, 8) : getModuleMetrics(pid).slice(0, 4);
-        out.body = `<p class="text-sm text-slate-600">${step.label} — phân tích KPI từ Analytics & Affiliate API</p>`;
+        out.body = `<p class="text-sm text-slate-600">${step.label} — phân tích từ dữ liệu Shop & Affiliate</p>`;
       } else if (stepIndex === 2) {
         out.body = `<p class="text-sm text-slate-600">Chuẩn bị việc cần làm: ${step.label}</p>`;
       } else {

@@ -3,7 +3,7 @@ const PAGES = {};
 
 function card(title, body, cls = '') {
   const t = typeof viLabel === 'function' ? viLabel(title) : title;
-  return `<div class="bg-white rounded-xl border border-slate-200 shadow-sm ${cls}"><div class="px-5 py-4 border-b border-slate-100"><h3 class="font-semibold text-slate-800">${t}</h3></div><div class="p-5">${body}</div></div>`;
+  return `<div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden min-w-0 ${cls}"><div class="px-5 py-4 border-b border-slate-100"><h3 class="font-semibold text-slate-800">${t}</h3></div><div class="p-5 min-w-0">${body}</div></div>`;
 }
 
 function statCard(label, value, sub = '', color = 'zzp') {
@@ -15,15 +15,17 @@ function statCard(label, value, sub = '', color = 'zzp') {
 
 function badge(text, type = 'default') {
   const display = typeof viBadge === 'function' ? viBadge(text, type) : text;
-  const styles = {
-    active: 'bg-green-100 text-green-700', pending: 'bg-amber-100 text-amber-700', critical: 'bg-red-100 text-red-700',
-    warning: 'bg-amber-100 text-amber-700', info: 'bg-blue-100 text-blue-700', default: 'bg-slate-100 text-slate-600',
-    ok: 'bg-green-100 text-green-700', review: 'bg-purple-100 text-purple-700', paused: 'bg-slate-100 text-slate-600',
-    low_stock: 'bg-red-100 text-red-700', connected: 'bg-green-100 text-green-700', synced: 'bg-green-100 text-green-700',
-    live: 'bg-green-100 text-green-700', partial: 'bg-amber-100 text-amber-700', high: 'bg-red-100 text-red-700',
-    medium: 'bg-amber-100 text-amber-700', new: 'bg-blue-100 text-blue-700', in_progress: 'bg-zzp-100 text-zzp-700'
+  const toneMap = {
+    active: 'ok', ok: 'ok', connected: 'ok', synced: 'ok', live: 'ok', converted: 'ok',
+    compliant: 'ok', delivered: 'ok', shipped: 'ok', published: 'ok', approved: 'ok',
+    pending: 'warn', warning: 'warn', medium: 'warn', partial: 'warn', scheduled: 'warn',
+    critical: 'critical', low_stock: 'critical', high: 'critical', no_content: 'critical',
+    review: 'purple', paused: 'muted', default: 'muted', draft: 'muted',
+    info: 'info', new: 'info', in_progress: 'brand', processing: 'brand',
+    affiliate: 'brand', ads: 'ads', organic: 'muted', revenue: 'ok', spark: 'ads'
   };
-  return `<span class="px-2 py-0.5 rounded-full text-xs font-medium ${styles[type] || styles.default}">${display}</span>`;
+  const tone = toneMap[type] || toneMap.default;
+  return `<span class="ui-badge ui-badge--${tone}">${display}</span>`;
 }
 
 function pageHeader(category, title, desc, prdRef) {
@@ -188,60 +190,38 @@ PAGES.datahub = () => {
 PAGES.products = () => {
   return `<div>${pageHeader('Vận hành','Product Operations','Quản lý vòng đời sản phẩm và hiệu suất bán hàng')}
     ${renderTtsMetricsStrip('products')}
-    ${layoutPrdBadge('products')}
-    ${chartGrid([['GMV theo SKU', 'chart-sku-gmv', 'md']], 1)}
-    ${card('Product Status Monitor', renderProductLifecycleMonitor())}</div>`;
+    ${renderModuleDataTabs('products')}</div>`;
 };
 
 PAGES.orders = () => {
   return `<div>${pageHeader('Vận hành','Order Center & SLA Monitoring','Theo dõi vòng đời đơn hàng và chất lượng vận hành')}
     ${renderTtsMetricsStrip('orders')}
-    ${layoutPrdBadge('orders')}
-    ${card('Order Center — SLA Board', renderOrderSlaBoard())}</div>`;
+    ${renderModuleDataTabs('orders')}</div>`;
 };
 
 PAGES.inventory = () => {
   return `<div>${pageHeader('Vận hành','Inventory Monitor & Stock Alert','Quản lý tồn kho, tốc độ bán và cảnh báo thiếu hàng')}
     ${renderTtsMetricsStrip('inventory')}
-    ${layoutPrdBadge('inventory')}
-    ${card('Stock Gauge Monitor', renderInventoryGaugeCards())}
-    <div class="mt-4 p-4 bg-red-50 border border-red-200 rounded-xl flex gap-3"><span class="shrink-0 mt-0.5">${iconBox('triangle-alert', 18, 'bg-red-100 text-red-600')}</span><div><p class="font-semibold text-red-800">Cảnh báo: Mặt nạ Collagen (P003)</p><p class="text-sm text-red-700 mt-1">Chỉ còn 45 sp — hết hàng dự kiến trong 2 ngày. <button onclick="runAutomationFlow('FLOW_STOCK')" class="underline font-medium inline-flex items-center gap-1">${icon('play', 12)} Chạy quy trình nhập hàng</button></p></div></div></div>`;
+    ${renderModuleDataTabs('inventory')}</div>`;
 };
 
 PAGES.returns = () => {
   return `<div>${pageHeader('Vận hành','Return & Cancellation Center','Theo dõi hoàn hàng, hủy đơn và nguyên nhân thất thoát doanh thu')}
     ${renderTtsMetricsStrip('returns')}
-    ${layoutPrdBadge('returns')}
-    ${card('Return & Cancellation Cases', renderReturnsCaseTimeline())}</div>`;
+    ${renderModuleDataTabs('returns')}</div>`;
 };
 
 PAGES.affiliate = () => {
-  const totalGmv = ZZP_DATA.kocs.reduce((s,k)=>s+k.gmv30d,0);
   return `<div>${pageHeader('Vận hành','Affiliate Center & SAM Strategy','Quản lý chiến dịch Affiliate và hiệu suất từng nguồn doanh thu')}
     ${renderTtsMetricsStrip('affiliate')}
-    ${layoutPrdBadge('affiliate')}
-    ${renderAffiliateSamFunnel()}
-    ${card('Creator Performance — Marketplace API', renderTtsBreakdownTable('affiliate'))}
-    ${chartGrid([
-      ['GMV theo KOC', 'chart-affiliate', 'md'],
-      ['Phân bổ tier KOC', 'chart-aff-tier', 'sm']
-    ])}
-    <div class="grid lg:grid-cols-2 gap-6 mt-6">
-      ${card('Chiến dịch Affiliate', `
-        <div class="space-y-3">${ZZP_DATA.campaigns.filter(c=>c.type==='affiliate'||c.type==='promotion').map(c => `
-          <button type="button" onclick="openDetail('campaign','${c.id}')" class="w-full text-left p-3 rounded-xl border border-slate-200 hover:border-rose-300 flex justify-between items-center gap-3">
-            <div><p class="font-medium text-sm">${c.name}</p><p class="text-xs text-slate-500">${fmt(c.spent)} / ${fmt(c.budget)}</p></div>
-            <div class="text-right"><p class="font-bold text-green-600">${(c.gmv/c.spent).toFixed(1)}x</p><p class="text-xs">${fmt(c.gmv)} GMV</p></div>
-          </button>`).join('')}</div>`)}
-    </div></div>`;
+    ${renderModuleDataTabs('affiliate')}</div>`;
 };
 
 PAGES.koc = () => {
   return `<div>${pageHeader('Vận hành','KOC CRM & Lifecycle Tracking','Quản lý vòng đời KOC từ tuyển chọn, gửi mẫu đến tạo doanh thu')}
     ${renderTtsMetricsStrip('koc')}
-    ${layoutPrdBadge('koc')}
-    ${card('KOC Lifecycle Pipeline', renderKocCrmPipeline())}
-    <p class="text-xs text-slate-500 mt-4 text-center">Phân tích chi tiết → <button type="button" onclick="navigate('creator-analytics')" class="text-zzp-600 hover:underline">KOC Scorecard</button></p></div>`;
+    ${renderModuleDataTabs('koc')}
+    <p class="text-xs text-slate-500 mt-4 text-center">Phân tích sâu → <button type="button" onclick="navigate('creator-analytics')" class="text-zzp-600 hover:underline">KOC Scorecard</button></p></div>`;
 };
 
 PAGES.agency = () => {
@@ -253,30 +233,19 @@ PAGES.agency = () => {
 PAGES.samples = () => {
   return `<div>${pageHeader('Vận hành','Sample Tracking & Sample ROI','Quản lý gửi mẫu và đánh giá hiệu quả đầu tư mẫu')}
     ${renderTtsMetricsStrip('samples')}
-    ${layoutPrdBadge('samples')}
-    ${renderSampleRoiPipeline()}</div>`;
+    ${renderModuleDataTabs('samples')}</div>`;
 };
 
 PAGES.content = () => {
   return `<div>${pageHeader('Vận hành','Content Calendar & Task Manager','Quản lý kế hoạch nội dung và vòng đời video Affiliate')}
     ${renderTtsMetricsStrip('content')}
-    ${layoutPrdBadge('content')}
-    ${card('Content Operations', renderContentCalendar())}</div>`;
+    ${renderModuleDataTabs('content')}</div>`;
 };
 
 PAGES.livestream = () => {
   return `<div>${pageHeader('Vận hành','Livestream Operations','Theo dõi hoạt động livestream và doanh thu phát sinh')}
     ${renderTtsMetricsStrip('livestream')}
-    ${card('Live Performance — Analytics API', renderTtsBreakdownTable('livestream'))}
-    ${ZZP_DATA.liveSessions.map(l => { const koc = ZZP_DATA.kocs.find(k=>k.id===l.host);
-      return card(`${l.title}`, `
-        <div class="grid lg:grid-cols-2 gap-4">
-          <div><p class="text-sm text-slate-500">Host: <button type="button" onclick="openDetail('koc','${l.host}')" class="text-zzp-600 hover:underline font-medium">${koc?.name}</button> · ${l.date} · ${l.duration} phút</p>
-          <p class="mt-2">Live Checklist: <span class="font-semibold">${l.checklistDone}/${l.checklistTotal}</span></p>
-          <div class="mt-2 h-2 bg-slate-100 rounded-full"><div class="h-2 bg-zzp-500 rounded-full" style="width:${l.checklistDone/l.checklistTotal*100}%"></div></div>
-          <div class="mt-4 space-y-1 text-sm">${['Script & sản phẩm','Flash sale setup','Voucher live-only','Pin sản phẩm Hero','Test stream','Backup internet','Moderator','Post-live report'].map((item,i)=>`<label class="flex gap-2"><input type="checkbox" ${i<l.checklistDone?'checked':''} disabled class="rounded"> ${item}</label>`).join('')}</div></div>
-          <div class="text-center p-4 bg-slate-50 rounded-xl"><p class="text-sm text-slate-500">GMV live trước</p><p class="text-2xl font-bold text-zzp-700">${fmt(l.pastGmv)}</p><p class="text-sm text-slate-500 mt-4">Dự kiến lần này</p><p class="text-xl font-bold">${fmt(l.expectedGmv)}</p></div>
-        </div>`); }).join('')}</div>`;
+    ${renderModuleDataTabs('livestream')}</div>`;
 };
 
 PAGES.campaigns = () => {
@@ -295,107 +264,63 @@ PAGES.vouchers = () => {
 PAGES.ads = () => {
   return `<div>${pageHeader('Vận hành','Spark Ads & Campaign Setup','Kết nối dữ liệu quảng cáo với doanh thu và Affiliate')}
     ${renderTtsMetricsStrip('ads')}
-    ${chartGrid([['ROAS theo chiến dịch', 'chart-ads-roas', 'sm'], ['Chi tiêu Ads', 'chart-ads-spend', 'sm']])}
-    ${card('Ads Campaigns — GMV Max & Reporting', renderTtsBreakdownTable('ads'))}
-    <div class="mt-6">${card('Spark Ads Wizard — Gợi ý', `
-      <div class="p-4 bg-green-50 rounded-xl border border-green-100"><p class="font-medium flex items-center gap-2">${icon('trending-up',16,'text-green-600')} Scale: Spark Ads Serum VC (ROAS 3.8x)</p><p class="text-sm text-slate-600 mt-1">Tăng budget 30% · Gắn video V001 · Target lookalike K001</p><button onclick="showToast('Đã tạo action: Tăng budget AD001')" class="mt-2 text-sm text-green-700 hover:underline">Thực hiện</button></div>
-      <div class="p-4 bg-red-50 rounded-xl border border-red-100 mt-3"><p class="font-medium flex items-center gap-2">${icon('pause-circle',16,'text-red-600')} Pause: Product Ads Mặt nạ (ROAS 1.2x)</p><p class="text-sm text-slate-600 mt-1">Chuyển ngân sách sang Affiliate K002</p><button onclick="pauseAd('AD002')" class="mt-2 text-sm text-red-700 hover:underline">Pause ngay</button></div>`)}</div></div>`;
+    ${renderModuleDataTabs('ads')}</div>`;
 };
 
 /* ===== PHASE 3 ===== */
 PAGES.executive = () => {
-  const p = calcProfit();
   return `<div>${pageHeader('Phân tích','Executive Dashboard','Tổng hợp toàn bộ tình hình kinh doanh trên một màn hình')}
     ${renderTtsMetricsStrip('executive')}
-    <div class="grid lg:grid-cols-2 gap-6">
-      ${card('Revenue Trend', '<div class="chart-box"><canvas id="chart-executive"></canvas></div>')}
-      ${card('GMV Breakdown — Shop Performance API', renderTtsBreakdownTable('executive'))}
-    </div></div>`;
+    ${renderModuleDataTabs('executive')}</div>`;
 };
 
 PAGES.revenue = () => {
-  const r = ZZP_DATA.revenueBreakdown;
   return `<div>${pageHeader('Phân tích','Revenue Intelligence & Attribution','Phân tích doanh thu theo nguồn và xác định yếu tố tạo doanh thu')}
     ${renderTtsMetricsStrip('revenue')}
-    ${card('GMV Breakdown — Content Type', renderTtsBreakdownTable('revenue'))}
-    ${card('Attribution Analysis', '<div class="chart-box"><canvas id="chart-attribution"></canvas></div>')}
-    <div class="mt-6">${card('Revenue by Product × Source', tableWrap(['Sản phẩm','Organic','Affiliate','Ads','Live','Tổng'],
-      ZZP_DATA.products.filter(p=>p.hero).map(p => { const share = p.sold30d * p.price;
-        return `<tr class="border-b border-slate-50"><td class="py-3 px-3">${p.name}</td><td class="px-3">${fmt(share*0.15)}</td><td class="px-3">${fmt(share*0.38)}</td><td class="px-3">${fmt(share*0.12)}</td><td class="px-3">${fmt(share*0.35)}</td><td class="px-3 font-semibold">${fmt(share)}</td></tr>`; }).join('')))}</div></div>`;
+    ${renderModuleDataTabs('revenue')}</div>`;
 };
 
 PAGES.profit = () => {
-  const p = calcProfit();
   return `<div>${pageHeader('Phân tích','P&L Dashboard & Margin Analytics','Tính toán lợi nhuận thực sau khi trừ toàn bộ chi phí vận hành')}
     ${renderTtsMetricsStrip('profit')}
-    ${card('Finance API — Settlement & Fees', renderTtsFinanceStrip())}
-    ${card('P&L Breakdown', '<div class="chart-box"><canvas id="chart-pnl"></canvas></div>')}
-    <div class="mt-6">${card('Profit by Product', tableWrap(['Sản phẩm','GMV','COGS','Chi phí phân bổ','Lợi nhuận','Margin'],
-      ZZP_DATA.products.filter(p=>p.hero).map(p => { const gmv = p.sold30d * p.price; const cogs = p.sold30d * p.cost; const other = gmv * 0.18; const profit = gmv - cogs - other;
-        return `<tr class="border-b border-slate-50"><td class="py-3 px-3">${p.name}</td><td class="px-3">${fmt(gmv)}</td><td class="px-3">${fmt(cogs)}</td><td class="px-3">${fmt(other)}</td><td class="px-3 font-semibold text-green-600">${fmt(profit)}</td><td class="px-3">${(profit/gmv*100).toFixed(1)}%</td></tr>`; }).join('')))}</div></div>`;
+    ${renderModuleDataTabs('profit')}</div>`;
 };
 
 PAGES.costs = () => {
-  const c = ZZP_DATA.costs;
   return `<div>${pageHeader('Phân tích','Cost Intelligence','Theo dõi và phân tích toàn bộ cấu trúc chi phí')}
     ${renderTtsMetricsStrip('costs')}
-    ${chartGrid([['Cấu trúc chi phí', 'chart-costs-detail', 'md'], ['% chi phí / GMV', 'chart-costs-pct', 'sm']])}
-    ${card('Cost Structure Detail', tableWrap(['Loại chi phí','Số tiền','% GMV','Trend'],
-      Object.entries({COGS:c.cogs,'Vận chuyển':c.shipping,'Commission Affiliate':c.commission,'Quảng cáo':c.ads,'Voucher':c.voucher,'Sample':c.sample,'Agency Fee':c.agency,'Platform Fee':c.platform}).map(([k,v]) =>
-        `<tr class="border-b border-slate-50"><td class="py-3 px-3">${k}</td><td class="px-3">${fmt(v)}</td><td class="px-3">${(v/ZZP_DATA.revenueBreakdown.total*100).toFixed(1)}%</td><td class="px-3">${k==='Quảng cáo'?badge('↑ 12%','warning'):badge('→ ổn định','ok')}</td></tr>`).join('')))}</div>`;
+    ${renderModuleDataTabs('costs')}</div>`;
 };
 
 PAGES['product-analytics'] = () => {
   return `<div>${pageHeader('Phân tích','Product Intelligence & SKU Ranking','Đánh giá hiệu suất và khả năng tăng trưởng từng sản phẩm')}
     ${renderTtsMetricsStrip('product-analytics')}
-    ${chartGrid([['GMV theo SKU', 'chart-sku-gmv', 'md'], ['Margin top SKU', 'chart-product-margin', 'sm']])}
-    ${card('SKU Performance — Product Analytics API', renderTtsBreakdownTable('product-analytics'))}
-    ${card('SKU Ranking', tableWrap(['#','Sản phẩm','GMV 30d','Units','Margin','Velocity','Score','Action'],
-      [...ZZP_DATA.products].sort((a,b)=>(b.sold30d*b.price)-(a.sold30d*a.price)).map((p,i) => {
-        const gmv = p.sold30d * p.price; const margin = ((p.price-p.cost)/p.price*100).toFixed(0);
-        return `<tr class="border-b border-slate-50"><td class="py-3 px-3 font-bold">${i+1}</td><td class="px-3"><div class="flex items-center gap-2">${productThumb(p,14)} ${p.name}</div></td><td class="px-3 font-semibold">${fmt(gmv)}</td><td class="px-3">${p.sold30d}</td><td class="px-3">${margin}%</td><td class="px-3">${Math.round(p.sold30d/30)}/ngày</td><td class="px-3">${p.listingScore}</td><td class="px-3">${i<2?badge('Scale','ok'):i===6?badge('Optimize','warning'):badge('Maintain','info')}</td></tr>`; }).join('')))}</div>`;
+    ${renderModuleDataTabs('product-analytics')}</div>`;
 };
 
 PAGES['affiliate-analytics'] = () => {
   return `<div>${pageHeader('Phân tích','Affiliate Analytics & Contribution','Đánh giá mức độ đóng góp Affiliate vào doanh thu')}
     ${renderTtsMetricsStrip('affiliate-analytics')}
-    ${card('Creator Marketplace Performance', renderTtsBreakdownTable('affiliate-analytics'))}
-    ${card('Affiliate Contribution', '<div class="chart-box"><canvas id="chart-aff-contrib"></canvas></div>')}
-    <div class="mt-6">${card('Campaign ROI Comparison', tableWrap(['Chiến dịch','Spent','GMV','ROI','Commission','Net Profit'],
-      ZZP_DATA.campaigns.map(c => `<tr class="border-b border-slate-50"><td class="py-3 px-3">${c.name}</td><td class="px-3">${fmt(c.spent)}</td><td class="px-3">${fmt(c.gmv)}</td><td class="px-3 font-semibold">${(c.gmv/c.spent).toFixed(1)}x</td><td class="px-3">${fmt(c.gmv*0.12)}</td><td class="px-3 text-green-600">${fmt(c.gmv-c.spent-c.gmv*0.12-c.gmv*0.3)}</td></tr>`).join('')))}</div></div>`;
+    ${renderModuleDataTabs('affiliate-analytics')}</div>`;
 };
 
 PAGES['creator-analytics'] = () => {
   return `<div>${pageHeader('Phân tích','KOC Scorecard & Creator Ranking','Xếp hạng KOC dựa trên GMV, ROI và CVR')}
     ${renderTtsMetricsStrip('creator-analytics')}
-    ${layoutPrdBadge('creator-analytics')}
-    ${card('Creator Scorecards', renderCreatorScorecardGrid())}
+    ${renderModuleDataTabs('creator-analytics')}
     <p class="text-xs text-slate-500 mt-4 text-center">Quản lý pipeline → <button type="button" onclick="navigate('koc')" class="text-zzp-600 hover:underline">KOC CRM</button></p></div>`;
 };
 
 PAGES['content-analytics'] = () => {
   return `<div>${pageHeader('Phân tích','Content Intelligence & Pattern Analysis','Xác định nội dung bán hàng hiệu quả và mô hình thành công')}
     ${renderTtsMetricsStrip('content-analytics')}
-    ${chartGrid([['CVR theo video', 'chart-content-cvr', 'sm'], ['Views theo video', 'chart-content-views', 'sm']])}
-    ${card('Video Performance', tableWrap(['Video','KOC','Views','Orders','GMV','CTR','CVR','Pattern'],
-      ZZP_DATA.content.filter(v=>v.status==='published').map(v => { const koc = ZZP_DATA.kocs.find(k=>k.id===v.koc); const cvr = v.views ? (v.orders/v.views*100).toFixed(2) : 0;
-        return `<tr class="border-b border-slate-50"><td class="py-3 px-3 text-sm font-medium">${v.title}</td><td class="px-3">${koc?.name}</td><td class="px-3">${fmt(v.views)}</td><td class="px-3">${v.orders}</td><td class="px-3">${fmt(v.gmv)}</td><td class="px-3">${v.ctr}%</td><td class="px-3">${cvr}%</td><td class="px-3">${v.type==='livestream'?'Live Sale':v.title.includes('Routine')?'Routine Format':'Review'}</td></tr>`; }).join('')))}
-    <div class="mt-6">${card('Content Pattern Analysis', `
-      <div class="grid lg:grid-cols-3 gap-4">
-        <div class="p-4 bg-green-50 rounded-xl"><p class="font-semibold text-green-800 flex items-center gap-2">${icon('trophy',16)} Top Pattern: Routine 3 bước</p><p class="text-sm mt-2">CVR 4.2% · Avg GMV 98M · Nên nhân rộng</p></div>
-        <div class="p-4 bg-blue-50 rounded-xl"><p class="font-semibold text-blue-800 flex items-center gap-2">${icon('radio',16)} Livestream Flash Sale</p><p class="text-sm mt-2">CVR 6.8% · Peak conversion · Book thêm 2 live/tháng</p></div>
-        <div class="p-4 bg-amber-50 rounded-xl"><p class="font-semibold text-amber-800">📝 Review Format</p><p class="text-sm mt-2">CVR 2.1% · Trust builder · Combine với voucher</p></div>
-      </div>`)}</div></div>`;
+    ${renderModuleDataTabs('content-analytics')}</div>`;
 };
 
 PAGES['live-analytics'] = () => {
   return `<div>${pageHeader('Phân tích','Livestream Analytics & Session Performance','Phân tích hiệu quả từng phiên livestream')}
     ${renderTtsMetricsStrip('live-analytics')}
-    ${card('Live Session — Per Minute API', renderTtsBreakdownTable('live-analytics'))}
-    ${chartGrid([['GMV live session', 'chart-live-gmv', 'sm'], ['Đơn live', 'chart-live-orders', 'sm']])}
-    ${card('Live Session Performance', tableWrap(['Session','Host','Views','Duration','Orders','GMV','GMV/giờ','Conversion'],
-      ZZP_DATA.content.filter(v=>v.type==='livestream').map(v => { const koc = ZZP_DATA.kocs.find(k=>k.id===v.koc);
-        return `<tr class="border-b border-slate-50"><td class="py-3 px-3">${v.title}</td><td class="px-3">${koc?.name}</td><td class="px-3">${fmt(v.views)}</td><td class="px-3">120 phút</td><td class="px-3">${v.orders}</td><td class="px-3 font-semibold">${fmt(v.gmv)}</td><td class="px-3">${fmt(v.gmv/2)}</td><td class="px-3">${v.ctr}%</td></tr>`; }).join('')))}</div>`;
+    ${renderModuleDataTabs('live-analytics')}</div>`;
 };
 
 PAGES['customer-analytics'] = () => {
@@ -495,12 +420,18 @@ PAGES.actions = () => {
 };
 
 PAGES.automation = () => {
-  return `<div>${pageHeader('Tối ưu','Quy tắc tự động','Tự động hóa báo cáo, cảnh báo và quy trình vận hành')}
+  return `<div>${pageHeader('Tối ưu','Quy tắc tích hợp TikTok','Quy tắc nhận sự kiện từ TikTok Shop / Ads / Affiliate và kích hoạt quy trình trên ZZP')}
+    ${renderFlowSyncStrip()}
     ${chartGrid([['Lần chạy quy tắc', 'chart-rule-runs', 'sm'], ['Quy tắc bật/tắt', 'chart-rule-active', 'sm']])}
-    ${card('Quy tắc tự động', ZZP_DATA.automationRules.map(r => `
-      <div class="flex items-center justify-between py-4 border-b border-slate-50">
-        <div><p class="font-medium">${r.name}</p><p class="text-xs text-slate-500 mt-1">Khi ${humanTrigger(r.trigger)} → ${r.action}</p><p class="text-xs text-slate-400">Đã chạy ${r.runs} lần</p></div>
-        <label class="relative inline-flex items-center cursor-pointer"><input type="checkbox" ${r.active?'checked':''} onchange="toggleRule('${r.id}')" class="sr-only peer"><div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-zzp-600"></div></label>
+    ${card('Quy tắc gắn quy trình', ZZP_DATA.automationRules.map(r => `
+      <div class="flex items-center justify-between py-4 border-b border-slate-50 gap-4">
+        <div class="min-w-0">
+          <div class="flex flex-wrap items-center gap-2 mb-1">${renderPlatformBadge(r.platform || 'cross')}${r.flowId ? badge('Có quy trình', 'info') : ''}</div>
+          <p class="font-medium">${r.name}</p>
+          <p class="text-xs text-slate-500 mt-1">${humanTrigger(r.trigger, r.flowId ? 'rule' : 'scheduled')} → ${r.action}</p>
+          <p class="text-xs text-slate-400">Đã chạy ${r.runs} lần${r.flowId ? ` · <button type="button" onclick="runAutomationFlow('${r.flowId}')" class="text-zzp-600 hover:underline">Chạy quy trình</button>` : ''}</p>
+        </div>
+        <label class="relative inline-flex items-center cursor-pointer shrink-0"><input type="checkbox" ${r.active?'checked':''} onchange="toggleRule('${r.id}')" class="sr-only peer"><div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-zzp-600"></div></label>
       </div>`).join(''))}</div>`;
 };
 
@@ -542,29 +473,40 @@ PAGES.optimization = () => {
 
 /* ===== SYSTEM ===== */
 PAGES.workflows = () => {
-  return `<div>${pageHeader('Tối ưu', 'Trung tâm quy trình', 'Các quy trình tự động giúp xử lý tình huống vận hành hàng ngày')}
-    <div class="grid lg:grid-cols-3 gap-4 mb-6">
-      ${statCard('Quy trình', AUTOMATION_FLOWS.length)}${statCard('Quy tắc đang bật', ZZP_DATA.automationRules.filter(r=>r.active).length)}${statCard('Đã chạy', ZZP_DATA.automationRules.reduce((s,r)=>s+r.runs,0) + ' lần')}
+  const byPlatform = { shop: [], ads: [], affiliate: [], cross: [] };
+  AUTOMATION_FLOWS.forEach(f => (byPlatform[f.platform] || byPlatform.cross).push(f));
+  const activeRules = ZZP_DATA.automationRules.filter(r => r.active);
+  return `<div>${pageHeader('Tối ưu', 'Trung tâm tích hợp TikTok', 'Quy trình tự động: nhận sự kiện TikTok → xử lý trên ZZP → ghi ngược lên Shop / Ads / Affiliate')}
+    ${renderFlowSyncStrip()}
+    <div class="grid lg:grid-cols-4 gap-4 mb-6">
+      ${statCard('Quy trình tích hợp', AUTOMATION_FLOWS.length)}
+      ${statCard('Quy tắc đang bật', activeRules.length)}
+      ${statCard('Nguồn live', ZZP_DATA.dataSync.filter(d => d.status === 'live').length + '/6')}
+      ${statCard('Lần chạy tháng này', ZZP_DATA.automationRules.reduce((s, r) => s + r.runs, 0))}
     </div>
-    <div class="space-y-4">${AUTOMATION_FLOWS.map(f => `
-      <div class="bg-white rounded-xl border border-slate-200 p-5 hover:border-zzp-300 hover:shadow-sm transition-all cursor-pointer" onclick="openDetail('flow','${f.id}')">
-        <div class="flex items-start justify-between gap-4">
-          <div class="flex gap-3"><span class="flex shrink-0">${iconBox(FLOW_ICONS[f.id] || 'workflow', 22, 'bg-zzp-50 text-zzp-600')}</span>
-            <div><p class="font-bold">${f.name}</p><p class="text-sm text-slate-500 mt-1">${f.desc}</p>
-              <p class="text-xs text-amber-600 mt-2 flex items-center gap-1">${icon('zap',12)} ${humanTrigger(f.trigger)}</p>
-              <div class="flex flex-wrap gap-1 mt-2" onclick="event.stopPropagation()">${f.modules.map(m => `<button type="button" onclick="navigate('${m}')" class="text-[10px] px-2 py-0.5 bg-zzp-50 text-zzp-700 rounded-full hover:bg-zzp-100">${viPage(m)}</button>`).join('')}</div>
-            </div>
+    ${card('Quy tắc tự động gắn TikTok', `
+      <div class="grid md:grid-cols-2 gap-3">${ZZP_DATA.automationRules.map(r => `
+        <div class="p-3 rounded-xl border ${r.active ? 'border-green-200 bg-green-50/40' : 'border-slate-200 bg-slate-50'} flex justify-between gap-3">
+          <div class="min-w-0">
+            <div class="flex flex-wrap items-center gap-2 mb-1">${renderPlatformBadge(r.platform || 'cross')}${r.active ? badge('Đang bật', 'ok') : badge('Tắt', 'info')}</div>
+            <p class="font-medium text-sm">${r.name}</p>
+            <p class="text-xs text-slate-500 mt-1">${r.trigger}</p>
+            <p class="text-xs text-slate-600 mt-1">${r.action}</p>
           </div>
-          <div class="flex flex-col gap-2 shrink-0" onclick="event.stopPropagation()">
-            <button type="button" onclick="openDetail('flow','${f.id}')" class="px-3 py-2 border border-slate-200 rounded-lg text-xs">Chi tiết</button>
-            <button type="button" onclick="runAutomationFlow('${f.id}')" class="px-4 py-2 bg-zzp-600 text-white rounded-lg text-sm hover:bg-zzp-700 inline-flex items-center gap-1">${icon('play',14)} Chạy</button>
+          <div class="text-right shrink-0">
+            <p class="text-lg font-bold text-zzp-700">${r.runs}</p>
+            <p class="text-[10px] text-slate-400">lần chạy</p>
+            ${r.flowId ? `<button type="button" onclick="runAutomationFlow('${r.flowId}')" class="mt-2 text-xs text-zzp-600 hover:underline inline-flex items-center gap-1">${icon('play', 12)} Chạy</button>` : ''}
           </div>
-        </div>
-        <div class="mt-4 grid lg:grid-cols-${Math.min(f.steps.length, 6)} gap-2" onclick="event.stopPropagation()">
-          ${f.steps.map((s, i) => `<button type="button" onclick="navigate('${s.module}')" class="p-2 bg-slate-50 rounded-lg text-center hover:bg-zzp-50 hover:border-zzp-200 border border-transparent"><p class="text-[10px] text-zzp-600 font-bold">${i+1}</p><p class="text-xs mt-1 leading-tight">${s.label}</p><p class="text-[10px] text-slate-400">${viPage(s.module)}</p></button>`).join('')}
-        </div>
-      </div>`).join('')}
-    </div></div>`;
+        </div>`).join('')}
+      </div>`)}
+    ${['shop', 'ads', 'affiliate', 'cross'].map(key => {
+      const list = byPlatform[key];
+      if (!list.length) return '';
+      const p = FLOW_PLATFORMS[key];
+      return `<div class="mt-8"><h3 class="font-semibold text-slate-800 mb-4 flex items-center gap-2">${renderPlatformBadge(key)} ${list.length} quy trình</h3><div class="space-y-4">${list.map(f => renderWorkflowListCard(f)).join('')}</div></div>`;
+    }).join('')}
+    </div>`;
 };
 
 PAGES.notifications = () => {

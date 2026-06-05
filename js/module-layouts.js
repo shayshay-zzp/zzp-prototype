@@ -309,29 +309,26 @@ function renderOrderSlaBoard() {
 function renderInventoryGaugeCards() {
   return `
     ${chartGrid([['Ngày tồn còn theo SKU', 'chart-stock-days', 'sm'], ['Velocity bán hàng', 'chart-velocity', 'sm']])}
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+    <div class="ui-card-grid">
       ${ZZP_DATA.products.map(p => {
         const daily = Math.round(p.sold30d / 30) || 1;
         const days = Math.round(p.stock / daily);
         const pct = Math.min(100, (p.stock / (daily * 30)) * 100);
-        const ringColor = days < 7 ? 'text-red-500' : days < 14 ? 'text-amber-500' : 'text-green-500';
         const bg = days < 7 ? 'border-red-200 bg-red-50/40' : days < 14 ? 'border-amber-200 bg-amber-50/40' : 'border-slate-200 bg-white';
         return `
-        <button type="button" onclick="openDetail('product','${p.id}')" class="text-left p-4 rounded-xl border-2 ${bg} hover:shadow-md transition-all">
+        <button type="button" onclick="openDetail('product','${p.id}')" class="ui-product-card text-left p-4 rounded-xl border-2 ${bg} hover:shadow-md transition-shadow">
           <div class="flex items-start gap-3">
-            ${productThumb(p, 18)}
+            <div class="shrink-0">${productThumb(p, 16)}</div>
             <div class="flex-1 min-w-0">
-              <p class="font-medium text-sm truncate">${p.name}</p>
-              <p class="text-xs text-slate-500">${daily}/ngày · ${days} ngày còn</p>
+              <p class="font-medium text-sm truncate-safe">${p.name}</p>
+              <p class="text-xs text-slate-500 mt-0.5">${daily}/ngày · ${days} ngày còn</p>
             </div>
-          </div>
-          <div class="mt-4 relative h-3 bg-slate-100 rounded-full overflow-hidden">
-            <div class="absolute inset-y-0 left-0 rounded-full ${days < 7 ? 'bg-red-500' : days < 14 ? 'bg-amber-500' : 'bg-green-500'}" style="width:${pct}%"></div>
-          </div>
-          <div class="flex justify-between mt-2 text-xs">
-            <span class="font-bold ${ringColor.replace('text-', 'text-')}">${p.stock} sp</span>
             ${days < 7 ? badge('Thiếu hàng', 'critical') : badge('OK', 'ok')}
           </div>
+          <div class="mt-3 h-2 bg-slate-100 rounded-full overflow-hidden">
+            <div class="h-full rounded-full ${days < 7 ? 'bg-red-500' : days < 14 ? 'bg-amber-500' : 'bg-green-500'}" style="width:${pct}%"></div>
+          </div>
+          <p class="mt-2 text-xs font-bold ${days < 7 ? 'text-red-600' : days < 14 ? 'text-amber-600' : 'text-green-600'}">${p.stock} sp tồn</p>
         </button>`;
       }).join('')}
     </div>`;
@@ -408,29 +405,37 @@ function renderProductLifecycleMonitor() {
     low_stock: ZZP_DATA.products.filter(p => p.status === 'low_stock' || p.stock < 100),
     review: ZZP_DATA.products.filter(p => p.status === 'review')
   };
+  const statusUi = {
+    active: { border: 'border-green-200', badge: 'ok' },
+    low_stock: { border: 'border-red-300', badge: 'critical' },
+    review: { border: 'border-purple-300', badge: 'purple' }
+  };
   return `
     <div class="mb-4 flex flex-wrap gap-2">
-      ${tabs.map(t => `<span class="px-3 py-1.5 rounded-full text-xs font-medium ${t.key === 'all' ? 'bg-zzp-600 text-white' : 'bg-slate-100 text-slate-600'}">${t.label} (${groups[t.key].length})</span>`).join('')}
+      ${tabs.map(t => `<span class="ui-badge ${t.key === 'all' ? 'ui-badge--brand' : 'ui-badge--muted'}">${t.label} (${groups[t.key].length})</span>`).join('')}
     </div>
-    <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
+    <div class="ui-card-grid">
       ${ZZP_DATA.products.map(p => {
         const margin = ((p.price - p.cost) / p.price * 100).toFixed(0);
-        const statusColors = { active: 'border-green-200', low_stock: 'border-red-300', review: 'border-purple-300' };
+        const ui = statusUi[p.status] || { border: 'border-slate-200', badge: 'muted' };
+        const marginTone = Number(margin) >= 50 ? 'text-green-600' : Number(margin) >= 30 ? 'text-slate-800' : 'text-amber-600';
         return `
-        <button type="button" onclick="openDetail('product','${p.id}')" class="text-left p-4 rounded-xl border-2 ${statusColors[p.status] || 'border-slate-200'} bg-white hover:shadow-md">
-          <div class="flex gap-3">
-            ${productThumb(p, 20)}
+        <button type="button" onclick="openDetail('product','${p.id}')" class="ui-product-card text-left p-4 rounded-xl border-2 ${ui.border} bg-white hover:shadow-md transition-shadow">
+          <div class="flex items-start gap-3">
+            <div class="shrink-0">${productThumb(p, 16)}</div>
             <div class="flex-1 min-w-0">
-              <p class="font-medium text-sm">${p.name}</p>
-              <p class="text-[10px] text-slate-400 font-mono">${p.sku}</p>
+              <div class="flex items-start justify-between gap-2">
+                <p class="font-semibold text-sm leading-snug line-clamp-2 flex-1 min-w-0">${p.name}</p>
+                ${badge(p.status, p.status)}
+              </div>
+              <p class="text-[10px] text-slate-400 font-mono mt-1 truncate-safe">${p.sku}</p>
             </div>
-            ${badge(p.status, p.status)}
           </div>
-          <div class="grid grid-cols-4 gap-1 mt-4 text-center text-[10px]">
-            <div class="p-1.5 bg-slate-50 rounded"><p class="font-bold">${fmtCurrency(p.price)}</p><p class="text-slate-400">Giá</p></div>
-            <div class="p-1.5 bg-slate-50 rounded"><p class="font-bold ${p.stock < 100 ? 'text-red-600' : ''}">${p.stock}</p><p class="text-slate-400">Tồn</p></div>
-            <div class="p-1.5 bg-slate-50 rounded"><p class="font-bold">${p.sold30d}</p><p class="text-slate-400">Bán 30d</p></div>
-            <div class="p-1.5 bg-slate-50 rounded"><p class="font-bold text-green-600">${margin}%</p><p class="text-slate-400">Margin</p></div>
+          <div class="ui-metric-grid mt-4">
+            <div class="ui-metric-cell"><p class="val">${fmtCurrency(p.price).replace('₫', '').trim()}</p><p class="lbl">Giá</p></div>
+            <div class="ui-metric-cell"><p class="val ${p.stock < 100 ? 'text-red-600' : ''}">${p.stock}</p><p class="lbl">Tồn</p></div>
+            <div class="ui-metric-cell"><p class="val">${p.sold30d}</p><p class="lbl">Bán 30d</p></div>
+            <div class="ui-metric-cell"><p class="val ${marginTone}">${margin}%</p><p class="lbl">Margin</p></div>
           </div>
         </button>`;
       }).join('')}

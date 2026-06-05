@@ -219,13 +219,16 @@ const DETAIL_RENDERERS = {
     if (!f) return notFound('Flow', id);
     const pageId = f.pageId || (f.modules && f.modules[0]) || 'workflows';
     return detailLayout('flow', id, f.name, 'workflows', `
-      <p class="text-sm text-slate-500 mb-4">${f.desc} · ${humanTrigger(f.trigger)}</p>
+      <div class="flex flex-wrap items-center gap-2 mb-3">${renderPlatformBadge(f.platform || 'cross')}${getFlowRule(f) ? `<span class="text-xs text-slate-500">${getFlowRule(f).name}</span>` : ''}</div>
+      <p class="text-sm text-slate-500 mb-2">${f.desc}</p>
+      <p class="text-xs text-amber-700 mb-4 flex items-center gap-1">${icon('zap', 12)} ${humanTrigger(f.trigger, f.triggerType)}</p>
+      ${renderFlowSyncStrip()}
       ${renderWorkflowCardInline(f, true, pageId)}
       <div class="mt-4 flex gap-2">
-        <button onclick="runAutomationFlow('${id}')" class="px-5 py-2.5 bg-zzp-600 text-white rounded-xl text-sm font-medium inline-flex items-center gap-2">${icon('play',16)} Chạy workflow ngay</button>
-        <button onclick="navigate('workflows')" class="px-4 py-2.5 border rounded-xl text-sm">Workflow Center</button>
+        <button onclick="runAutomationFlow('${id}')" class="px-5 py-2.5 bg-zzp-600 text-white rounded-xl text-sm font-medium inline-flex items-center gap-2">${icon('play',16)} Thực thi trên TikTok</button>
+        <button onclick="navigate('workflows')" class="px-4 py-2.5 border rounded-xl text-sm">Trung tâm tích hợp</button>
       </div>
-      ${card('Mô-đun liên kết', f.modules.map(m => `<button onclick="navigate('${m}')" class="mr-2 mb-2 px-3 py-1.5 bg-slate-100 rounded-lg text-xs hover:bg-zzp-100">${viPage(m)}</button>`).join(''))}
+      ${card('Mô-đun liên quan', f.modules.map(m => `<button onclick="navigate('${m}')" class="mr-2 mb-2 px-3 py-1.5 bg-slate-100 rounded-lg text-xs hover:bg-zzp-100">${viPage(m)}</button>`).join(''))}
     `);
   },
 
