@@ -1,0 +1,3293 @@
+{
+  "csv_count": 340,
+  "xlsx_count": 532,
+  "categories": {
+    "Access token inspector": 1,
+    "Insights": 4,
+    "Comments": 8,
+    "Posts": 3,
+    "Ad authorization": 4,
+    "URL properties": 4,
+    "Webhooks": 6,
+    "Ads": 10,
+    "Ad Accounts": 2,
+    "Ad Comments": 8,
+    "Ad Comments - Blocked Words": 8,
+    "Ad Diagnosis": 1,
+    "Ad Groups": 7,
+    "Ad Review": 6,
+    "Customer File": 2,
+    "Audience segment": 2,
+    "Audience": 12,
+    "Saved Audience": 3,
+    "Audience Insights": 2,
+    "Authentication": 5,
+    "Automated Rules": 8,
+    "BC Management": 2,
+    "BC Payments": 8,
+    "BC Payment Portfolios": 6,
+    "BC Assets": 20,
+    "Manage a pixel": 3,
+    "BC Asset Groups": 5,
+    "BC Billing Groups": 4,
+    "BC Partners": 5,
+    "BC Members": 4,
+    "BC Invoices": 2,
+    "Download the invoices of a BC": 1,
+    "Download asynchronously": 3,
+    "BC Reporting": 1,
+    "Brand Safety": 2,
+    "Direct messages": 8,
+    "Automatic messages": 6,
+    "Campaign": 8,
+    "Catalog Management": 9,
+    "Catalog Event Sources": 3,
+    "Catalog Feeds": 6,
+    "Catalog Products": 6,
+    "Catalog Product Sets": 6,
+    "Catalog Videos": 4,
+    "Catalog Video Templates": 6,
+    "Catalog Diagnostics": 5,
+    "Catalog Insights": 3,
+    "Change Log": 3,
+    "Creative Portfolios": 4,
+    "Creative Reports": 2,
+    "Creative Insights": 2,
+    "Creative Tools": 13,
+    "Custom Conversions": 5,
+    "Discovery": 7,
+    "(Deprecated) Dynamic Scene": 5,
+    "Events 2.0": 1,
+    "App Events": 8,
+    "Pixel Events": 10,
+    "Offline Events": 6,
+    "CRM Events": 2,
+    "CTM Events": 1,
+    "Files": 5,
+    "GMV Max": 24,
+    "Identity": 8,
+    "Images": 4,
+    "Leads": 10,
+    "Media Mix Modeling": 4,
+    "Mentions": 15,
+    "Music": 2,
+    "Negative Keywords": 5,
+    "Page": 4,
+    "Pangle": 3,
+    "Playable Ads": 5,
+    "Reach & Frequency": 7,
+    "Reporting": 7,
+    "Showcase": 3,
+    "Smart Creative": 4,
+    "(To be deprecated) Legacy Smart+": 6,
+    "Campaigns": 6,
+    "Ad groups": 5,
+    "Spark Ads Recommendation": 3,
+    "Spark Ads Using Authorized Posts": 4,
+    "Super Split Test": 5,
+    "Subscription": 3,
+    "Terms": 3,
+    "TikTok One": 29,
+    "TikTok Store": 2,
+    "Tools": 35,
+    "Get additional interest categories": 2,
+    "API Reference": 1,
+    "Video": 5,
+    "Welcome Messages": 2
+  },
+  "apis": [
+    {
+      "name": "Get the authorized TikTok account permission scopes via access token",
+      "endpoint": "/open_api/v1.3/tt_user/token_info/get/",
+      "category": "Access token inspector",
+      "method": "POST"
+    },
+    {
+      "name": "Get profile data of a TikTok account",
+      "endpoint": "/open_api/v1.3/business/get/",
+      "category": "Insights",
+      "method": "GET"
+    },
+    {
+      "name": "Get post data of a TikTok account",
+      "endpoint": "/open_api/v1.3/business/video/list/",
+      "category": "Insights",
+      "method": "GET"
+    },
+    {
+      "name": "Get benchmarks for a business category",
+      "endpoint": "/open_api/v1.3/business/benchmark/",
+      "category": "Insights",
+      "method": "GET"
+    },
+    {
+      "name": "Get the post privacy settings of a TikTok account",
+      "endpoint": "/open_api/v1.3/business/video/settings/",
+      "category": "Insights",
+      "method": "GET"
+    },
+    {
+      "name": "Get comments on an owned video",
+      "endpoint": "/open_api/v1.3/business/comment/list/",
+      "category": "Comments",
+      "method": "GET"
+    },
+    {
+      "name": "Get all replies to a comment",
+      "endpoint": "/open_api/v1.3/business/comment/reply/list/",
+      "category": "Comments",
+      "method": "GET"
+    },
+    {
+      "name": "Create a new comment on an owned video",
+      "endpoint": "/open_api/v1.3/business/comment/create/",
+      "category": "Comments",
+      "method": "POST"
+    },
+    {
+      "name": "Upload a comment image",
+      "endpoint": "/open_api/v1.3/business/comment/image/upload/",
+      "category": "Comments",
+      "method": "POST"
+    },
+    {
+      "name": "Reply to an existing comment on an owned video",
+      "endpoint": "/open_api/v1.3/business/comment/reply/create/",
+      "category": "Comments",
+      "method": "POST"
+    },
+    {
+      "name": "Like/unlike an existing comment on an owned video",
+      "endpoint": "/open_api/v1.3/business/comment/like/",
+      "category": "Comments",
+      "method": "POST"
+    },
+    {
+      "name": "Hide/unhide an existing comment on an owned video",
+      "endpoint": "/open_api/v1.3/business/comment/hide/",
+      "category": "Comments",
+      "method": "POST"
+    },
+    {
+      "name": "Delete an existing comment on an owned video",
+      "endpoint": "/open_api/v1.3/business/comment/delete/",
+      "category": "Comments",
+      "method": "POST"
+    },
+    {
+      "name": "Publish a public video post to an owned account",
+      "endpoint": "/open_api/v1.3/business/video/publish/",
+      "category": "Posts",
+      "method": "POST"
+    },
+    {
+      "name": "Get the publishing status of a TikTok post",
+      "endpoint": "/open_api/v1.3/business/publish/status/",
+      "category": "Posts",
+      "method": "GET"
+    },
+    {
+      "name": "Get recommended hashtags for TikTok accounts",
+      "endpoint": "/open_api/v1.3/business/hashtag/suggestion/",
+      "category": "Posts",
+      "method": "GET"
+    },
+    {
+      "name": "Enable or disable the ad authorization setting for a TikTok post",
+      "endpoint": "/open_api/v1.3/business/post/authorize/setting/",
+      "category": "Ad authorization",
+      "method": "POST"
+    },
+    {
+      "name": "Extend the authorization validity period of a TikTok post",
+      "endpoint": "/open_api/v1.3/business/post/authorize/",
+      "category": "Ad authorization",
+      "method": "POST"
+    },
+    {
+      "name": "Get the authorization status of a TikTok post",
+      "endpoint": "/open_api/v1.3/business/post/authorize/status/",
+      "category": "Ad authorization",
+      "method": "GET"
+    },
+    {
+      "name": "Delete the authorization code of a TikTok post",
+      "endpoint": "/open_api/v1.3/business/post/authorize/delete/",
+      "category": "Ad authorization",
+      "method": "POST"
+    },
+    {
+      "name": "Add a URL property to an ad account",
+      "endpoint": "/open_api/v1.3/business/property/add/",
+      "category": "URL properties",
+      "method": "POST"
+    },
+    {
+      "name": "Check the URL property verification result",
+      "endpoint": "/open_api/v1.3/business/property/verify/",
+      "category": "URL properties",
+      "method": "POST"
+    },
+    {
+      "name": "Delete the verified ownership of a URL property",
+      "endpoint": "/open_api/v1.3/business/property/delete/",
+      "category": "URL properties",
+      "method": "POST"
+    },
+    {
+      "name": "Get the list of added URL properties under an ad account",
+      "endpoint": "/open_api/v1.3/business/property/list/",
+      "category": "URL properties",
+      "method": "GET"
+    },
+    {
+      "name": "Create or update a TikTok account Webhook configuration",
+      "endpoint": "/open_api/v1.3/business/webhook/update/",
+      "category": "Webhooks",
+      "method": "POST"
+    },
+    {
+      "name": "Get TikTok account Webhook configurations",
+      "endpoint": "/open_api/v1.3/business/webhook/list/",
+      "category": "Webhooks",
+      "method": "GET"
+    },
+    {
+      "name": "Delete a TikTok account Webhook configuration",
+      "endpoint": "/open_api/v1.3/business/webhook/delete/",
+      "category": "Webhooks",
+      "method": "POST"
+    },
+    {
+      "name": "Get ads",
+      "endpoint": "/open_api/v1.3/ad/get/",
+      "category": "Ads",
+      "method": "GET"
+    },
+    {
+      "name": "Create ads",
+      "endpoint": "/open_api/v1.3/ad/create/",
+      "category": "Ads",
+      "method": "POST"
+    },
+    {
+      "name": "Update ads",
+      "endpoint": "/open_api/v1.3/ad/update/",
+      "category": "Ads",
+      "method": "POST"
+    },
+    {
+      "name": "Update the statuses of ads",
+      "endpoint": "/open_api/v1.3/ad/status/update/",
+      "category": "Ads",
+      "method": "POST"
+    },
+    {
+      "name": "Get authorized ad accounts",
+      "endpoint": "/open_api/v1.3/oauth2/advertiser/get/",
+      "category": "Ad Accounts",
+      "method": "GET"
+    },
+    {
+      "name": "Get ad account details",
+      "endpoint": "/open_api/v1.3/advertiser/info/",
+      "category": "Ad Accounts",
+      "method": "GET"
+    },
+    {
+      "name": "Get comments",
+      "endpoint": "/open_api/v1.3/comment/list/",
+      "category": "Ad Comments",
+      "method": "GET"
+    },
+    {
+      "name": "Get related comments",
+      "endpoint": "/open_api/v1.3/comment/reference/",
+      "category": "Ad Comments",
+      "method": "GET"
+    },
+    {
+      "name": "Update the statuses of comments",
+      "endpoint": "/open_api/v1.3/comment/status/update/",
+      "category": "Ad Comments",
+      "method": "POST"
+    },
+    {
+      "name": "Reply to a comment",
+      "endpoint": "/open_api/v1.3/comment/post/",
+      "category": "Ad Comments",
+      "method": "POST"
+    },
+    {
+      "name": "Delete a comment",
+      "endpoint": "/open_api/v1.3/comment/delete/",
+      "category": "Ad Comments",
+      "method": "POST"
+    },
+    {
+      "name": "Create a comment export task",
+      "endpoint": "/open_api/v1.3/comment/task/create/",
+      "category": "Ad Comments",
+      "method": "POST"
+    },
+    {
+      "name": "Get the status of a comment export task",
+      "endpoint": "/open_api/v1.3/comment/task/check/",
+      "category": "Ad Comments",
+      "method": "GET"
+    },
+    {
+      "name": "Download exported comments",
+      "endpoint": "/open_api/v1.3/comment/task/download/",
+      "category": "Ad Comments",
+      "method": "GET"
+    },
+    {
+      "name": "Create blocked words",
+      "endpoint": "/open_api/v1.3/blockedword/create/",
+      "category": "Ad Comments - Blocked Words",
+      "method": "POST"
+    },
+    {
+      "name": "Update a blocked word",
+      "endpoint": "/open_api/v1.3/blockedword/update/",
+      "category": "Ad Comments - Blocked Words",
+      "method": "POST"
+    },
+    {
+      "name": "Check the statuses of words",
+      "endpoint": "/open_api/v1.3/blockedword/check/",
+      "category": "Ad Comments - Blocked Words",
+      "method": "GET"
+    },
+    {
+      "name": "Get blocked words",
+      "endpoint": "/open_api/v1.3/blockedword/list/",
+      "category": "Ad Comments - Blocked Words",
+      "method": "GET"
+    },
+    {
+      "name": "Delete blocked words",
+      "endpoint": "/open_api/v1.3/blockedword/delete/",
+      "category": "Ad Comments - Blocked Words",
+      "method": "POST"
+    },
+    {
+      "name": "Create an export task (blocked words)",
+      "endpoint": "/open_api/v1.3/blockedword/task/create/",
+      "category": "Ad Comments - Blocked Words",
+      "method": "POST"
+    },
+    {
+      "name": "Check the status of an export task (blocked words)",
+      "endpoint": "/open_api/v1.3/blockedword/task/check/",
+      "category": "Ad Comments - Blocked Words",
+      "method": "GET"
+    },
+    {
+      "name": "Download exported data",
+      "endpoint": "/open_api/v1.3/blockedword/task/download/",
+      "category": "Ad Comments - Blocked Words",
+      "method": "GET"
+    },
+    {
+      "name": "Get diagnoses for ad groups",
+      "endpoint": "/open_api/v1.3/tool/diagnosis/get/",
+      "category": "Ad Diagnosis",
+      "method": "GET"
+    },
+    {
+      "name": "Get ad groups",
+      "endpoint": "/open_api/v1.3/adgroup/get/",
+      "category": "Ad Groups",
+      "method": "GET"
+    },
+    {
+      "name": "Get the dynamic quota on active ad groups",
+      "endpoint": "/open_api/v1.3/adgroup/quota/",
+      "category": "Ad Groups",
+      "method": "GET"
+    },
+    {
+      "name": "Estimate audience size",
+      "endpoint": "/open_api/v1.3/ad/audience_size/estimate/",
+      "category": "Ad Groups",
+      "method": "POST"
+    },
+    {
+      "name": "Create an ad group",
+      "endpoint": "/open_api/v1.3/adgroup/create/",
+      "category": "Ad Groups",
+      "method": "POST"
+    },
+    {
+      "name": "Update an ad group",
+      "endpoint": "/open_api/v1.3/adgroup/update/",
+      "category": "Ad Groups",
+      "method": "POST"
+    },
+    {
+      "name": "Update the statuses of ad groups",
+      "endpoint": "/open_api/v1.3/adgroup/status/update/",
+      "category": "Ad Groups",
+      "method": "POST"
+    },
+    {
+      "name": "Update the budgets of ad groups",
+      "endpoint": "/open_api/v1.3/adgroup/budget/update/",
+      "category": "Ad Groups",
+      "method": "POST"
+    },
+    {
+      "name": "Get review info of ad groups",
+      "endpoint": "/open_api/v1.3/adgroup/review_info/",
+      "category": "Ad Review",
+      "method": "GET"
+    },
+    {
+      "name": "Get review info of ads",
+      "endpoint": "/open_api/v1.3/ad/review_info/",
+      "category": "Ad Review",
+      "method": "GET"
+    },
+    {
+      "name": "Appeal a rejection",
+      "endpoint": "/open_api/v1.3/adgroup/appeal/",
+      "category": "Ad Review",
+      "method": "POST"
+    },
+    {
+      "name": "Upload an audience file",
+      "endpoint": "/open_api/v1.3/dmp/custom_audience/file/upload/",
+      "category": "Customer File",
+      "method": "POST"
+    },
+    {
+      "name": "Create an audience by file",
+      "endpoint": "/open_api/v1.3/dmp/custom_audience/create/",
+      "category": "Customer File",
+      "method": "POST"
+    },
+    {
+      "name": "Create/Delete an audience segment",
+      "endpoint": "/open_api/v1.3/segment/audience/",
+      "category": "Audience segment",
+      "method": "POST"
+    },
+    {
+      "name": "Add/Delete audience segment mappings",
+      "endpoint": "/open_api/v1.3/segment/mapping/",
+      "category": "Audience segment",
+      "method": "POST"
+    },
+    {
+      "name": "Update an audience",
+      "endpoint": "/open_api/v1.3/dmp/custom_audience/update/",
+      "category": "Audience",
+      "method": "POST"
+    },
+    {
+      "name": "Get all audiences",
+      "endpoint": "/open_api/v1.3/dmp/custom_audience/list/",
+      "category": "Audience",
+      "method": "GET"
+    },
+    {
+      "name": "Get audience details",
+      "endpoint": "/open_api/v1.3/dmp/custom_audience/get/",
+      "category": "Audience",
+      "method": "GET"
+    },
+    {
+      "name": "Create an audience by rule",
+      "endpoint": "/open_api/v1.3/dmp/custom_audience/rule/create/",
+      "category": "Audience",
+      "method": "POST"
+    },
+    {
+      "name": "Create a lookalike audience",
+      "endpoint": "/open_api/v1.3/dmp/custom_audience/lookalike/create/",
+      "category": "Audience",
+      "method": "POST"
+    },
+    {
+      "name": "Refresh a lookalike audience",
+      "endpoint": "/open_api/v1.3/dmp/custom_audience/lookalike/update/",
+      "category": "Audience",
+      "method": "POST"
+    },
+    {
+      "name": "Delete audiences",
+      "endpoint": "/open_api/v1.3/dmp/custom_audience/delete/",
+      "category": "Audience",
+      "method": "POST"
+    },
+    {
+      "name": "Share audiences",
+      "endpoint": "/open_api/v1.3/dmp/custom_audience/share/",
+      "category": "Audience",
+      "method": "POST"
+    },
+    {
+      "name": "Cancel the sharing of an audience",
+      "endpoint": "/open_api/v1.3/dmp/custom_audience/share/cancel/",
+      "category": "Audience",
+      "method": "POST"
+    },
+    {
+      "name": "Get the sharing log of an audience",
+      "endpoint": "/open_api/v1.3/dmp/custom_audience/share/log/",
+      "category": "Audience",
+      "method": "GET"
+    },
+    {
+      "name": "Apply audiences to ad groups",
+      "endpoint": "/open_api/v1.3/dmp/custom_audience/apply/",
+      "category": "Audience",
+      "method": "POST"
+    },
+    {
+      "name": "Get the application log of audiences",
+      "endpoint": "/open_api/v1.3/dmp/custom_audience/apply/log/",
+      "category": "Audience",
+      "method": "GET"
+    },
+    {
+      "name": "Create a Saved Audience",
+      "endpoint": "/open_api/v1.3/dmp/saved_audience/create/",
+      "category": "Saved Audience",
+      "method": "POST"
+    },
+    {
+      "name": "Get details of Saved Audiences",
+      "endpoint": "/open_api/v1.3/dmp/saved_audience/list/",
+      "category": "Saved Audience",
+      "method": "GET"
+    },
+    {
+      "name": "Delete Saved Audiences",
+      "endpoint": "/open_api/v1.3/dmp/saved_audience/delete/",
+      "category": "Saved Audience",
+      "method": "POST"
+    },
+    {
+      "name": "Get details of potential audiences",
+      "endpoint": "/open_api/v1.3/audience/insight/info/",
+      "category": "Audience Insights",
+      "method": "POST"
+    },
+    {
+      "name": "Get details of audience overlap",
+      "endpoint": "/open_api/v1.3/audience/insight/overlap/",
+      "category": "Audience Insights",
+      "method": "GET"
+    },
+    {
+      "name": "Obtain a long-term access token",
+      "endpoint": "/open_api/v1.3/oauth2/access_token/",
+      "category": "Authentication",
+      "method": "POST"
+    },
+    {
+      "name": "Revoke a long-term access token",
+      "endpoint": "/open_api/v1.3/oauth2/revoke_token/",
+      "category": "Authentication",
+      "method": "POST"
+    },
+    {
+      "name": "Obtain a short-term access token",
+      "endpoint": "/open_api/v1.3/tt_user/oauth2/token/",
+      "category": "Authentication",
+      "method": "POST"
+    },
+    {
+      "name": "Renew a short-term access token",
+      "endpoint": "/open_api/v1.3/tt_user/oauth2/refresh_token/",
+      "category": "Authentication",
+      "method": "POST"
+    },
+    {
+      "name": "Revoke a short-term access token",
+      "endpoint": "/open_api/v1.3/tt_user/oauth2/revoke/",
+      "category": "Authentication",
+      "method": "POST"
+    },
+    {
+      "name": "Create rules",
+      "endpoint": "/open_api/v1.3/optimizer/rule/create/",
+      "category": "Automated Rules",
+      "method": "POST"
+    },
+    {
+      "name": "Get rules by ID",
+      "endpoint": "/open_api/v1.3/optimizer/rule/get/",
+      "category": "Automated Rules",
+      "method": "GET"
+    },
+    {
+      "name": "Get rules by filters",
+      "endpoint": "/open_api/v1.3/optimizer/rule/list/",
+      "category": "Automated Rules",
+      "method": "GET"
+    },
+    {
+      "name": "Get rule results",
+      "endpoint": "/open_api/v1.3/optimizer/rule/result/list/",
+      "category": "Automated Rules",
+      "method": "GET"
+    },
+    {
+      "name": "Get result details",
+      "endpoint": "/open_api/v1.3/optimizer/rule/result/get/",
+      "category": "Automated Rules",
+      "method": "GET"
+    },
+    {
+      "name": "Update rules",
+      "endpoint": "/open_api/v1.3/optimizer/rule/update/",
+      "category": "Automated Rules",
+      "method": "POST"
+    },
+    {
+      "name": "Update the statuses of rules",
+      "endpoint": "/open_api/v1.3/optimizer/rule/update/status/",
+      "category": "Automated Rules",
+      "method": "POST"
+    },
+    {
+      "name": "Bind/Unbind rules",
+      "endpoint": "/open_api/v1.3/optimizer/rule/batch_bind/",
+      "category": "Automated Rules",
+      "method": "POST"
+    },
+    {
+      "name": "Get Business Centers",
+      "endpoint": "/open_api/v1.3/bc/get/",
+      "category": "BC Management",
+      "method": "GET"
+    },
+    {
+      "name": "Get the activity log of a Business Center",
+      "endpoint": "/open_api/v1.3/changelog/get/",
+      "category": "BC Management",
+      "method": "GET"
+    },
+    {
+      "name": "Process a payment",
+      "endpoint": "/open_api/v1.3/bc/transfer/",
+      "category": "BC Payments",
+      "method": "POST"
+    },
+    {
+      "name": "Get the balance and budget of ad accounts",
+      "endpoint": "/open_api/v1.3/advertiser/balance/get/",
+      "category": "BC Payments",
+      "method": "GET"
+    },
+    {
+      "name": "Get the balance of a BC",
+      "endpoint": "/open_api/v1.3/bc/balance/get/",
+      "category": "BC Payments",
+      "method": "GET"
+    },
+    {
+      "name": "Get the transaction records of a BC or ad accounts",
+      "endpoint": "/open_api/v1.3/bc/account/transaction/get/",
+      "category": "BC Payments",
+      "method": "GET"
+    },
+    {
+      "name": "Get the transaction records of ad accounts",
+      "endpoint": "/open_api/v1.3/advertiser/transaction/get/",
+      "category": "BC Payments",
+      "method": "GET"
+    },
+    {
+      "name": "Get the transaction records of a BC",
+      "endpoint": "/open_api/v1.3/bc/transaction/get/",
+      "category": "BC Payments",
+      "method": "GET"
+    },
+    {
+      "name": "Get the budget change history of an ad account",
+      "endpoint": "/open_api/v1.3/bc/account/budget/changelog/get//",
+      "category": "BC Payments",
+      "method": "GET"
+    },
+    {
+      "name": "Get the cost records of a BC and ad accounts",
+      "endpoint": "/open_api/v1.3/bc/account/cost/get/",
+      "category": "BC Payments",
+      "method": "GET"
+    },
+    {
+      "name": "Get Payment Portfolios",
+      "endpoint": "/open_api/v1.3/payment_portfolio/get/",
+      "category": "BC Payment Portfolios",
+      "method": "GET"
+    },
+    {
+      "name": "Create a Payment Portfolio",
+      "endpoint": "/open_api/v1.3/payment_portfolio/create/",
+      "category": "BC Payment Portfolios",
+      "method": "POST"
+    },
+    {
+      "name": "Link ad accounts to a Payment Portfolio",
+      "endpoint": "/open_api/v1.3/payment_portfolio/advertiser/update/",
+      "category": "BC Payment Portfolios",
+      "method": "POST"
+    },
+    {
+      "name": "Allocate the credit line to Payment Portfolios",
+      "endpoint": "/open_api/v1.3/payment_portfolio/credit_line/update/",
+      "category": "BC Payment Portfolios",
+      "method": "POST"
+    },
+    {
+      "name": "Get ad accounts linked to a Payment Portfolio",
+      "endpoint": "/open_api/v1.3/payment_portfolio/advertiser/get/",
+      "category": "BC Payment Portfolios",
+      "method": "GET"
+    },
+    {
+      "name": "Get authorized users for a Payment Portfolio",
+      "endpoint": "/open_api/v1.3/payment_portfolio/user/get/",
+      "category": "BC Payment Portfolios",
+      "method": "GET"
+    },
+    {
+      "name": "Create an ad account",
+      "endpoint": "/open_api/v1.3/bc/advertiser/create/",
+      "category": "BC Assets",
+      "method": "POST"
+    },
+    {
+      "name": "Update an ad account",
+      "endpoint": "/open_api/v1.3/advertiser/update/",
+      "category": "BC Assets",
+      "method": "POST"
+    },
+    {
+      "name": "Disable an ad account",
+      "endpoint": "/open_api/v1.3/bc/advertiser/disable/",
+      "category": "BC Assets",
+      "method": "POST"
+    },
+    {
+      "name": "Upload a business certificate",
+      "endpoint": "/open_api/v1.3/bc/image/upload/",
+      "category": "BC Assets",
+      "method": "POST"
+    },
+    {
+      "name": "Get qualifications within a Business Center",
+      "endpoint": "/open_api/v1.3/bc/advertiser/qualification/get/",
+      "category": "BC Assets",
+      "method": "GET"
+    },
+    {
+      "name": "Check the UnionPay verification requirement for a business license",
+      "endpoint": "/open_api/v1.3/bc/advertiser/unionpay_info/check/",
+      "category": "BC Assets",
+      "method": "GET"
+    },
+    {
+      "name": "Submit UnionPay verification for a business license",
+      "endpoint": "/open_api/v1.3/bc/advertiser/unionpay_info/submit/",
+      "category": "BC Assets",
+      "method": "POST"
+    },
+    {
+      "name": "Create an Organization Account in a Business Center",
+      "endpoint": "/open_api/v1.3/bc/oa/create/",
+      "category": "BC Assets",
+      "method": "POST"
+    },
+    {
+      "name": "Get assets",
+      "endpoint": "/open_api/v1.3/bc/asset/get/",
+      "category": "BC Assets",
+      "method": "GET"
+    },
+    {
+      "name": "Get assets as admin",
+      "endpoint": "/open_api/v1.3/bc/asset/admin/get/",
+      "category": "BC Assets",
+      "method": "GET"
+    },
+    {
+      "name": "Assign an asset",
+      "endpoint": "/open_api/v1.3/bc/asset/assign/",
+      "category": "BC Assets",
+      "method": "POST"
+    },
+    {
+      "name": "Unassign an asset",
+      "endpoint": "/open_api/v1.3/bc/asset/unassign/",
+      "category": "BC Assets",
+      "method": "POST"
+    },
+    {
+      "name": "Obtain a TikTok account ad delivery authorization URL",
+      "endpoint": "/open_api/v1.3/bc/asset/account/authorization/",
+      "category": "BC Assets",
+      "method": "POST"
+    },
+    {
+      "name": "Link a TikTok account to an ad account in Business Center",
+      "endpoint": "/open_api/v1.3/bc/asset/advertiser/assign/",
+      "category": "BC Assets",
+      "method": "POST"
+    },
+    {
+      "name": "Unlink a TikTok account from an ad account in Business Center",
+      "endpoint": "/open_api/v1.3/bc/asset/advertiser/unassign/",
+      "category": "BC Assets",
+      "method": "POST"
+    },
+    {
+      "name": "Get ad accounts linked to a TikTok account in Business Center",
+      "endpoint": "/open_api/v1.3/bc/asset/advertiser/assigned/",
+      "category": "BC Assets",
+      "method": "GET"
+    },
+    {
+      "name": "Transfer a pixel from advertiser to BC",
+      "endpoint": "/open_api/v1.3/bc/pixel/transfer/",
+      "category": "Manage a pixel",
+      "method": "POST"
+    },
+    {
+      "name": "Link a pixel to ad accounts / Unlink",
+      "endpoint": "/open_api/v1.3/bc/pixel/link/update/",
+      "category": "Manage a pixel",
+      "method": "POST"
+    },
+    {
+      "name": "Get ad accounts linked to a pixel",
+      "endpoint": "/open_api/v1.3/bc/pixel/link/get/",
+      "category": "Manage a pixel",
+      "method": "GET"
+    },
+    {
+      "name": "Get partners by an asset",
+      "endpoint": "/open_api/v1.3/bc/asset/partner/get/",
+      "category": "BC Assets",
+      "method": "GET"
+    },
+    {
+      "name": "Get members by an asset",
+      "endpoint": "/open_api/v1.3/bc/asset/member/get/",
+      "category": "BC Assets",
+      "method": "GET"
+    },
+    {
+      "name": "Delete assets from a BC",
+      "endpoint": "/open_api/v1.3/bc/asset/admin/delete/",
+      "category": "BC Assets",
+      "method": "POST"
+    },
+    {
+      "name": "Get binding info of an asset",
+      "endpoint": "/open_api/v1.3/asset/bind/quota/",
+      "category": "BC Assets",
+      "method": "GET"
+    },
+    {
+      "name": "Create an Asset Group",
+      "endpoint": "/open_api/v1.3/bc/asset_group/create/",
+      "category": "BC Asset Groups",
+      "method": "POST"
+    },
+    {
+      "name": "Update an Asset Group",
+      "endpoint": "/open_api/v1.3/bc/asset_group/update/",
+      "category": "BC Asset Groups",
+      "method": "POST"
+    },
+    {
+      "name": "Get all Asset Groups",
+      "endpoint": "/open_api/v1.3/bc/asset_group/list/",
+      "category": "BC Asset Groups",
+      "method": "GET"
+    },
+    {
+      "name": "Get the details of an Asset Group",
+      "endpoint": "/open_api/v1.3/bc/asset_group/get/",
+      "category": "BC Asset Groups",
+      "method": "GET"
+    },
+    {
+      "name": "Delete Asset Groups",
+      "endpoint": "/open_api/v1.3/bc/asset_group/delete/",
+      "category": "BC Asset Groups",
+      "method": "POST"
+    },
+    {
+      "name": "Create a Billing Group",
+      "endpoint": "/open_api/v1.3/bc/billing_group/create/",
+      "category": "BC Billing Groups",
+      "method": "POST"
+    },
+    {
+      "name": "Update a Billing Group",
+      "endpoint": "/open_api/v1.3/bc/billing_group/update/",
+      "category": "BC Billing Groups",
+      "method": "POST"
+    },
+    {
+      "name": "Get Billing Groups",
+      "endpoint": "/open_api/v1.3/bc/billing_group/get/",
+      "category": "BC Billing Groups",
+      "method": "GET"
+    },
+    {
+      "name": "Get the advertiser list of a Billing Group",
+      "endpoint": "/open_api/v1.3/bc/billing_group/advertiser/list/",
+      "category": "BC Billing Groups",
+      "method": "GET"
+    },
+    {
+      "name": "Get the partners of a BC",
+      "endpoint": "/open_api/v1.3/bc/partner/get/",
+      "category": "BC Partners",
+      "method": "GET"
+    },
+    {
+      "name": "Add a partner to a BC",
+      "endpoint": "/open_api/v1.3/bc/partner/add/",
+      "category": "BC Partners",
+      "method": "POST"
+    },
+    {
+      "name": "Delete a partner from a BC",
+      "endpoint": "/open_api/v1.3/bc/partner/delete/",
+      "category": "BC Partners",
+      "method": "POST"
+    },
+    {
+      "name": "Cancel the sharing of assets",
+      "endpoint": "/open_api/v1.3/bc/partner/asset/delete/",
+      "category": "BC Partners",
+      "method": "POST"
+    },
+    {
+      "name": "Get the assets of a partner",
+      "endpoint": "/open_api/v1.3/bc/partner/asset/get/",
+      "category": "BC Partners",
+      "method": "GET"
+    },
+    {
+      "name": "Get the members of a BC",
+      "endpoint": "/open_api/v1.3/bc/member/get/",
+      "category": "BC Members",
+      "method": "GET"
+    },
+    {
+      "name": "Invite members to a BC",
+      "endpoint": "/open_api/v1.3/bc/member/invite/",
+      "category": "BC Members",
+      "method": "POST"
+    },
+    {
+      "name": "Update info of a BC member",
+      "endpoint": "/open_api/v1.3/bc/member/update/",
+      "category": "BC Members",
+      "method": "POST"
+    },
+    {
+      "name": "Delete a member from a BC or revoke a member invitation",
+      "endpoint": "/open_api/v1.3/bc/member/delete/",
+      "category": "BC Members",
+      "method": "POST"
+    },
+    {
+      "name": "Get the invoices of a BC",
+      "endpoint": "/open_api/v1.3/bc/invoice/get/",
+      "category": "BC Invoices",
+      "method": "GET"
+    },
+    {
+      "name": "Get the unpaid amount of a BC",
+      "endpoint": "/open_api/v1.3/bc/invoice/unpaid/get/",
+      "category": "BC Invoices",
+      "method": "GET"
+    },
+    {
+      "name": "Download synchronously",
+      "endpoint": "/open_api/v1.3/bc/invoice/download/",
+      "category": "Download the invoices of a BC",
+      "method": "GET"
+    },
+    {
+      "name": "Create an asynchronous download task",
+      "endpoint": "/open_api/v1.3/bc/invoice/task/create/",
+      "category": "Download asynchronously",
+      "method": "POST"
+    },
+    {
+      "name": "Get asynchronous download tasks",
+      "endpoint": "/open_api/v1.3/bc/invoice/task/get/",
+      "category": "Download asynchronously",
+      "method": "GET"
+    },
+    {
+      "name": "Get asynchronous download task list",
+      "endpoint": "/open_api/v1.3/bc/invoice/task/list/",
+      "category": "Download asynchronously",
+      "method": "GET"
+    },
+    {
+      "name": "Get currencies and registration areas for ad accounts",
+      "endpoint": "/open_api/v1.3/bc/advertiser/attribute/",
+      "category": "BC Reporting",
+      "method": "GET"
+    },
+    {
+      "name": "Get the Brand Safety Hub settings of an ad account",
+      "endpoint": "/open_api/v1.3/tiktok_inventory_filters/get/",
+      "category": "Brand Safety",
+      "method": "GET"
+    },
+    {
+      "name": "Set or update the Brand Safety Hub settings of an ad account",
+      "endpoint": "/open_api/v1.3/tiktok_inventory_filters/update/",
+      "category": "Brand Safety",
+      "method": "POST"
+    },
+    {
+      "name": "Send a message to a conversation",
+      "endpoint": "/open_api/v1.3/business/message/send/",
+      "category": "Direct messages",
+      "method": "POST"
+    },
+    {
+      "name": "Get a list of conversations",
+      "endpoint": "/open_api/v1.3/business/message/conversation/list/",
+      "category": "Direct messages",
+      "method": "GET"
+    },
+    {
+      "name": "Get a list of messages",
+      "endpoint": "/open_api/v1.3/business/message/content/list/",
+      "category": "Direct messages",
+      "method": "GET"
+    },
+    {
+      "name": "Upload an image",
+      "endpoint": "/open_api/v1.3/business/message/media/upload/",
+      "category": "Direct messages",
+      "method": "POST"
+    },
+    {
+      "name": "Download an image or a video from a message",
+      "endpoint": "/open_api/v1.3/business/message/media/download/",
+      "category": "Direct messages",
+      "method": "POST"
+    },
+    {
+      "name": "Check the capability of a Business Account for a conversation",
+      "endpoint": "/open_api/v1.3/business/message/capabilities/get/",
+      "category": "Direct messages",
+      "method": "GET"
+    },
+    {
+      "name": "Enable or disable Comment-to-Message for a Business Account",
+      "endpoint": "/open_api/v1.3/business/message/direct_reply/update/",
+      "category": "Direct messages",
+      "method": "POST"
+    },
+    {
+      "name": "Get the Comment-to-Message setting of a Business Account",
+      "endpoint": "/open_api/v1.3/business/message/direct_reply/get/",
+      "category": "Direct messages",
+      "method": "GET"
+    },
+    {
+      "name": "Create a Business Messaging Webhook configuration",
+      "endpoint": "/open_api/v1.3/business/webhook/update/",
+      "category": "Webhooks",
+      "method": "POST"
+    },
+    {
+      "name": "Get a Business Messaging Webhook configuration",
+      "endpoint": "/open_api/v1.3/business/webhook/list/",
+      "category": "Webhooks",
+      "method": "GET"
+    },
+    {
+      "name": "Delete a Business Messaging Webhook configuration",
+      "endpoint": "/open_api/v1.3/business/webhook/delete/",
+      "category": "Webhooks",
+      "method": "POST"
+    },
+    {
+      "name": "Create an automatic message for a Business Account",
+      "endpoint": "/open_api/v1.3/business/message/auto_message/create/",
+      "category": "Automatic messages",
+      "method": "POST"
+    },
+    {
+      "name": "Update the automatic message for a Business Account",
+      "endpoint": "/open_api/v1.3/business/message/auto_message/update/",
+      "category": "Automatic messages",
+      "method": "POST"
+    },
+    {
+      "name": "Turn on or turn off an automatic message for a Business Account",
+      "endpoint": "/open_api/v1.3/business/message/auto_message/status/update/",
+      "category": "Automatic messages",
+      "method": "POST"
+    },
+    {
+      "name": "Get the automatic messages for a Business Account",
+      "endpoint": "/open_api/v1.3/business/message/auto_message/get/",
+      "category": "Automatic messages",
+      "method": "POST"
+    },
+    {
+      "name": "Delete the automatic message for a Business Account",
+      "endpoint": "/open_api/v1.3/business/message/auto_message/delete/",
+      "category": "Automatic messages",
+      "method": "POST"
+    },
+    {
+      "name": "Sort the automatic message for a Business Account",
+      "endpoint": "/open_api/v1.3/business/message/auto_message/sort/",
+      "category": "Automatic messages",
+      "method": "POST"
+    },
+    {
+      "name": "Get campaigns",
+      "endpoint": "/open_api/v1.3/campaign/get/",
+      "category": "Campaign",
+      "method": "GET"
+    },
+    {
+      "name": "Create a campaign",
+      "endpoint": "/open_api/v1.3/campaign/create/",
+      "category": "Campaign",
+      "method": "POST"
+    },
+    {
+      "name": "Update a campaign",
+      "endpoint": "/open_api/v1.3/campaign/update/",
+      "category": "Campaign",
+      "method": "POST"
+    },
+    {
+      "name": "Update the operation statuses of campaigns",
+      "endpoint": "/open_api/v1.3/campaign/status/update/",
+      "category": "Campaign",
+      "method": "POST"
+    },
+    {
+      "name": "Get the quota for a SKAN Dedicated Campaign per ad network",
+      "endpoint": "/open_api/v1.3/campaign/quota/info/",
+      "category": "Campaign",
+      "method": "GET"
+    },
+    {
+      "name": "Create an asynchronous copy task for a Manual Campaign",
+      "endpoint": "/open_api/v1.3/campaign/copy/task/create/",
+      "category": "Campaign",
+      "method": "POST"
+    },
+    {
+      "name": "Get the results of an asynchronous copy task for a Manual Campaign",
+      "endpoint": "/open_api/v1.3/campaign/copy/task/check/",
+      "category": "Campaign",
+      "method": "GET"
+    },
+    {
+      "name": "(Deprecated) Get the quota for an iOS 14 Dedicated Campaign",
+      "endpoint": "/open_api/v1.3/campaign/quota/get/",
+      "category": "Campaign",
+      "method": "GET"
+    },
+    {
+      "name": "Create a catalog",
+      "endpoint": "/open_api/v1.3/catalog/create/",
+      "category": "Catalog Management",
+      "method": "POST"
+    },
+    {
+      "name": "Update the name of a catalog",
+      "endpoint": "/open_api/v1.3/catalog/update/",
+      "category": "Catalog Management",
+      "method": "POST"
+    },
+    {
+      "name": "Delete a catalog",
+      "endpoint": "/open_api/v1.3/catalog/delete/",
+      "category": "Catalog Management",
+      "method": "POST"
+    },
+    {
+      "name": "Get catalogs",
+      "endpoint": "/open_api/v1.3/catalog/get/",
+      "category": "Catalog Management",
+      "method": "GET"
+    },
+    {
+      "name": "Get the lexicon list for a catalog",
+      "endpoint": "/open_api/v1.3/catalog/lexicon/get/",
+      "category": "Catalog Management",
+      "method": "GET"
+    },
+    {
+      "name": "Migrate a catalog to a BC",
+      "endpoint": "/open_api/v1.3/catalog/capitalize/",
+      "category": "Catalog Management",
+      "method": "POST"
+    },
+    {
+      "name": "Get available regions",
+      "endpoint": "/open_api/v1.3/catalog/available_country/get/",
+      "category": "Catalog Management",
+      "method": "GET"
+    },
+    {
+      "name": "Get locations and currencies",
+      "endpoint": "/open_api/v1.3/catalog/location_currency/get/",
+      "category": "Catalog Management",
+      "method": "GET"
+    },
+    {
+      "name": "Get the overview of a catalog",
+      "endpoint": "/open_api/v1.3/catalog/overview/",
+      "category": "Catalog Management",
+      "method": "GET"
+    },
+    {
+      "name": "Bind an event source to a catalog",
+      "endpoint": "/open_api/v1.3/catalog/eventsource/bind/",
+      "category": "Catalog Event Sources",
+      "method": "POST"
+    },
+    {
+      "name": "Unbind an event source from a catalog",
+      "endpoint": "/open_api/v1.3/catalog/eventsource/unbind/",
+      "category": "Catalog Event Sources",
+      "method": "POST"
+    },
+    {
+      "name": "Get event source binding info of a catalog",
+      "endpoint": "/open_api/v1.3/catalog/eventsource_bind/get/",
+      "category": "Catalog Event Sources",
+      "method": "GET"
+    },
+    {
+      "name": "Create a feed",
+      "endpoint": "/open_api/v1.3/catalog/feed/create/",
+      "category": "Catalog Feeds",
+      "method": "POST"
+    },
+    {
+      "name": "Get feeds",
+      "endpoint": "/open_api/v1.3/catalog/feed/get/",
+      "category": "Catalog Feeds",
+      "method": "GET"
+    },
+    {
+      "name": "Update a feed",
+      "endpoint": "/open_api/v1.3/catalog/feed/update/",
+      "category": "Catalog Feeds",
+      "method": "POST"
+    },
+    {
+      "name": "Delete a feed",
+      "endpoint": "/open_api/v1.3/catalog/feed/delete/",
+      "category": "Catalog Feeds",
+      "method": "POST"
+    },
+    {
+      "name": "Get the log of a feed",
+      "endpoint": "/open_api/v1.3/catalog/feed/log/",
+      "category": "Catalog Feeds",
+      "method": "GET"
+    },
+    {
+      "name": "Update the schedule status of a feed",
+      "endpoint": "/open_api/v1.3/catalog/feed/switch/",
+      "category": "Catalog Feeds",
+      "method": "POST"
+    },
+    {
+      "name": "Upload products via a file URL",
+      "endpoint": "/open_api/v1.3/catalog/product/file/",
+      "category": "Catalog Products",
+      "method": "POST"
+    },
+    {
+      "name": "Upload products via a JSON schema",
+      "endpoint": "/open_api/v1.3/catalog/product/upload/",
+      "category": "Catalog Products",
+      "method": "POST"
+    },
+    {
+      "name": "Update products",
+      "endpoint": "/open_api/v1.3/catalog/product/update/",
+      "category": "Catalog Products",
+      "method": "POST"
+    },
+    {
+      "name": "Remove products",
+      "endpoint": "/open_api/v1.3/catalog/product/delete/",
+      "category": "Catalog Products",
+      "method": "POST"
+    },
+    {
+      "name": "Get products",
+      "endpoint": "/open_api/v1.3/catalog/product/get/",
+      "category": "Catalog Products",
+      "method": "GET"
+    },
+    {
+      "name": "Get the product handling log",
+      "endpoint": "/open_api/v1.3/catalog/product/log/",
+      "category": "Catalog Products",
+      "method": "GET"
+    },
+    {
+      "name": "Get product sets",
+      "endpoint": "/open_api/v1.3/catalog/set/get/",
+      "category": "Catalog Product Sets",
+      "method": "GET"
+    },
+    {
+      "name": "Get products in a product set",
+      "endpoint": "/open_api/v1.3/catalog/set/product/get/",
+      "category": "Catalog Product Sets",
+      "method": "GET"
+    },
+    {
+      "name": "Create a product set by conditions",
+      "endpoint": "/open_api/v1.3/catalog/set/create/",
+      "category": "Catalog Product Sets",
+      "method": "POST"
+    },
+    {
+      "name": "Create a product set by file",
+      "endpoint": "/open_api/v1.3/catalog/set/upload/",
+      "category": "Catalog Product Sets",
+      "method": "POST"
+    },
+    {
+      "name": "Update a product set",
+      "endpoint": "/open_api/v1.3/catalog/set/update/",
+      "category": "Catalog Product Sets",
+      "method": "POST"
+    },
+    {
+      "name": "Delete product sets",
+      "endpoint": "/open_api/v1.3/catalog/set/delete/",
+      "category": "Catalog Product Sets",
+      "method": "POST"
+    },
+    {
+      "name": "Upload catalog videos via a file URL",
+      "endpoint": "/open_api/v1.3/catalog/video/file/",
+      "category": "Catalog Videos",
+      "method": "POST"
+    },
+    {
+      "name": "Get the catalog video handling log",
+      "endpoint": "/open_api/v1.3/catalog/video/log/",
+      "category": "Catalog Videos",
+      "method": "GET"
+    },
+    {
+      "name": "Get the uploaded catalog videos within a catalog",
+      "endpoint": "/open_api/v1.3/catalog/video/get/",
+      "category": "Catalog Videos",
+      "method": "GET"
+    },
+    {
+      "name": "Delete uploaded catalog videos",
+      "endpoint": "/open_api/v1.3/catalog/video/delete/",
+      "category": "Catalog Videos",
+      "method": "POST"
+    },
+    {
+      "name": "Get video packages",
+      "endpoint": "/open_api/v1.3/catalog/video_package/get/",
+      "category": "Catalog Video Templates",
+      "method": "GET"
+    },
+    {
+      "name": "(Deprecated) Create a video package",
+      "endpoint": "/open_api/v1.3/catalog/video_package/create/",
+      "category": "Catalog Video Templates",
+      "method": "POST"
+    },
+    {
+      "name": "(Deprecated) Update the name of a video package",
+      "endpoint": "/open_api/v1.3/catalog/video_package/update/",
+      "category": "Catalog Video Templates",
+      "method": "POST"
+    },
+    {
+      "name": "(Deprecated) Delete a video package",
+      "endpoint": "/open_api/v1.3/catalog/video_package/delete/",
+      "category": "Catalog Video Templates",
+      "method": "POST"
+    },
+    {
+      "name": "(Deprecated) Upload a video template",
+      "endpoint": "/open_api/v1.3/catalog/template/upload/",
+      "category": "Catalog Video Templates",
+      "method": "POST"
+    },
+    {
+      "name": "(Deprecated) Preview video templates",
+      "endpoint": "/open_api/v1.3/catalog/template_preview/create/",
+      "category": "Catalog Video Templates",
+      "method": "POST"
+    },
+    {
+      "name": "Get synchronous catalog product diagnostic information",
+      "endpoint": "/open_api/v1.3/diagnostic/catalog/",
+      "category": "Catalog Diagnostics",
+      "method": "GET"
+    },
+    {
+      "name": "Create an asynchronous download task for catalog product diagnostic information",
+      "endpoint": "/open_api/v1.3/diagnostic/catalog/product/task/create/",
+      "category": "Catalog Diagnostics",
+      "method": "POST"
+    },
+    {
+      "name": "Download asynchronous catalog product diagnostic information",
+      "endpoint": "/open_api/v1.3/diagnostic/catalog/product/task/get/",
+      "category": "Catalog Diagnostics",
+      "method": "GET"
+    },
+    {
+      "name": "Get catalog event source diagnostic information",
+      "endpoint": "/open_api/v1.3/diagnostic/catalog/eventsource/issue/",
+      "category": "Catalog Diagnostics",
+      "method": "GET"
+    },
+    {
+      "name": "Get catalog event trends and match rate",
+      "endpoint": "/open_api/v1.3/diagnostic/catalog/eventsource/metric/",
+      "category": "Catalog Diagnostics",
+      "method": "GET"
+    },
+    {
+      "name": "Get filters for catalog product insights",
+      "endpoint": "/open_api/v1.3/catalog/insight/filter/get/",
+      "category": "Catalog Insights",
+      "method": "GET"
+    },
+    {
+      "name": "Get trending catalog products",
+      "endpoint": "/open_api/v1.3/catalog/insight/product/get/",
+      "category": "Catalog Insights",
+      "method": "GET"
+    },
+    {
+      "name": "Get trending catalog product categories",
+      "endpoint": "/open_api/v1.3/catalog/insight/category/get/",
+      "category": "Catalog Insights",
+      "method": "GET"
+    },
+    {
+      "name": "Create a change log download task",
+      "endpoint": "/open_api/v1.3/changelog/task/create/",
+      "category": "Change Log",
+      "method": "POST"
+    },
+    {
+      "name": "Check the status of a download task",
+      "endpoint": "/open_api/v1.3/changelog/task/check/",
+      "category": "Change Log",
+      "method": "GET"
+    },
+    {
+      "name": "Get the downloaded file",
+      "endpoint": "/open_api/v1.3/changelog/task/download/",
+      "category": "Change Log",
+      "method": "GET"
+    },
+    {
+      "name": "Create a portfolio",
+      "endpoint": "/open_api/v1.3/creative/portfolio/create/",
+      "category": "Creative Portfolios",
+      "method": "POST"
+    },
+    {
+      "name": "Get a portfolio by ID",
+      "endpoint": "/open_api/v1.3/creative/portfolio/get/",
+      "category": "Creative Portfolios",
+      "method": "GET"
+    },
+    {
+      "name": "Get portfolios within an ad account",
+      "endpoint": "/open_api/v1.3/creative/portfolio/list/",
+      "category": "Creative Portfolios",
+      "method": "GET"
+    },
+    {
+      "name": "Delete portfolios",
+      "endpoint": "/open_api/v1.3/creative/portfolio/delete/",
+      "category": "Creative Portfolios",
+      "method": "POST"
+    },
+    {
+      "name": "Creative basic reports",
+      "endpoint": "/open_api/v1.3/creative/report/get/",
+      "category": "Creative Reports",
+      "method": "GET"
+    },
+    {
+      "name": "Video Insights reports",
+      "endpoint": "/open_api/v1.3/creative/report/get/",
+      "category": "Creative Reports",
+      "method": "GET"
+    },
+    {
+      "name": "Get ad benchmarks",
+      "endpoint": "/open_api/v1.3/report/ad_benchmark/get/",
+      "category": "Creative Insights",
+      "method": "GET"
+    },
+    {
+      "name": "Get in-second performance",
+      "endpoint": "/open_api/v1.3/report/video_performance/get/",
+      "category": "Creative Insights",
+      "method": "GET"
+    },
+    {
+      "name": "(Deprecated) Get the status of a task",
+      "endpoint": "/open_api/v1.3/creative/status/get/",
+      "category": "Creative Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Edit an image",
+      "endpoint": "/open_api/v1.3/creative/image/edit/",
+      "category": "Creative Tools",
+      "method": "POST"
+    },
+    {
+      "name": "Preview an ad or a creative",
+      "endpoint": "/open_api/v1.3/creative/ads_preview/create/",
+      "category": "Creative Tools",
+      "method": "POST"
+    },
+    {
+      "name": "(Deprecated) Create a Smart Video Soundtrack task",
+      "endpoint": "/open_api/v1.3/creative/video_soundtrack/create/",
+      "category": "Creative Tools",
+      "method": "POST"
+    },
+    {
+      "name": "(Deprecated) Create a Quick Optimization task",
+      "endpoint": "/open_api/v1.3/creative/quick_optimization/create/",
+      "category": "Creative Tools",
+      "method": "POST"
+    },
+    {
+      "name": "(Deprecated) Create a Smart Video task",
+      "endpoint": "/open_api/v1.3/creative/smart_video/create/",
+      "category": "Creative Tools",
+      "method": "POST"
+    },
+    {
+      "name": "Share creative assets",
+      "endpoint": "/open_api/v1.3/creative/asset/share/",
+      "category": "Creative Tools",
+      "method": "POST"
+    },
+    {
+      "name": "Delete creative assets",
+      "endpoint": "/open_api/v1.3/creative/asset/delete/",
+      "category": "Creative Tools",
+      "method": "POST"
+    },
+    {
+      "name": "Get Smart Text recommendations",
+      "endpoint": "/open_api/v1.3/creative/smart_text/generate/",
+      "category": "Creative Tools",
+      "method": "POST"
+    },
+    {
+      "name": "Get recommended CTAs",
+      "endpoint": "/open_api/v1.3/creative/cta/recommend/",
+      "category": "Creative Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Create a Smart Fix task",
+      "endpoint": "/open_api/v1.3/video/fix/task/create/",
+      "category": "Creative Tools",
+      "method": "POST"
+    },
+    {
+      "name": "Get the results of a Smart Fix task",
+      "endpoint": "/open_api/v1.3/video/fix/task/get/",
+      "category": "Creative Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Get Creative Fatigue Detection results",
+      "endpoint": "/open_api/v1.3/creative_fatigue/get/",
+      "category": "Creative Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Get Custom Conversions associated with an event source",
+      "endpoint": "/open_api/v1.3/custom_conversion/list/",
+      "category": "Custom Conversions",
+      "method": "GET"
+    },
+    {
+      "name": "Get the details of a Custom Conversion",
+      "endpoint": "/open_api/v1.3/custom_conversion/get/",
+      "category": "Custom Conversions",
+      "method": "GET"
+    },
+    {
+      "name": "Create a Custom Conversion",
+      "endpoint": "/open_api/v1.3/custom_conversion/create/",
+      "category": "Custom Conversions",
+      "method": "POST"
+    },
+    {
+      "name": "Update a Custom Conversion",
+      "endpoint": "/open_api/v1.3/custom_conversion/update/",
+      "category": "Custom Conversions",
+      "method": "POST"
+    },
+    {
+      "name": "Delete a Custom Conversion",
+      "endpoint": "/open_api/v1.3/custom_conversion/delete/",
+      "category": "Custom Conversions",
+      "method": "POST"
+    },
+    {
+      "name": "Get popular hashtags",
+      "endpoint": "/open_api/v1.3/discovery/trending_list/",
+      "category": "Discovery",
+      "method": "GET"
+    },
+    {
+      "name": "Get details of a popular hashtag",
+      "endpoint": "/open_api/v1.3/discovery/detail/",
+      "category": "Discovery",
+      "method": "GET"
+    },
+    {
+      "name": "Get trending videos related to hashtags",
+      "endpoint": "/open_api/v1.3/discovery/video_list/",
+      "category": "Discovery",
+      "method": "GET"
+    },
+    {
+      "name": "Get popular tracks from the Commercial Music Library",
+      "endpoint": "/open_api/v1.3/discovery/cml/trending_list/",
+      "category": "Discovery",
+      "method": "GET"
+    },
+    {
+      "name": "Get trending videos related to tracks",
+      "endpoint": "/open_api/v1.3/discovery/cml/video_list/",
+      "category": "Discovery",
+      "method": "GET"
+    },
+    {
+      "name": "Get trending search keywords",
+      "endpoint": "/open_api/v1.3/discovery/trending/search/",
+      "category": "Discovery",
+      "method": "GET"
+    },
+    {
+      "name": "Get recommended search keywords",
+      "endpoint": "/open_api/v1.3/discovery/trending/search/keyword/",
+      "category": "Discovery",
+      "method": "GET"
+    },
+    {
+      "name": "(Deprecated) Submit materials",
+      "endpoint": "/open_api/v1.3/dynamic_scene/material/submit/",
+      "category": "(Deprecated) Dynamic Scene",
+      "method": "POST"
+    },
+    {
+      "name": "(Deprecated) Create an async task",
+      "endpoint": "/open_api/v1.3/dynamic_scene/task/create/",
+      "category": "(Deprecated) Dynamic Scene",
+      "method": "POST"
+    },
+    {
+      "name": "(Deprecated) Get the results of an async task",
+      "endpoint": "/open_api/v1.3/dynamic_scene/task/get/",
+      "category": "(Deprecated) Dynamic Scene",
+      "method": "GET"
+    },
+    {
+      "name": "(Deprecated) Get all videos",
+      "endpoint": "/open_api/v1.3/dynamic_scene/get/",
+      "category": "(Deprecated) Dynamic Scene",
+      "method": "GET"
+    },
+    {
+      "name": "(Deprecated) Run a report",
+      "endpoint": "/open_api/v1.3/dynamic_scene/report/get/",
+      "category": "(Deprecated) Dynamic Scene",
+      "method": "GET"
+    },
+    {
+      "name": "Report App, Web, Offline, or CRM Events",
+      "endpoint": "/open_api/v1.3/event/track/",
+      "category": "Events 2.0",
+      "method": "POST"
+    },
+    {
+      "name": "Report an App Event",
+      "endpoint": "/open_api/v1.3/app/track/",
+      "category": "App Events",
+      "method": "POST"
+    },
+    {
+      "name": "Report App Events in bulk",
+      "endpoint": "/open_api/v1.3/app/batch/",
+      "category": "App Events",
+      "method": "POST"
+    },
+    {
+      "name": "Get info of an app",
+      "endpoint": "/open_api/v1.3/app/info/",
+      "category": "App Events",
+      "method": "GET"
+    },
+    {
+      "name": "Create an app",
+      "endpoint": "/open_api/v1.3/app/create/",
+      "category": "App Events",
+      "method": "POST"
+    },
+    {
+      "name": "Update an app",
+      "endpoint": "/open_api/v1.3/app/update/",
+      "category": "App Events",
+      "method": "POST"
+    },
+    {
+      "name": "Get the app list",
+      "endpoint": "/open_api/v1.3/app/list/",
+      "category": "App Events",
+      "method": "GET"
+    },
+    {
+      "name": "Get App Conversion Events",
+      "endpoint": "/open_api/v1.3/app/optimization_event/",
+      "category": "App Events",
+      "method": "GET"
+    },
+    {
+      "name": "Get App Retargeting Events",
+      "endpoint": "/open_api/v1.3/app/optimization_event/retargeting/",
+      "category": "App Events",
+      "method": "GET"
+    },
+    {
+      "name": "Report a Web Event",
+      "endpoint": "/open_api/v1.3/pixel/track/",
+      "category": "Pixel Events",
+      "method": "POST"
+    },
+    {
+      "name": "Report Web Events in bulk",
+      "endpoint": "/open_api/v1.3/pixel/batch/",
+      "category": "Pixel Events",
+      "method": "POST"
+    },
+    {
+      "name": "Get pixels",
+      "endpoint": "/open_api/v1.3/pixel/list/",
+      "category": "Pixel Events",
+      "method": "GET"
+    },
+    {
+      "name": "Create a pixel",
+      "endpoint": "/open_api/v1.3/pixel/create/",
+      "category": "Pixel Events",
+      "method": "POST"
+    },
+    {
+      "name": "Update a pixel",
+      "endpoint": "/open_api/v1.3/pixel/update/",
+      "category": "Pixel Events",
+      "method": "POST"
+    },
+    {
+      "name": "Create Pixel Events",
+      "endpoint": "/open_api/v1.3/pixel/event/create/",
+      "category": "Pixel Events",
+      "method": "POST"
+    },
+    {
+      "name": "Update a Pixel Event",
+      "endpoint": "/open_api/v1.3/pixel/event/update/",
+      "category": "Pixel Events",
+      "method": "POST"
+    },
+    {
+      "name": "Delete a Pixel Event",
+      "endpoint": "/open_api/v1.3/pixel/event/delete/",
+      "category": "Pixel Events",
+      "method": "POST"
+    },
+    {
+      "name": "Get Instant Page events",
+      "endpoint": "/open_api/v1.3/pixel/instant_page/event/",
+      "category": "Pixel Events",
+      "method": "GET"
+    },
+    {
+      "name": "Get Pixel Event statistics",
+      "endpoint": "/open_api/v1.3/pixel/event/stats/",
+      "category": "Pixel Events",
+      "method": "GET"
+    },
+    {
+      "name": "Create an Offline Event set",
+      "endpoint": "/open_api/v1.3/offline/create/",
+      "category": "Offline Events",
+      "method": "POST"
+    },
+    {
+      "name": "Update an Offline Event set",
+      "endpoint": "/open_api/v1.3/offline/update/",
+      "category": "Offline Events",
+      "method": "POST"
+    },
+    {
+      "name": "Delete an Offline Event set",
+      "endpoint": "/open_api/v1.3/offline/delete/",
+      "category": "Offline Events",
+      "method": "POST"
+    },
+    {
+      "name": "Get Offline Event sets",
+      "endpoint": "/open_api/v1.3/offline/get/",
+      "category": "Offline Events",
+      "method": "GET"
+    },
+    {
+      "name": "Report an Offline Event",
+      "endpoint": "/open_api/v1.3/offline/track/",
+      "category": "Offline Events",
+      "method": "POST"
+    },
+    {
+      "name": "Report Offline Events in bulk",
+      "endpoint": "/open_api/v1.3/offline/batch/",
+      "category": "Offline Events",
+      "method": "POST"
+    },
+    {
+      "name": "Get CRM Event Sets",
+      "endpoint": "/open_api/v1.3/crm/list/",
+      "category": "CRM Events",
+      "method": "GET"
+    },
+    {
+      "name": "Create a CRM Event Set",
+      "endpoint": "/open_api/v1.3/crm/create/",
+      "category": "CRM Events",
+      "method": "POST"
+    },
+    {
+      "name": "Get the message event sets for ad creation",
+      "endpoint": "/open_api/v1.3/ctm/message_event_set/get/",
+      "category": "CTM Events",
+      "method": "GET"
+    },
+    {
+      "name": "Upload a file",
+      "endpoint": "/open_api/v1.3/file/temporarily/upload/",
+      "category": "Files",
+      "method": "POST"
+    },
+    {
+      "name": "Start a file chunk upload task",
+      "endpoint": "/open_api/v1.3/file/start/upload/",
+      "category": "Files",
+      "method": "POST"
+    },
+    {
+      "name": "Transfer a file chunk",
+      "endpoint": "/open_api/v1.3/file/transfer/upload/",
+      "category": "Files",
+      "method": "POST"
+    },
+    {
+      "name": "Finish a chunk upload task",
+      "endpoint": "/open_api/v1.3/file/finish/upload/",
+      "category": "Files",
+      "method": "POST"
+    },
+    {
+      "name": "Check the names of files",
+      "endpoint": "/open_api/v1.3/file/name/check/",
+      "category": "Files",
+      "method": "GET"
+    },
+    {
+      "name": "Get GMV Max Campaigns",
+      "endpoint": "/open_api/v1.3/gmv_max/campaign/get/",
+      "category": "GMV Max",
+      "method": "GET"
+    },
+    {
+      "name": "Get the details of a GMV Max Campaign",
+      "endpoint": "/open_api/v1.3/campaign/gmv_max/info/",
+      "category": "GMV Max",
+      "method": "GET"
+    },
+    {
+      "name": "Create a GMV Max Campaign",
+      "endpoint": "/open_api/v1.3/campaign/gmv_max/create/",
+      "category": "GMV Max",
+      "method": "POST"
+    },
+    {
+      "name": "Update a GMV Max Campaign",
+      "endpoint": "/open_api/v1.3/campaign/gmv_max/update/",
+      "category": "GMV Max",
+      "method": "POST"
+    },
+    {
+      "name": "Get the recommended GMV Max ROI target and budget",
+      "endpoint": "/open_api/v1.3/gmv_max/bid/recommend/",
+      "category": "GMV Max",
+      "method": "GET"
+    },
+    {
+      "name": "Create a max delivery or creative boost session",
+      "endpoint": "/open_api/v1.3/campaign/gmv_max/session/create/",
+      "category": "GMV Max",
+      "method": "POST"
+    },
+    {
+      "name": "Update a max delivery or creative boost session",
+      "endpoint": "/open_api/v1.3/campaign/gmv_max/session/update/",
+      "category": "GMV Max",
+      "method": "POST"
+    },
+    {
+      "name": "Get max delivery or creative boost sessions within a campaign",
+      "endpoint": "/open_api/v1.3/campaign/gmv_max/session/list/",
+      "category": "GMV Max",
+      "method": "GET"
+    },
+    {
+      "name": "Get details of max delivery or creative boost sessions",
+      "endpoint": "/open_api/v1.3/campaign/gmv_max/session/get/",
+      "category": "GMV Max",
+      "method": "GET"
+    },
+    {
+      "name": "Delete a max delivery or creative boost session",
+      "endpoint": "/open_api/v1.3/campaign/gmv_max/session/delete/",
+      "category": "GMV Max",
+      "method": "POST"
+    },
+    {
+      "name": "Get TikTok Shops for GMV Max Campaigns",
+      "endpoint": "/open_api/v1.3/gmv_max/store/list/",
+      "category": "GMV Max",
+      "method": "GET"
+    },
+    {
+      "name": "Check the availability of a TikTok Shop for Product GMV Max Campaigns",
+      "endpoint": "/open_api/v1.3/gmv_max/store/shop_ad_usage_check/",
+      "category": "GMV Max",
+      "method": "GET"
+    },
+    {
+      "name": "Get identities for GMV Max Campaigns",
+      "endpoint": "/open_api/v1.3/gmv_max/identity/get/",
+      "category": "GMV Max",
+      "method": "GET"
+    },
+    {
+      "name": "Check the occupancy of identities or products in Shopping Ads",
+      "endpoint": "/open_api/v1.3/gmv_max/occupied_custom_shop_ads/list/",
+      "category": "GMV Max",
+      "method": "GET"
+    },
+    {
+      "name": "Get posts for a Product GMV Max Campaign",
+      "endpoint": "/open_api/v1.3/gmv_max/video/get/",
+      "category": "GMV Max",
+      "method": "GET"
+    },
+    {
+      "name": "(To be deprecated) Get details of videos in customized posts",
+      "endpoint": "/open_api/v1.3/gmv_max/custom_anchor_video_list/get/",
+      "category": "GMV Max",
+      "method": "GET"
+    },
+    {
+      "name": "Remove or add back creatives in a GMV Max Campaign",
+      "endpoint": "/open_api/v1.3/campaign/gmv_max/creative/update/",
+      "category": "GMV Max",
+      "method": "POST"
+    },
+    {
+      "name": "Create shop-level customized TikTok posts",
+      "endpoint": "/open_api/v1.3/gmv_max/creation/custom_anchor_video_list/create/",
+      "category": "GMV Max",
+      "method": "POST"
+    },
+    {
+      "name": "Get customized TikTok posts",
+      "endpoint": "/open_api/v1.3/gmv_max/creation/custom_anchor_video_list/get/",
+      "category": "GMV Max",
+      "method": "POST"
+    },
+    {
+      "name": "Delete customized TikTok posts",
+      "endpoint": "/open_api/v1.3/gmv_max/creation/custom_anchor_video_list/delete/",
+      "category": "GMV Max",
+      "method": "POST"
+    },
+    {
+      "name": "Get product linkage details of videos in customized posts",
+      "endpoint": "/open_api/v1.3/gmv_max/creation/shop_video/video_anchors/",
+      "category": "GMV Max",
+      "method": "POST"
+    },
+    {
+      "name": "Get the TikTok Shop exclusive authorization status of an ad account",
+      "endpoint": "/open_api/v1.3/gmv_max/exclusive_authorization/get/",
+      "category": "GMV Max",
+      "method": "GET"
+    },
+    {
+      "name": "Grant an ad account exclusive authorization for a TikTok Shop",
+      "endpoint": "/open_api/v1.3/gmv_max/exclusive_authorization/create/",
+      "category": "GMV Max",
+      "method": "POST"
+    },
+    {
+      "name": "Run a GMV Max Campaign report",
+      "endpoint": "/open_api/v1.3/gmv_max/report/get/",
+      "category": "GMV Max",
+      "method": "GET"
+    },
+    {
+      "name": "Create an identity",
+      "endpoint": "/open_api/v1.3/identity/create/",
+      "category": "Identity",
+      "method": "POST"
+    },
+    {
+      "name": "Delete an identity",
+      "endpoint": "/open_api/v1.3/identity/delete/",
+      "category": "Identity",
+      "method": "POST"
+    },
+    {
+      "name": "Get the identity list",
+      "endpoint": "/open_api/v1.3/identity/get/",
+      "category": "Identity",
+      "method": "GET"
+    },
+    {
+      "name": "Get info about an identity",
+      "endpoint": "/open_api/v1.3/identity/info/",
+      "category": "Identity",
+      "method": "GET"
+    },
+    {
+      "name": "Get posts under an identity",
+      "endpoint": "/open_api/v1.3/identity/video/get/",
+      "category": "Identity",
+      "method": "GET"
+    },
+    {
+      "name": "Get live videos under an identity",
+      "endpoint": "/open_api/v1.3/identity/live/get/",
+      "category": "Identity",
+      "method": "GET"
+    },
+    {
+      "name": "Get music authorization info of a video",
+      "endpoint": "/open_api/v1.3/identity/music/authorization/",
+      "category": "Identity",
+      "method": "GET"
+    },
+    {
+      "name": "Get info about TikTok posts",
+      "endpoint": "/open_api/v1.3/identity/video/info/",
+      "category": "Identity",
+      "method": "GET"
+    },
+    {
+      "name": "Upload an image",
+      "endpoint": "/open_api/v1.3/file/image/ad/upload/",
+      "category": "Images",
+      "method": "POST"
+    },
+    {
+      "name": "Update the name of an image",
+      "endpoint": "/open_api/v1.3/file/image/ad/update/",
+      "category": "Images",
+      "method": "POST"
+    },
+    {
+      "name": "Get info about images",
+      "endpoint": "/open_api/v1.3/file/image/ad/info/",
+      "category": "Images",
+      "method": "GET"
+    },
+    {
+      "name": "Search for images",
+      "endpoint": "/open_api/v1.3/file/image/ad/search/",
+      "category": "Images",
+      "method": "GET"
+    },
+    {
+      "name": "Create a test lead",
+      "endpoint": "/open_api/v1.3/page/lead/mock/create/",
+      "category": "Leads",
+      "method": "POST"
+    },
+    {
+      "name": "Get a test lead",
+      "endpoint": "/open_api/v1.3/page/lead/mock/get/",
+      "category": "Leads",
+      "method": "GET"
+    },
+    {
+      "name": "Delete a test lead",
+      "endpoint": "/open_api/v1.3/page/lead/mock/delete/",
+      "category": "Leads",
+      "method": "POST"
+    },
+    {
+      "name": "Create a lead download task",
+      "endpoint": "/open_api/v1.3/page/lead/task/",
+      "category": "Leads",
+      "method": "POST"
+    },
+    {
+      "name": "Download leads",
+      "endpoint": "/open_api/v1.3/page/lead/task/download/",
+      "category": "Leads",
+      "method": "GET"
+    },
+    {
+      "name": "Get form libraries",
+      "endpoint": "/open_api/v1.3/page/library/get/",
+      "category": "Leads",
+      "method": "GET"
+    },
+    {
+      "name": "Migrate leads to a BC",
+      "endpoint": "/open_api/v1.3/page/library/transfer/",
+      "category": "Leads",
+      "method": "POST"
+    },
+    {
+      "name": "Get the fields of an Instant Form",
+      "endpoint": "/open_api/v1.3/page/field/get/",
+      "category": "Leads",
+      "method": "GET"
+    },
+    {
+      "name": "Get fields of an Instant Form or direct message leads",
+      "endpoint": "/open_api/v1.3/lead/field/get/",
+      "category": "Leads",
+      "method": "GET"
+    },
+    {
+      "name": "Get an Instant Form lead or a direct message lead",
+      "endpoint": "/open_api/v1.3/lead/get/",
+      "category": "Leads",
+      "method": "GET"
+    },
+    {
+      "name": "Create an MMM data request",
+      "endpoint": "/open_api/v1.3/mmm/api/create/",
+      "category": "Media Mix Modeling",
+      "method": "POST"
+    },
+    {
+      "name": "Check the status of an MMM data request",
+      "endpoint": "/open_api/v1.3/mmm/api/check/",
+      "category": "Media Mix Modeling",
+      "method": "GET"
+    },
+    {
+      "name": "Obtain the download URL for MMM data",
+      "endpoint": "/open_api/v1.3/mmm/api/download/",
+      "category": "Media Mix Modeling",
+      "method": "GET"
+    },
+    {
+      "name": "Get the MMM data request history",
+      "endpoint": "/open_api/v1.3/mmm/api/history/",
+      "category": "Media Mix Modeling",
+      "method": "GET"
+    },
+    {
+      "name": "Get top 1000 mentioned posts",
+      "endpoint": "/open_api/v1.3/business/mention/video/list/",
+      "category": "Mentions",
+      "method": "GET"
+    },
+    {
+      "name": "Get the details of a mentioned post from mentions webhook",
+      "endpoint": "/open_api/v1.3/business/mention/video/get/",
+      "category": "Mentions",
+      "method": "GET"
+    },
+    {
+      "name": "Get frequent keywords used in top 1000 mentioned posts",
+      "endpoint": "/open_api/v1.3/business/mention/top_word/list/",
+      "category": "Mentions",
+      "method": "GET"
+    },
+    {
+      "name": "Get frequent hashtags used in top 1000 mentioned posts",
+      "endpoint": "/open_api/v1.3/business/mention/top_hashtag/list/",
+      "category": "Mentions",
+      "method": "GET"
+    },
+    {
+      "name": "Get mention content for top 1000 brand hashtag posts",
+      "endpoint": "/open_api/v1.3/business/mention/hashtag/video/list/",
+      "category": "Mentions",
+      "method": "GET"
+    },
+    {
+      "name": "Get valid brand mention hashtags for a Business Account",
+      "endpoint": "/open_api/v1.3/business/mention/hashtag/verify/list/",
+      "category": "Mentions",
+      "method": "GET"
+    },
+    {
+      "name": "Enable brand hashtags for a Business Account",
+      "endpoint": "/open_api/v1.3/business/mention/hashtag/add/",
+      "category": "Mentions",
+      "method": "POST"
+    },
+    {
+      "name": "Get enabled hashtags for a Business Account",
+      "endpoint": "/open_api/v1.3/business/mention/hashtag/manage/list/",
+      "category": "Mentions",
+      "method": "GET"
+    },
+    {
+      "name": "Delete an enabled brand hashtag for a Business Account",
+      "endpoint": "/open_api/v1.3/business/mention/hashtag/remove/",
+      "category": "Mentions",
+      "method": "POST"
+    },
+    {
+      "name": "Get top 1000 comment mentions on posts",
+      "endpoint": "/open_api/v1.3/business/mention/comment/list/",
+      "category": "Mentions",
+      "method": "GET"
+    },
+    {
+      "name": "Get the details of a comment mention from webhooks",
+      "endpoint": "/open_api/v1.3/business/mention/comment/get/",
+      "category": "Mentions",
+      "method": "GET"
+    },
+    {
+      "name": "Reply to a mention in comments",
+      "endpoint": "/open_api/v1.3/business/comment/reply/create/",
+      "category": "Mentions",
+      "method": "POST"
+    },
+    {
+      "name": "Create a Mentions Webhook configuration",
+      "endpoint": "/open_api/v1.3/business/webhook/update/",
+      "category": "Mentions",
+      "method": "POST"
+    },
+    {
+      "name": "Get a Mentions Webhook configuration",
+      "endpoint": "/open_api/v1.3/business/webhook/list/",
+      "category": "Mentions",
+      "method": "GET"
+    },
+    {
+      "name": "Delete a Mentions Webhook configuration",
+      "endpoint": "/open_api/v1.3/business/webhook/delete/",
+      "category": "Mentions",
+      "method": "POST"
+    },
+    {
+      "name": "Upload a piece of music",
+      "endpoint": "/open_api/v1.3/file/music/upload/",
+      "category": "Music",
+      "method": "POST"
+    },
+    {
+      "name": "Get the music list",
+      "endpoint": "/open_api/v1.3/file/music/get/",
+      "category": "Music",
+      "method": "GET"
+    },
+    {
+      "name": "Get negative keywords",
+      "endpoint": "/open_api/v1.3/search_ad/negative_keyword/get/",
+      "category": "Negative Keywords",
+      "method": "GET"
+    },
+    {
+      "name": "Create negative keywords",
+      "endpoint": "/open_api/v1.3/search_ad/negative_keyword/add/",
+      "category": "Negative Keywords",
+      "method": "POST"
+    },
+    {
+      "name": "Update a negative keyword",
+      "endpoint": "/open_api/v1.3/search_ad/negative_keyword/update/",
+      "category": "Negative Keywords",
+      "method": "POST"
+    },
+    {
+      "name": "Delete negative keywords",
+      "endpoint": "/open_api/v1.3/search_ad/negative_keyword/delete/",
+      "category": "Negative Keywords",
+      "method": "POST"
+    },
+    {
+      "name": "Download negative keywords",
+      "endpoint": "/open_api/v1.3/search_ad/negative_keyword/download/",
+      "category": "Negative Keywords",
+      "method": "GET"
+    },
+    {
+      "name": "Get the Page ID",
+      "endpoint": "/open_api/v1.3/page/get/",
+      "category": "Page",
+      "method": "GET"
+    },
+    {
+      "name": "Create a TIP Editor SDK access token",
+      "endpoint": "/open_api/v1.3/oauth2/access_token/tip_sdk/create/",
+      "category": "Page",
+      "method": "POST"
+    },
+    {
+      "name": "Validate a TIP Editor SDK access token",
+      "endpoint": "/open_api/v1.3/oauth2/access_token/tip_sdk/validate/",
+      "category": "Page",
+      "method": "POST"
+    },
+    {
+      "name": "Renew a TIP Editor SDK access token",
+      "endpoint": "/open_api/v1.3/oauth2/access_token/tip_sdk/renew/",
+      "category": "Page",
+      "method": "POST"
+    },
+    {
+      "name": "Get the Pangle block list",
+      "endpoint": "/open_api/v1.3/pangle_block_list/get/",
+      "category": "Pangle",
+      "method": "GET"
+    },
+    {
+      "name": "Update the Pangle block list",
+      "endpoint": "/open_api/v1.3/pangle_block_list/update/",
+      "category": "Pangle",
+      "method": "POST"
+    },
+    {
+      "name": "Get the Pangle audience packages",
+      "endpoint": "/open_api/v1.3/pangle_audience_package/get/",
+      "category": "Pangle",
+      "method": "GET"
+    },
+    {
+      "name": "Upload a playable creative",
+      "endpoint": "/open_api/v1.3/playable/upload/",
+      "category": "Playable Ads",
+      "method": "POST"
+    },
+    {
+      "name": "Check the status of a playable creative",
+      "endpoint": "/open_api/v1.3/playable/validate/",
+      "category": "Playable Ads",
+      "method": "GET"
+    },
+    {
+      "name": "Save a playable creative",
+      "endpoint": "/open_api/v1.3/playable/save/",
+      "category": "Playable Ads",
+      "method": "POST"
+    },
+    {
+      "name": "Get playable creatives",
+      "endpoint": "/open_api/v1.3/playable/get/",
+      "category": "Playable Ads",
+      "method": "GET"
+    },
+    {
+      "name": "Delete a playable creative",
+      "endpoint": "/open_api/v1.3/playable/delete/",
+      "category": "Playable Ads",
+      "method": "POST"
+    },
+    {
+      "name": "Get inventory estimates",
+      "endpoint": "/open_api/v1.3/rf/inventory/estimate/",
+      "category": "Reach & Frequency",
+      "method": "GET"
+    },
+    {
+      "name": "Create an R&F ad group",
+      "endpoint": "/open_api/v1.3/adgroup/rf/create/",
+      "category": "Reach & Frequency",
+      "method": "POST"
+    },
+    {
+      "name": "Update an R&F ad group",
+      "endpoint": "/open_api/v1.3/adgroup/rf/update/",
+      "category": "Reach & Frequency",
+      "method": "POST"
+    },
+    {
+      "name": "Cancel the R&F ad order",
+      "endpoint": "/open_api/v1.3/rf/order/cancel/",
+      "category": "Reach & Frequency",
+      "method": "POST"
+    },
+    {
+      "name": "Get estimated info of R&F ad groups",
+      "endpoint": "/open_api/v1.3/adgroup/rf/estimated/info/",
+      "category": "Reach & Frequency",
+      "method": "GET"
+    },
+    {
+      "name": "Query contracts",
+      "endpoint": "/open_api/v1.3/rf/contract/query/",
+      "category": "Reach & Frequency",
+      "method": "GET"
+    },
+    {
+      "name": "Get R&F time zones",
+      "endpoint": "/open_api/v1.3/rf/delivery/timezone/",
+      "category": "Reach & Frequency",
+      "method": "GET"
+    },
+    {
+      "name": "Run a synchronous report",
+      "endpoint": "/open_api/v1.3/report/integrated/get/",
+      "category": "Reporting",
+      "method": "GET"
+    },
+    {
+      "name": "Create an asynchronous report task",
+      "endpoint": "/open_api/v1.3/report/task/create/",
+      "category": "Reporting",
+      "method": "POST"
+    },
+    {
+      "name": "Get the status of an async report task",
+      "endpoint": "/open_api/v1.3/report/task/check/",
+      "category": "Reporting",
+      "method": "GET"
+    },
+    {
+      "name": "Download the output of an async report task",
+      "endpoint": "/open_api/v1.3/report/task/download/",
+      "category": "Reporting",
+      "method": "GET"
+    },
+    {
+      "name": "Cancel an asynchronous report task",
+      "endpoint": "/open_api/v1.3/report/task/cancel/",
+      "category": "Reporting",
+      "method": "POST"
+    },
+    {
+      "name": "Get identities with Showcase permission under an ad account",
+      "endpoint": "/open_api/v1.3/showcase/identity/get/",
+      "category": "Showcase",
+      "method": "GET"
+    },
+    {
+      "name": "Get the available regions for a Showcase via identity",
+      "endpoint": "/open_api/v1.3/showcase/region/get/",
+      "category": "Showcase",
+      "method": "GET"
+    },
+    {
+      "name": "Get the available products in a Showcase",
+      "endpoint": "/open_api/v1.3/showcase/product/get/",
+      "category": "Showcase",
+      "method": "GET"
+    },
+    {
+      "name": "Get Smart Creative materials",
+      "endpoint": "/open_api/v1.3/ad/aco/get/",
+      "category": "Smart Creative",
+      "method": "GET"
+    },
+    {
+      "name": "Create Smart Creative ads",
+      "endpoint": "/open_api/v1.3/ad/aco/create/",
+      "category": "Smart Creative",
+      "method": "POST"
+    },
+    {
+      "name": "Update Smart Creative materials",
+      "endpoint": "/open_api/v1.3/ad/aco/update/",
+      "category": "Smart Creative",
+      "method": "POST"
+    },
+    {
+      "name": "Update the statuses of Smart Creative materials",
+      "endpoint": "/open_api/v1.3/ad/aco/material_status/update/",
+      "category": "Smart Creative",
+      "method": "POST"
+    },
+    {
+      "name": "(To be deprecated) Get the dynamic quota on Legacy Smart+ Campaigns",
+      "endpoint": "/open_api/v1.3/campaign/spc/quota/get/",
+      "category": "(To be deprecated) Legacy Smart+",
+      "method": "GET"
+    },
+    {
+      "name": "(To be deprecated) Create a Legacy Smart+ Campaign",
+      "endpoint": "/open_api/v1.3/campaign/spc/create/",
+      "category": "(To be deprecated) Legacy Smart+",
+      "method": "POST"
+    },
+    {
+      "name": "(To be deprecated) Update a Legacy Smart+ Campaign",
+      "endpoint": "/open_api/v1.3/campaign/spc/update/",
+      "category": "(To be deprecated) Legacy Smart+",
+      "method": "POST"
+    },
+    {
+      "name": "(To be deprecated) Get Legacy Smart+ Campaigns",
+      "endpoint": "/open_api/v1.3/campaign/spc/get/",
+      "category": "(To be deprecated) Legacy Smart+",
+      "method": "GET"
+    },
+    {
+      "name": "(To be deprecated) Disable or enable creatives in a Legacy Smart+ Campaign",
+      "endpoint": "/open_api/v1.3/campaign/spc/material_status/update/",
+      "category": "(To be deprecated) Legacy Smart+",
+      "method": "POST"
+    },
+    {
+      "name": "(To be deprecated) Run a Legacy Smart+ Campaign report",
+      "endpoint": "/open_api/v1.3/campaign/spc/report/get/",
+      "category": "(To be deprecated) Legacy Smart+",
+      "method": "GET"
+    },
+    {
+      "name": "Get Upgraded Smart+ Campaigns",
+      "endpoint": "/open_api/v1.3/smart_plus/campaign/get/",
+      "category": "Campaigns",
+      "method": "GET"
+    },
+    {
+      "name": "Create an Upgraded Smart+ Campaign",
+      "endpoint": "/open_api/v1.3/smart_plus/campaign/create/",
+      "category": "Campaigns",
+      "method": "POST"
+    },
+    {
+      "name": "Update an Upgraded Smart+ Campaign",
+      "endpoint": "/open_api/v1.3/smart_plus/campaign/update/",
+      "category": "Campaigns",
+      "method": "POST"
+    },
+    {
+      "name": "Update the operation statuses of Upgraded Smart+ Campaigns",
+      "endpoint": "/open_api/v1.3/smart_plus/campaign/status/update/",
+      "category": "Campaigns",
+      "method": "POST"
+    },
+    {
+      "name": "Create an asynchronous copy task for an Upgraded Smart+ Campaign",
+      "endpoint": "/open_api/v1.3/smart_plus/campaign/copy/task/create/",
+      "category": "Campaigns",
+      "method": "POST"
+    },
+    {
+      "name": "Get the results of an asynchronous copy task for an Upgraded Smart+ Campaign",
+      "endpoint": "/open_api/v1.3/smart_plus/campaign/copy/task/check/",
+      "category": "Campaigns",
+      "method": "GET"
+    },
+    {
+      "name": "Get Upgraded Smart+ Ad Groups",
+      "endpoint": "/open_api/v1.3/smart_plus/adgroup/get/",
+      "category": "Ad groups",
+      "method": "GET"
+    },
+    {
+      "name": "Create an Upgraded Smart+ Ad Group",
+      "endpoint": "/open_api/v1.3/smart_plus/adgroup/create/",
+      "category": "Ad groups",
+      "method": "POST"
+    },
+    {
+      "name": "Update an Upgraded Smart+ Ad Group",
+      "endpoint": "/open_api/v1.3/smart_plus/adgroup/update/",
+      "category": "Ad groups",
+      "method": "POST"
+    },
+    {
+      "name": "Update the operation statuses of Upgraded Smart+ Ad Groups",
+      "endpoint": "/open_api/v1.3/smart_plus/adgroup/status/update/",
+      "category": "Ad groups",
+      "method": "POST"
+    },
+    {
+      "name": "Update the budgets of Upgraded Smart+ Ad Groups",
+      "endpoint": "/open_api/v1.3/smart_plus/adgroup/budget/update/",
+      "category": "Ad groups",
+      "method": "POST"
+    },
+    {
+      "name": "Get Upgraded Smart+ Ads",
+      "endpoint": "/open_api/v1.3/smart_plus/ad/get/",
+      "category": "Ads",
+      "method": "GET"
+    },
+    {
+      "name": "Create an Upgraded Smart+ Ad",
+      "endpoint": "/open_api/v1.3/smart_plus/ad/create/",
+      "category": "Ads",
+      "method": "POST"
+    },
+    {
+      "name": "Update an Upgraded Smart+ Ad",
+      "endpoint": "/open_api/v1.3/smart_plus/ad/update/",
+      "category": "Ads",
+      "method": "POST"
+    },
+    {
+      "name": "Update the operation statuses of Upgraded Smart+ Ads",
+      "endpoint": "/open_api/v1.3/smart_plus/ad/status/update/",
+      "category": "Ads",
+      "method": "POST"
+    },
+    {
+      "name": "Disable or enable creatives in an Upgraded Smart+ Ad",
+      "endpoint": "/open_api/v1.3/smart_plus/ad/material_status/update/",
+      "category": "Ads",
+      "method": "POST"
+    },
+    {
+      "name": "Preview Upgraded Smart+ Ads",
+      "endpoint": "/open_api/v1.3/smart_plus/ad/preview/",
+      "category": "Ads",
+      "method": "POST"
+    },
+    {
+      "name": "Get the review info of Upgraded Smart+ Ads",
+      "endpoint": "/open_api/v1.3/smart_plus/ad/review_info/",
+      "category": "Ad Review",
+      "method": "GET"
+    },
+    {
+      "name": "Get the review info of Upgraded Smart+ Ad creatives",
+      "endpoint": "/open_api/v1.3/smart_plus/material/review_info/",
+      "category": "Ad Review",
+      "method": "GET"
+    },
+    {
+      "name": "Appeal rejection of an Upgraded Smart+ Ad",
+      "endpoint": "/open_api/v1.3/smart_plus/ad/appeal/",
+      "category": "Ad Review",
+      "method": "POST"
+    },
+    {
+      "name": "Run an Upgraded Smart+ Creative Overview Report",
+      "endpoint": "/open_api/v1.3/smart_plus/material_report/overview/",
+      "category": "Reporting",
+      "method": "GET"
+    },
+    {
+      "name": "Run an Upgraded Smart+ Creative Breakdown Report",
+      "endpoint": "/open_api/v1.3/smart_plus/material_report/breakdown/",
+      "category": "Reporting",
+      "method": "GET"
+    },
+    {
+      "name": "Get Spark Ads video recommendations for a Business Account",
+      "endpoint": "/open_api/v1.3/business/video/recommend/",
+      "category": "Spark Ads Recommendation",
+      "method": "GET"
+    },
+    {
+      "name": "Get Spark Ads video recommendations for a TTO account",
+      "endpoint": "/open_api/v1.3/spark_ad/recommend/",
+      "category": "Spark Ads Recommendation",
+      "method": "GET"
+    },
+    {
+      "name": "Create a campaign, an ad group, and a Spark Ad in one step",
+      "endpoint": "/open_api/v1.3/business/spark_ad/create/",
+      "category": "Spark Ads Recommendation",
+      "method": "POST"
+    },
+    {
+      "name": "Get info about a Spark Ad post",
+      "endpoint": "/open_api/v1.3/tt_video/info/",
+      "category": "Spark Ads Using Authorized Posts",
+      "method": "GET"
+    },
+    {
+      "name": "Apply an authorization code",
+      "endpoint": "/open_api/v1.3/tt_video/authorize/",
+      "category": "Spark Ads Using Authorized Posts",
+      "method": "POST"
+    },
+    {
+      "name": "Get Spark Ad posts",
+      "endpoint": "/open_api/v1.3/tt_video/list/",
+      "category": "Spark Ads Using Authorized Posts",
+      "method": "GET"
+    },
+    {
+      "name": "Unbind a Spark Ad post",
+      "endpoint": "/open_api/v1.3/tt_video/unbind/",
+      "category": "Spark Ads Using Authorized Posts",
+      "method": "POST"
+    },
+    {
+      "name": "Create a split test",
+      "endpoint": "/open_api/v1.3/split_test/create/",
+      "category": "Super Split Test",
+      "method": "POST"
+    },
+    {
+      "name": "Update the time of a split test",
+      "endpoint": "/open_api/v1.3/split_test/update/",
+      "category": "Super Split Test",
+      "method": "POST"
+    },
+    {
+      "name": "End a split test",
+      "endpoint": "/open_api/v1.3/split_test/end/",
+      "category": "Super Split Test",
+      "method": "POST"
+    },
+    {
+      "name": "Get the results of a split test",
+      "endpoint": "/open_api/v1.3/split_test/result/get/",
+      "category": "Super Split Test",
+      "method": "GET"
+    },
+    {
+      "name": "Run the winning ad group",
+      "endpoint": "/open_api/v1.3/split_test/promote/",
+      "category": "Super Split Test",
+      "method": "POST"
+    },
+    {
+      "name": "Create a subscription",
+      "endpoint": "/open_api/v1.3/subscription/subscribe/",
+      "category": "Subscription",
+      "method": "POST"
+    },
+    {
+      "name": "Get subscription details of a developer app",
+      "endpoint": "/open_api/v1.3/subscription/get/",
+      "category": "Subscription",
+      "method": "GET"
+    },
+    {
+      "name": "Cancel a subscription",
+      "endpoint": "/open_api/v1.3/subscription/unsubscribe/",
+      "category": "Subscription",
+      "method": "POST"
+    },
+    {
+      "name": "Get Terms",
+      "endpoint": "/open_api/v1.3/term/get/",
+      "category": "Terms",
+      "method": "GET"
+    },
+    {
+      "name": "Sign Terms",
+      "endpoint": "/open_api/v1.3/term/confirm/",
+      "category": "Terms",
+      "method": "POST"
+    },
+    {
+      "name": "Check the status of Terms",
+      "endpoint": "/open_api/v1.3/term/check/",
+      "category": "Terms",
+      "method": "GET"
+    },
+    {
+      "name": "Get, renew or revoke a Creator access token",
+      "endpoint": "/open_api/v1.3/tt_user/oauth2/token/",
+      "category": "TikTok One",
+      "method": "POST"
+    },
+    {
+      "name": "Obtain the authorized Creator permissions",
+      "endpoint": "/open_api/v1.3/tt_user/token_info/get/",
+      "category": "TikTok One",
+      "method": "POST"
+    },
+    {
+      "name": "Get authorized TTO Creator Marketplace accounts",
+      "endpoint": "/open_api/v1.3/tto/oauth2/tcm/",
+      "category": "TikTok One",
+      "method": "GET"
+    },
+    {
+      "name": "Check TTO Creator Status",
+      "endpoint": "/open_api/v1.3/tto/tcm/creator/status/get/",
+      "category": "TikTok One",
+      "method": "GET"
+    },
+    {
+      "name": "Get the details of a TTO Creator Marketplace account",
+      "endpoint": "/open_api/v1.3/tto/oauth2/info/",
+      "category": "TikTok One",
+      "method": "GET"
+    },
+    {
+      "name": "Get TTO Public Account Insights",
+      "endpoint": "/open_api/v1.3/tto/tcm/creator/public/",
+      "category": "TikTok One",
+      "method": "GET"
+    },
+    {
+      "name": "Get TTO Public Media Insights",
+      "endpoint": "/open_api/v1.3/tto/tcm/creator/public/video/list/",
+      "category": "TikTok One",
+      "method": "GET"
+    },
+    {
+      "name": "Get Authorized TTO Creator Insights",
+      "endpoint": "/open_api/v1.3/tto/creator/authorized/",
+      "category": "TikTok One",
+      "method": "GET"
+    },
+    {
+      "name": "Get Authorized TTO Media Insights",
+      "endpoint": "/open_api/v1.3/tto/creator/authorized/video/list/",
+      "category": "TikTok One",
+      "method": "GET"
+    },
+    {
+      "name": "Get TTO creator ranking or search labels",
+      "endpoint": "/open_api/v1.3/tto/tcm/category/label/",
+      "category": "TikTok One",
+      "method": "GET"
+    },
+    {
+      "name": "Get top TTO creator rankings",
+      "endpoint": "/open_api/v1.3/tto/tcm/rank/",
+      "category": "TikTok One",
+      "method": "GET"
+    },
+    {
+      "name": "Discover TTO creators",
+      "endpoint": "/open_api/v1.3/tto/tcm/creator/discover/",
+      "category": "TikTok One",
+      "method": "GET"
+    },
+    {
+      "name": "Create a Brand Profile for your TTO account",
+      "endpoint": "/open_api/v1.3/tto/tcm/brand/profile/create/",
+      "category": "TikTok One",
+      "method": "POST"
+    },
+    {
+      "name": "Get the Brand Profiles for your TTO account",
+      "endpoint": "/open_api/v1.3/tto/tcm/brand/profile/get/",
+      "category": "TikTok One",
+      "method": "GET"
+    },
+    {
+      "name": "Create or update a TTO Creator Marketplace campaign",
+      "endpoint": "/open_api/v1.3/tto/tcm/campaign/create/",
+      "category": "TikTok One",
+      "method": "POST"
+    },
+    {
+      "name": "Update a TTO Creator Marketplace campaign",
+      "endpoint": "/open_api/v1.3/tto/tcm/campaign/update/",
+      "category": "TikTok One",
+      "method": "POST"
+    },
+    {
+      "name": "Get TTO Creator Marketplace campaigns",
+      "endpoint": "/open_api/v1.3/tto/tcm/campaign/",
+      "category": "TikTok One",
+      "method": "GET"
+    },
+    {
+      "name": "Send or revoke a TTO video linking request",
+      "endpoint": "/open_api/v1.3/tto/tcm/campaign/link/",
+      "category": "TikTok One",
+      "method": "POST"
+    },
+    {
+      "name": "Get TTO video linking requests as a brand",
+      "endpoint": "/open_api/v1.3/tto/tcm/campaign/link/status/",
+      "category": "TikTok One",
+      "method": "GET"
+    },
+    {
+      "name": "Report on TTO Creator Marketplace videos",
+      "endpoint": "/open_api/v1.3/tto/tcm/report/",
+      "category": "TikTok One",
+      "method": "GET"
+    },
+    {
+      "name": "Apply for Spark Ads authorization",
+      "endpoint": "/open_api/v1.3/tcm/tt_video/apply/",
+      "category": "TikTok One",
+      "method": "POST"
+    },
+    {
+      "name": "Get the authorization status",
+      "endpoint": "/open_api/v1.3/tcm/tt_video/status/",
+      "category": "TikTok One",
+      "method": "GET"
+    },
+    {
+      "name": "Create a webpage anchor",
+      "endpoint": "/open_api/v1.3/tto/tcm/anchor/create/",
+      "category": "TikTok One",
+      "method": "GET"
+    },
+    {
+      "name": "Get webpage anchors",
+      "endpoint": "/open_api/v1.3/tto/tcm/anchor/get/",
+      "category": "TikTok One",
+      "method": "GET"
+    },
+    {
+      "name": "Delete a draft anchor",
+      "endpoint": "/open_api/v1.3/tto/tcm/anchor/delete/",
+      "category": "TikTok One",
+      "method": "POST"
+    },
+    {
+      "name": "Join a TTO Creator Marketplace campaign as a creator",
+      "endpoint": "/open_api/v1.3/tto/creator/campaign/join/",
+      "category": "TikTok One",
+      "method": "POST"
+    },
+    {
+      "name": "Link a video to a TTO Creator Marketplace campaign as a creator",
+      "endpoint": "/open_api/v1.3/tto/creator/campaign/video/link/",
+      "category": "TikTok One",
+      "method": "POST"
+    },
+    {
+      "name": "Get TTO video linking requests as a creator",
+      "endpoint": "/open_api/v1.3/tto/creator/link/request/get/",
+      "category": "TikTok One",
+      "method": "GET"
+    },
+    {
+      "name": "Approve or reject a TTO video linking request as a creator",
+      "endpoint": "/open_api/v1.3/tto/creator/link/request/confirm/",
+      "category": "TikTok One",
+      "method": "POST"
+    },
+    {
+      "name": "Get available stores under an ad account",
+      "endpoint": "/open_api/v1.3/store/list/",
+      "category": "TikTok Store",
+      "method": "GET"
+    },
+    {
+      "name": "Get products within a TikTok Shop",
+      "endpoint": "/open_api/v1.3/store/product/get/",
+      "category": "TikTok Store",
+      "method": "GET"
+    },
+    {
+      "name": "Search for location targeting tags",
+      "endpoint": "/open_api/v1.3/tool/targeting/search/",
+      "category": "Tools",
+      "method": "POST"
+    },
+    {
+      "name": "Obtain details about location targeting tags by ID",
+      "endpoint": "/open_api/v1.3/tool/targeting/info/",
+      "category": "Tools",
+      "method": "POST"
+    },
+    {
+      "name": "Get available locations by different settings",
+      "endpoint": "/open_api/v1.3/tool/region/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Get available locations by advertiser ID",
+      "endpoint": "/open_api/v1.3/search/region/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Get languages",
+      "endpoint": "/open_api/v1.3/tool/language/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Search for or list targeting categories and hashtags for interests and behaviors",
+      "endpoint": "/open_api/v1.3/targeting/search/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Get general interest categories",
+      "endpoint": "/open_api/v1.3/tool/interest_category/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Search for additional interest categories",
+      "endpoint": "/open_api/v1.3/tool/interest_keyword/recommend/",
+      "category": "Get additional interest categories",
+      "method": "GET"
+    },
+    {
+      "name": "Get additional interest categories by ID",
+      "endpoint": "/open_api/v1.3/tool/interest_keyword/get/",
+      "category": "Get additional interest categories",
+      "method": "GET"
+    },
+    {
+      "name": "Get action categories",
+      "endpoint": "/open_api/v1.3/tool/action_category/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Search for targeting hashtags",
+      "endpoint": "/open_api/v1.3/tool/hashtag/recommend/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Get targeting hashtags by ID",
+      "endpoint": "/open_api/v1.3/tool/hashtag/get/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Get recommended interest and action categories",
+      "endpoint": "/open_api/v1.3/tool/targeting_category/recommend/",
+      "category": "Tools",
+      "method": "POST"
+    },
+    {
+      "name": "Get recommended search keywords",
+      "endpoint": "/open_api/v1.3/tool/search_keyword/recommend/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Get Search Ads Campaign Health diagnoses",
+      "endpoint": "/open_api/v1.3/tool/diagnosis/search/health/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Discover new keywords",
+      "endpoint": "/open_api/v1.3/tool/search_keyword/keyword_idea/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Get OS versions",
+      "endpoint": "/open_api/v1.3/tool/os_version/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Get device models",
+      "endpoint": "/open_api/v1.3/tool/device_model/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Get carriers",
+      "endpoint": "/open_api/v1.3/tool/carrier/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Get internet service providers",
+      "endpoint": "/open_api/v1.3/tool/targeting/list/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Get available contextual tags",
+      "endpoint": "/open_api/v1.3/tool/contextual_tag/get/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Get details of contextual tags",
+      "endpoint": "/open_api/v1.3/tool/contextual_tag/info/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Get available content exclusion categories",
+      "endpoint": "/open_api/v1.3/tool/content_exclusion/get/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Get details of content exclusion categories",
+      "endpoint": "/open_api/v1.3/tool/content_exclusion/info/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "(To-be-deprecated) Get recommended budgets",
+      "endpoint": "/open_api/v1.3/delivery/budget/recommend/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "(To-be-deprecated) Get recommended bids",
+      "endpoint": "/open_api/v1.3/delivery/bid/recommend/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Get a suggested bid",
+      "endpoint": "/open_api/v1.3/tool/bid/recommend/",
+      "category": "Tools",
+      "method": "POST"
+    },
+    {
+      "name": "Check Value-Based Optimization eligibility",
+      "endpoint": "/open_api/v1.3/tool/vbo_status/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Get the authorization status of a Brand Safety partner",
+      "endpoint": "/open_api/v1.3/tool/brand_safety/partner/authorize/status/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "(Deprecated) Get available post-bid third-party measurement partners",
+      "endpoint": "/open_api/v1.3/tool/vast_option/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Get the verification results of a URL",
+      "endpoint": "/open_api/v1.3/tool/url_validate/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Get region calling codes and region codes for phone numbers",
+      "endpoint": "/open_api/v1.3/tool/phone_region_code/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Get time zones",
+      "endpoint": "/open_api/v1.3/tool/timezone/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Get a TikTok in-app link",
+      "endpoint": "/open_api/v1.3/tool/open_url/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Get the campaign labels of an ad account",
+      "endpoint": "/open_api/v1.3/campaign_label/get/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Get the TikTok Minis within an ad account",
+      "endpoint": "/open_api/v1.3/minis/get/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "Get the available TikTok Series within an ad account",
+      "endpoint": "/open_api/v1.3/identity/native_series/get/",
+      "category": "Tools",
+      "method": "GET"
+    },
+    {
+      "name": "User",
+      "endpoint": "/open_api/v1.3/user/info/",
+      "category": "API Reference",
+      "method": "GET"
+    },
+    {
+      "name": "Upload a video",
+      "endpoint": "/open_api/v1.3/file/video/ad/upload/",
+      "category": "Video",
+      "method": "POST"
+    },
+    {
+      "name": "Update the name of a video",
+      "endpoint": "/open_api/v1.3/file/video/ad/update/",
+      "category": "Video",
+      "method": "POST"
+    },
+    {
+      "name": "Get info about videos",
+      "endpoint": "/open_api/v1.3/file/video/ad/info/",
+      "category": "Video",
+      "method": "GET"
+    },
+    {
+      "name": "Search for videos",
+      "endpoint": "/open_api/v1.3/file/video/ad/search/",
+      "category": "Video",
+      "method": "GET"
+    },
+    {
+      "name": "Get suggested thumbnails for a video",
+      "endpoint": "/open_api/v1.3/file/video/suggestcover/",
+      "category": "Video",
+      "method": "GET"
+    },
+    {
+      "name": "Create a welcome message within an ad account",
+      "endpoint": "/open_api/v1.3/creative/auto_message/create/",
+      "category": "Welcome Messages",
+      "method": "POST"
+    },
+    {
+      "name": "Get welcome messages within an ad account",
+      "endpoint": "/open_api/v1.3/creative/auto_message/get/",
+      "category": "Welcome Messages",
+      "method": "GET"
+    }
+  ],
+  "metric_fields": {}
+}

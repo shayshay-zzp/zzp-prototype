@@ -3,7 +3,8 @@ const DETAIL_RENDERERS = {
   product: (id) => {
     const p = getProduct(id);
     if (!p) return notFound('Sản phẩm', id);
-    const gmv = p.sold30d * p.price;
+    const m = getProductMetrics(id);
+    const gmv = m ? m.gmv : p.sold30d * p.price;
     const margin = ((p.price - p.cost) / p.price * 100).toFixed(1);
     const orders = ZZP_DATA.orders.filter(o => o.product === id);
     const kocSales = ZZP_DATA.kocs.filter(k => orders.some(o => o.koc === k.id));
@@ -12,9 +13,26 @@ const DETAIL_RENDERERS = {
     const flows = getFlowsForModule('products').concat(getFlowsForModule('inventory'));
 
     return detailLayout('product', id, `<span class="inline-flex items-center gap-2">${productThumb(p, 20)} ${p.name}</span>`, 'products', `
-      <div class="grid lg:grid-cols-4 gap-4 mb-6">
-        ${statCard('GMV 30d', fmt(gmv))}${statCard('Đã bán', p.sold30d + ' sp')}${statCard('Tồn kho', p.stock, p.stock < 100 ? 'Thấp' : '', p.stock < 100 ? 'red' : 'zzp')}${statCard('Margin', margin + '%')}
+      <div class="grid lg:grid-cols-6 gap-3 mb-6">
+        ${statCard('GMV 30d', fmt(gmv))}${statCard('Orders', m ? m.orders : p.sold30d)}
+        ${statCard('CTR', m ? m.ctr + '%' : '—')}${statCard('CVR', m ? m.avgConversionRate + '%' : '—')}
+        ${statCard('Impressions', m ? fmt(m.impressions) : '—')}${statCard('Margin', margin + '%')}
       </div>
+      ${m ? card('Performance API — GMV theo kênh content', `
+        <div class="grid grid-cols-3 gap-3 text-sm mb-4">
+          ${['VIDEO', 'LIVE', 'PRODUCT_CARD'].map(t => `
+            <div class="p-3 rounded-lg border border-slate-100 bg-slate-50">
+              <p class="text-[10px] text-slate-500 uppercase">${t === 'PRODUCT_CARD' ? 'Product Card' : t}</p>
+              <p class="font-bold text-zzp-700 mt-1">${fmt(m.breakdown[t].gmv)}</p>
+              <p class="text-xs text-slate-500">${m.breakdown[t].itemsSold} sp · ${((m.breakdown[t].gmv / m.gmv) * 100).toFixed(0)}%</p>
+            </div>`).join('')}
+        </div>
+        <div class="grid grid-cols-4 gap-2 text-xs">
+          <div class="p-2 bg-red-50 rounded"><p class="text-slate-500">Returned</p><p class="font-bold">${m.returned}</p></div>
+          <div class="p-2 bg-amber-50 rounded"><p class="text-slate-500">Canceled</p><p class="font-bold">${m.canceled}</p></div>
+          <div class="p-2 bg-slate-50 rounded"><p class="text-slate-500">Refunded</p><p class="font-bold">${m.refunded}</p></div>
+          <div class="p-2 bg-blue-50 rounded"><p class="text-slate-500">Page views</p><p class="font-bold">${fmt(m.pageViews)}</p></div>
+        </div>`) : ''}
       <div class="grid lg:grid-cols-2 gap-6">
         ${card('Thông tin SKU', `
           <div class="grid grid-cols-2 gap-3 text-sm">
@@ -87,14 +105,28 @@ const DETAIL_RENDERERS = {
   koc: (id) => {
     const k = ZZP_DATA.kocs.find(x => x.id === id);
     if (!k) return notFound('KOC', id);
+    const cm = getCreatorMetrics(id);
     const samples = ZZP_DATA.samples.filter(s => s.koc === id);
     const videos = ZZP_DATA.content.filter(c => c.koc === id);
     const orders = ZZP_DATA.orders.filter(o => o.koc === id);
 
     return detailLayout('koc', id, k.name, 'koc', `
-      <div class="grid lg:grid-cols-4 gap-4 mb-6">
-        ${statCard('GMV 30d', fmt(k.gmv30d))}${statCard('ROI', k.roi ? k.roi + 'x' : '-')}${statCard('CVR', k.cvr ? k.cvr + '%' : '-')}${statCard('Score', k.score, k.tier)}
+      <div class="grid lg:grid-cols-6 gap-3 mb-6">
+        ${statCard('GMV 30d', fmt(cm ? cm.gmv : k.gmv30d))}${statCard('ROI', k.roi ? k.roi + 'x' : '-')}
+        ${statCard('GPM', cm ? fmt(cm.gpm) : '—')}${statCard('PPS', cm ? cm.pps : k.score)}
+        ${statCard('Video GMV', cm ? fmt(cm.videoGmv) : '—')}${statCard('Live GMV', cm ? fmt(cm.liveGmv) : '—')}
       </div>
+      ${cm ? card('Marketplace Creator Performance API', `
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 text-sm">
+          <div class="p-3 rounded-lg border"><p class="text-slate-500 text-xs">Units sold</p><p class="font-bold">${cm.unitsSold}</p></div>
+          <div class="p-3 rounded-lg border"><p class="text-slate-500 text-xs">Avg GMV/buyer</p><p class="font-bold">${fmtCurrency(cm.avgGmvPerBuyer)}</p></div>
+          <div class="p-3 rounded-lg border"><p class="text-slate-500 text-xs">Commission rate</p><p class="font-bold">${cm.avgCommissionRate}%</p></div>
+          <div class="p-3 rounded-lg border"><p class="text-slate-500 text-xs">EC engagement</p><p class="font-bold">${(cm.ecLiveEngagementRate / 100).toFixed(1)}%</p></div>
+          <div class="p-3 rounded-lg border"><p class="text-slate-500 text-xs">Video GPM</p><p class="font-bold">${fmt(cm.videoGpm)}</p></div>
+          <div class="p-3 rounded-lg border"><p class="text-slate-500 text-xs">Live GPM</p><p class="font-bold">${fmt(cm.liveGpm)}</p></div>
+          <div class="p-3 rounded-lg border"><p class="text-slate-500 text-xs">EC videos</p><p class="font-bold">${cm.ecVideoCount}</p></div>
+          <div class="p-3 rounded-lg border"><p class="text-slate-500 text-xs">Post rate</p><p class="font-bold">${cm.postRate}%</p></div>
+        </div>`) : ''}
       <div class="grid lg:grid-cols-2 gap-6">
         ${card('Hồ sơ Creator', `
           <div class="space-y-2 text-sm">

@@ -113,90 +113,12 @@ const MODULES_DATA_BODY = new Set([
 const AUTOMATION_FAB_SKIP = new Set(['dashboard', 'workflows', 'settings', 'education']);
 
 function getAutomationOutputs(pageId) {
-  switch (pageId) {
-    case 'livestream': {
-      const l = ZZP_DATA.liveSessions[0];
-      const k = ZZP_DATA.kocs.find(x => x.id === l.host);
-      return [
-        { l: 'Live sắp tới', v: l.date.split(' ')[0] },
-        { l: 'Checklist', v: `${l.checklistDone}/${l.checklistTotal} xong` },
-        { l: 'GMV dự kiến', v: fmt(l.expectedGmv), highlight: true },
-        { l: 'Host', v: k?.name || '—' }
-      ];
-    }
-    case 'samples': {
-      const s = calcSamplePipelineStats();
-      return [
-        { l: 'Gói mẫu', v: ZZP_DATA.samples.length },
-        { l: 'Convert', v: s.convPct + '%', highlight: true },
-        { l: 'ROI TB', v: s.avgRoi + 'x' },
-        { l: 'Chờ content', v: ZZP_DATA.samples.filter(x => x.status === 'pending').length }
-      ];
-    }
-    case 'inventory': {
-      const p = getProduct('P003');
-      return [
-        { l: 'SKU cảnh báo', v: p.name.slice(0, 18) },
-        { l: 'Tồn còn', v: p.stock + ' sp', color: 'text-red-600' },
-        { l: 'Hết hàng dự kiến', v: '2 ngày', color: 'text-red-600' },
-        { l: 'Đề xuất nhập', v: '2000 sp' }
-      ];
-    }
-    case 'orders':
-      return [
-        { l: 'Đơn hôm nay', v: ZZP_DATA.orders.length },
-        { l: 'Chờ xử lý', v: ZZP_DATA.orders.filter(o => o.status === 'pending').length },
-        { l: 'SLA ổn', v: ZZP_DATA.orders.filter(o => o.sla === 'ok').length + ' đơn' },
-        { l: 'Cần gấp', v: ZZP_DATA.orders.filter(o => o.sla !== 'ok').length, color: 'text-amber-600' }
-      ];
-    case 'ads':
-      return [
-        { l: 'Campaign active', v: ZZP_DATA.ads.filter(a => a.status === 'active').length },
-        { l: 'ROAS tốt nhất', v: Math.max(...ZZP_DATA.ads.map(a => a.roas)) + 'x', highlight: true },
-        { l: 'Đã tối ưu', v: ZZP_DATA.ads.filter(a => a.status === 'paused').length + ' pause' },
-        { l: 'Chi tiêu 30d', v: fmt(ZZP_DATA.ads.reduce((s, a) => s + a.spent, 0)) }
-      ];
-    case 'koc':
-      return [
-        { l: 'KOC active', v: ZZP_DATA.kocs.filter(k => k.status === 'active').length },
-        { l: 'Top score', v: Math.max(...ZZP_DATA.kocs.map(k => k.score)) },
-        { l: 'GMV KOC 30d', v: fmt(ZZP_DATA.kocs.reduce((s, k) => s + k.gmv30d, 0)), highlight: true },
-        { l: 'Mẫu đang chờ', v: ZZP_DATA.samples.filter(s => s.status === 'pending').length }
-      ];
-    case 'content':
-      return [
-        { l: 'Video/live', v: ZZP_DATA.content.length },
-        { l: 'Đã publish', v: ZZP_DATA.content.filter(c => c.status === 'published').length },
-        { l: 'GMV content', v: fmt(ZZP_DATA.content.reduce((s, c) => s + c.gmv, 0)), highlight: true },
-        { l: 'Lịch tuần này', v: ZZP_DATA.content.filter(c => c.status !== 'published').length + ' slot' }
-      ];
-    case 'growth-assistant':
-      return ZZP_DATA.aiInsights.slice(0, 4).map((i, idx) => ({
-        l: idx === 0 ? 'Gợi ý ưu tiên' : `#${i.priority}`,
-        v: idx === 0 ? i.title.slice(0, 22) + '…' : i.impact,
-        highlight: idx === 0
-      }));
-    case 'alerts':
-      return [
-        { l: 'Cảnh báo mới', v: ZZP_DATA.alerts.filter(a => !a.read).length },
-        { l: 'Critical', v: ZZP_DATA.alerts.filter(a => a.severity === 'critical').length, color: 'text-red-600' },
-        { l: 'Đã xử lý hôm nay', v: ZZP_DATA.alerts.filter(a => a.read).length },
-        { l: 'Cập nhật', v: ZZP_DATA.shop.lastSync.split(' ')[1] || '—' }
-      ];
-    case 'dashboard':
-      return [
-        { l: 'GMV 30 ngày', v: fmt(ZZP_DATA.shop.gmv30d), highlight: true },
-        { l: 'Đơn hàng', v: ZZP_DATA.shop.orders30d },
-        { l: 'Sức khỏe shop', v: calcHealthScore() + '%' },
-        { l: 'Biên LN', v: ZZP_DATA.shop.profitMargin + '%' }
-      ];
-    default:
-      return [
-        { l: 'Trạng thái', v: 'Đang chạy', highlight: true },
-        { l: 'Đồng bộ', v: ZZP_DATA.shop.lastSync },
-        { l: 'Module', v: viPage(pageId) }
-      ];
-  }
+  return getModuleMetrics(pageId).slice(0, 4).map(m => ({
+    l: m.l,
+    v: m.v,
+    highlight: m.highlight,
+    color: m.color
+  }));
 }
 
 function toggleAutomationFab() {
@@ -330,6 +252,7 @@ function renderActiveSellerDashboard() {
   const issues = getShopIssues().filter(i => i.kind !== 'setup').slice(0, 6);
   return `
     <div class="space-y-6">
+      ${renderTtsMetricsStrip('dashboard')}
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         ${statCard('Doanh thu gộp 30 ngày', fmt(ZZP_DATA.shop.gmv30d), '↑ 28%', 'green')}
         ${statCard('Lợi nhuận', fmt(p.profit), `Biên lợi nhuận ${p.margin}%`, 'zzp')}

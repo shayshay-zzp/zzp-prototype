@@ -195,10 +195,11 @@ function getFlowStepContent(pageId, stepIndex, step, flow) {
       break;
     default:
       if (stepIndex === 0) {
-        out.metrics = [{ l: 'Module', v: viPage(step.module).slice(0, 12) }, { l: 'Bước', v: stepIndex + 1 }];
-        out.body = `<p class="text-sm text-slate-600">Đồng bộ dữ liệu mới nhất từ ${viPage(step.module)}</p>`;
+        out.metrics = getModuleMetrics(pid).slice(0, 4);
+        out.body = `<p class="text-sm text-slate-600">Đồng bộ từ TikTok Shop API · ${TTS_METRICS.shop.syncAt}</p>${renderTtsBreakdownTable(pid) ? `<div class="mt-3">${renderTtsBreakdownTable(pid)}</div>` : ''}`;
       } else if (stepIndex === 1) {
-        out.body = `<p class="text-sm text-slate-600">${step.label} — đối chiếu KPI và phát hiện bất thường</p>`;
+        out.metrics = getModuleMetrics(pid).slice(4, 8).length ? getModuleMetrics(pid).slice(4, 8) : getModuleMetrics(pid).slice(0, 4);
+        out.body = `<p class="text-sm text-slate-600">${step.label} — phân tích KPI từ Analytics & Affiliate API</p>`;
       } else if (stepIndex === 2) {
         out.body = `<p class="text-sm text-slate-600">Chuẩn bị việc cần làm: ${step.label}</p>`;
       } else {
@@ -283,10 +284,18 @@ const FLOW_STEP_PANELS = {
   'MOD_SAMPLES:s3': (step, flow, pageId, i) => {
     const s = ZZP_DATA.samples.find(x => x.id === 'S001');
     const v = ZZP_DATA.content.find(c => c.id === 'V001');
+    const roi = calcSampleRoiDetailed(s);
     return flowPanelShell(STEP_KINDS[i] || 'act', step, flow, i, `
       <p class="font-semibold">Đo Sample ROI · Convert</p>
-      ${flowMetrics([{ l: 'ROI', v: s.roi + 'x', color: 'text-green-600' }, { l: 'Doanh thu', v: fmt(s.revenue) }, { l: 'Chi phí', v: fmtCurrency(s.cost) }, { l: 'vs ngưỡng 2x', v: 'PASS', color: 'text-green-600' }])}
-      <p class="text-sm mt-2">Video liên kết: <strong>${v.title}</strong> · ${fmt(v.gmv)} GMV</p>
+      ${flowMetrics([
+        { l: 'ROI', v: roi.roi + 'x', color: 'text-green-600' },
+        { l: 'Margin', v: roi.margin + '%' },
+        { l: 'Doanh thu', v: fmt(s.revenue) },
+        { l: 'Chi phí', v: fmtCurrency(s.cost) },
+        { l: 'Payback', v: roi.paybackDays ? roi.paybackDays + ' ngày' : '—' },
+        { l: 'Pipeline ROI', v: TTS_METRICS.samples.pipelineRoi + 'x', color: 'text-green-600' }
+      ])}
+      <p class="text-sm mt-2">Video liên kết: <strong>${v.title}</strong> · ${fmt(v.gmv)} GMV · CTR ${getVideoMetrics('V001')?.ctr || v.ctr}%</p>
       ${flowActions([btnPrimary('Chạy quy trình mẫu', `runAutomationFlow('FLOW_SAMPLE')`), btnSecondary('Chi tiết', `openDetail('sample','S001')`)])}`);
   },
   'MOD_SAMPLES:s4': (step, flow, pageId, i) => {
