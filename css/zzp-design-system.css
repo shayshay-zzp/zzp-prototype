@@ -577,6 +577,75 @@ body.zzp-app {
 .ds-alert-desc { margin: 4px 0 0; font-size: 13px; color: var(--ds-text-secondary); line-height: 1.5; }
 
 /* ── Issue card ── */
+.ds-issue-list {
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-sm);
+  overflow: hidden;
+  background: var(--ds-surface);
+}
+.ds-issue-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--ds-border);
+  cursor: pointer;
+  transition: background .12s;
+}
+.ds-issue-row:last-child { border-bottom: none; }
+.ds-issue-row:hover { background: var(--ds-bg-subtle); }
+.ds-issue-row.is-read { opacity: .72; }
+.ds-issue-row--critical { background: #fef2f2; }
+.ds-issue-row--critical:hover { background: #fee2e2; }
+.ds-issue-row--warning { background: #fffbeb; }
+.ds-issue-row--warning:hover { background: #fef3c7; }
+.ds-issue-row--info { background: #fff; }
+.ds-issue-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.ds-issue-row--critical .ds-issue-dot { background: #ef4444; }
+.ds-issue-row--warning .ds-issue-dot { background: #f59e0b; }
+.ds-issue-row--info .ds-issue-dot { background: #3b82f6; }
+.ds-issue-body { flex: 1; min-width: 0; }
+.ds-issue-row-title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ds-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ds-issue-row-sub {
+  margin: 1px 0 0;
+  font-size: 11px;
+  color: var(--ds-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ds-issue-row-actions { display: flex; gap: 4px; flex-shrink: 0; }
+.ds-issue-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid var(--ds-border);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ds-text-secondary);
+  cursor: pointer;
+}
+.ds-issue-btn:hover { border-color: var(--ds-brand-muted); color: var(--ds-brand); }
+.ds-issue-btn--primary { background: var(--ds-brand); border-color: var(--ds-brand); color: #fff; }
+.ds-issue-btn--primary:hover { background: var(--ds-brand-dark, #0f766e); color: #fff; }
+
+/* Legacy issue card — giữ cho tương thích */
 .ds-issue {
   padding: 16px 18px;
   border-radius: var(--ds-radius-md);
@@ -589,6 +658,12 @@ body.zzp-app {
 .ds-issue-title { margin: 8px 0 0; font-size: 14px; font-weight: 700; color: var(--ds-text); }
 .ds-issue-desc { margin: 6px 0 0; font-size: 13px; color: var(--ds-text-secondary); line-height: 1.5; }
 .ds-issue-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+
+.ds-context-block--compact { margin-bottom: 12px; }
+.ds-context-block--compact .ds-context-head { margin-bottom: 8px; font-size: 13px; }
+.ds-card--compact .ds-card-body { padding-top: 10px; padding-bottom: 10px; }
+.ds-card--compact .ds-card-head { padding-bottom: 8px; }
+.ds-card--compact .ds-card-title { font-size: 14px; }
 
 /* ── Table ── */
 .ds-table-wrap { overflow-x: auto; border: 1px solid var(--ds-border); border-radius: var(--ds-radius-md); -webkit-overflow-scrolling: touch; }

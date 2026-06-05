@@ -43,6 +43,17 @@ function isNewSeller() {
   return done < 7 || calcHealthScore() < 82;
 }
 
+const ISSUE_SEVERITY_RANK = { critical: 0, warning: 1, info: 2 };
+
+function sortIssuesBySeverity(issues) {
+  return [...issues].sort((a, b) => {
+    const ra = ISSUE_SEVERITY_RANK[a.severity] ?? 3;
+    const rb = ISSUE_SEVERITY_RANK[b.severity] ?? 3;
+    if (ra !== rb) return ra - rb;
+    return String(a.title || '').localeCompare(String(b.title || ''), 'vi');
+  });
+}
+
 function getShopIssues(opts = {}) {
   const { includeSetup = false } = opts;
   const issues = [];
@@ -96,7 +107,7 @@ function getShopIssues(opts = {}) {
     });
   }
 
-  return issues;
+  return sortIssuesBySeverity(issues);
 }
 
 function alertToFlow(alertId) {
@@ -123,34 +134,48 @@ function rowClick(type, id, extraCls = '') {
   return `onclick="openDetail('${type}','${id}')" class="is-clickable ${extraCls}"`.trim();
 }
 
-function renderIssueCard(issue, compact) {
-  const sevCls = issue.severity === 'critical' ? 'critical' : issue.severity === 'warning' ? 'warning' : 'info';
-  const entityBtn = issue.entity ? detailLink(issue.entity.type, issue.entity.id, 'Xem chi tiết →', 'ds-text-link') : '';
-  const flowBtn = issue.flow ? dsBtnIcon('Giải quyết ngay', `runAutomationFlow('${issue.flow}')`, 'play', 'primary', 'sm') : '';
-  const modBtn = dsBtnIcon('Mô-đun', `navigate('${issue.module === 'products' ? 'products-setup' : issue.module}')`, 'external-link', 'secondary', 'sm');
-  if (compact) {
-    return `
-      <div class="ds-issue ds-issue--${sevCls}" style="display:flex;align-items:center;gap:12px">
-        <div style="flex:1;min-width:0">
-          <p class="ds-issue-title" style="margin-top:0">${issue.title}</p>
-          <p class="ds-issue-desc truncate-safe">${issue.desc}</p>
-        </div>
-        ${flowBtn || modBtn}
-      </div>`;
-  }
+function renderIssueList(issues) {
+  if (!issues.length) return '<p class="ds-empty" style="padding:16px">Không có vấn đề.</p>';
+  return `<div class="ds-issue-list">${issues.map(i => renderIssueCard(i)).join('')}</div>`;
+}
+
+function renderIssueCard(issue) {
+  const tone = issue.severity === 'critical' ? 'critical' : issue.severity === 'warning' ? 'warning' : 'info';
+  const detailFn = issue.kind === 'alert'
+    ? `openDetail('alert','${issue.id}')`
+    : issue.entity
+      ? `openDetail('${issue.entity.type}','${issue.entity.id}')`
+      : null;
+  const sub = [issue.action, issue.desc].filter(Boolean).join(' · ');
+  const readCls = issue.read ? ' is-read' : '';
+
   return `
-    <div class="ds-issue ds-issue--${sevCls}">
-      <div>${badge(issue.kind === 'setup' ? 'Thiết lập' : 'Vấn đề', issue.severity)}</div>
-      <p class="ds-issue-title">${issue.title}</p>
-      <p class="ds-issue-desc">${issue.desc}</p>
-      ${issue.action ? `<p class="ds-issue-desc" style="margin-top:6px;font-weight:600;color:var(--ds-text-secondary)">→ ${issue.action}</p>` : ''}
-      <div class="ds-issue-actions">
-        ${entityBtn}
-        ${flowBtn}
-        ${modBtn}
-        ${issue.kind === 'alert' ? dsBtn('Chi tiết vấn đề', `openDetail('alert','${issue.id}')`, 'secondary', 'sm') : ''}
+    <div class="ds-issue-row ds-issue-row--${tone}${readCls}"${detailFn ? ` onclick="${detailFn}"` : ''}>
+      <span class="ds-issue-dot" aria-hidden="true"></span>
+      <div class="ds-issue-body">
+        <p class="ds-issue-row-title">${issue.title}</p>
+        <p class="ds-issue-row-sub">${sub}</p>
+      </div>
+      <div class="ds-issue-row-actions" onclick="event.stopPropagation()">
+        ${issue.flow ? `<button type="button" class="ds-issue-btn ds-issue-btn--primary" onclick="runAutomationFlow('${issue.flow}')" title="${issue.action || 'Giải quyết'}">${icon('play', 12)}</button>` : ''}
+        ${detailFn ? `<button type="button" class="ds-issue-btn" onclick="${detailFn}" title="Chi tiết">${icon('chevron-right', 12)}</button>` : `<button type="button" class="ds-issue-btn" onclick="navigate('${issue.module === 'products' ? 'products-setup' : issue.module}')" title="Mô-đun">${icon('external-link', 12)}</button>`}
       </div>
     </div>`;
+}
+
+function alertToIssue(a) {
+  return {
+    kind: 'alert',
+    id: a.id,
+    severity: a.severity,
+    title: a.title,
+    desc: a.desc,
+    action: a.action,
+    module: a.module,
+    flow: alertToFlow(a.id),
+    entity: ALERT_ENTITY[a.id],
+    read: a.read
+  };
 }
 
 /* Module có bảng dữ liệu riêng — quy trình chỉ mô tả luồng xử lý, không lặp bảng */
@@ -261,23 +286,20 @@ function renderWorkflowCardInline(f, isPrimary, pageId) {
 function renderDashboardIssuesOverview() {
   const issues = getShopIssues({ includeSetup: false });
   if (!issues.length) {
-    return dsCard('Vấn đề cần xử lý', '<p class="text-sm text-slate-500">Không có vấn đề vận hành cần xử lý ngay.</p>');
+    return dsCard('Vấn đề cần xử lý', '<p class="ds-empty" style="padding:12px;font-size:12px">Không có vấn đề vận hành cần xử lý ngay.</p>', { className: 'ds-card--compact' });
   }
-  return `
-    <div class="ds-context-block">
-      <h3 class="ds-context-head">${icon('alert-circle', 18)} Vấn đề cần xử lý (${issues.length})</h3>
-      <div class="ds-stack-sm">${issues.map(i => renderIssueCard(i)).join('')}</div>
-      <button type="button" class="ds-text-link" style="margin-top:16px" onclick="navigate('alerts')">Xem tất cả cảnh báo →</button>
-    </div>`;
+  return dsCard(`Vấn đề cần xử lý · ${issues.length}`, `
+    ${renderIssueList(issues)}
+    <button type="button" class="ds-text-link" style="margin-top:8px;font-size:12px" onclick="navigate('alerts')">Xem tất cả →</button>`, { className: 'ds-card--compact' });
 }
 
 function renderModuleContext(pageId) {
   const issues = getModuleIssues(pageId).filter(i => i.kind !== 'setup').slice(0, pageId === 'dashboard' ? 6 : 3);
   if (!issues.length) return '';
   return `
-    <div class="ds-context-block">
-      <h3 class="ds-context-head">${icon('alert-circle', 18)} Vấn đề cần xử lý (${issues.length})</h3>
-      <div class="ds-stack-sm">${issues.map(i => renderIssueCard(i, pageId !== 'dashboard')).join('')}</div>
+    <div class="ds-context-block ds-context-block--compact">
+      <h3 class="ds-context-head">${icon('alert-circle', 16)} Vấn đề (${issues.length})</h3>
+      ${renderIssueList(issues)}
     </div>`;
 }
 

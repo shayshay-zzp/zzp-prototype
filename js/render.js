@@ -215,20 +215,7 @@ PAGES.alerts = () => {
       { label: 'Thông tin', value: ZZP_DATA.alerts.filter(a => a.severity === 'info' && !a.read).length, tone: 'info' },
       { label: 'Đã đọc', value: ZZP_DATA.alerts.filter(a => a.read).length, tone: 'brand' }
     ])}
-    ${dsCard('Active Alerts', `<div class="ds-stack-sm">${ZZP_DATA.alerts.map(a => `
-      <div class="ds-list-card"${a.read ? ' style="opacity:.65"' : ''} onclick="openDetail('alert','${a.id}')">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
-          <div>${badge(a.type, a.severity)} ${!a.read ? badge('Mới', 'new') : ''}
-            <p class="ds-list-card-title">${a.title}</p>
-            <p class="ds-list-card-desc">${a.desc}</p>
-          </div>
-          ${icon('chevron-right', 18)}
-        </div>
-        <div class="ds-issue-actions" onclick="event.stopPropagation()">
-          ${dsBtn('Chi tiết', `openDetail('alert','${a.id}')`, 'secondary', 'sm')}
-          ${dsBtnIcon('Giải quyết', `runAutomationFlow('${alertToFlow(a.id) || 'FLOW_OPTIMIZE'}')`, 'play', 'primary', 'sm')}
-        </div>
-      </div>`).join('')}</div>`)}`);
+    ${dsCard('Cảnh báo đang hoạt động', `${renderIssueList(sortIssuesBySeverity(ZZP_DATA.alerts).map(alertToIssue))}`, { className: 'ds-card--compact' })}`);
 };
 
 PAGES.opportunities = () => {

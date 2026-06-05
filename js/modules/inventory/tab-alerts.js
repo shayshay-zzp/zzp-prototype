@@ -9,16 +9,16 @@ function renderInventoryTabAlerts() {
     ? `${po.id} (${po.status === 'draft' ? 'nháp' : po.status}) · ${po.qty} sp · ${po.note || ''}`
     : 'Chưa có đơn NCC xác nhận';
   return `
-    <div class="p-4 bg-red-50 border border-red-200 rounded-xl flex gap-3 mb-4">
-      ${iconBox('triangle-alert', 18, 'bg-red-100 text-red-600 shrink-0')}
-      <div>
-        <p class="font-semibold text-red-800">Sắp hết hàng: Mặt nạ Collagen (P003)</p>
-        <p class="text-sm text-red-700 mt-1">Còn ${p?.stock} sp (~${daysLeft} ngày) · ${poLine}</p>
-        <p class="text-sm text-red-700 mt-2">Hàng chưa về kho — cần gửi PO cho NCC và tạm giảm push bán (Ads/KOC) trước khi hết tồn.</p>
-        <div class="flex flex-wrap gap-2 mt-3">
-          ${aq ? `<button onclick="navigate('actions')" class="px-3 py-1.5 bg-white border border-red-200 rounded-lg text-xs font-medium text-red-800 hover:bg-red-100">${icon('clipboard-list', 12)} ${aq.title}</button>` : ''}
-          <button onclick="runAutomationFlow('FLOW_STOCK')" class="px-3 py-1.5 bg-red-700 text-white rounded-lg text-xs font-medium inline-flex items-center gap-1 hover:bg-red-800">${icon('play', 12)} Quy trình gửi PO NCC</button>
-          <button onclick="openDetail('product','P003')" class="px-3 py-1.5 border border-red-200 rounded-lg text-xs text-red-800 hover:bg-red-100">Chi tiết SKU</button>
+    <div class="ds-issue-list mb-4">
+      <div class="ds-issue-row ds-issue-row--critical" onclick="openDetail('product','P003')">
+        <span class="ds-issue-dot" aria-hidden="true"></span>
+        <div class="ds-issue-body">
+          <p class="ds-issue-row-title">Sắp hết hàng: Mặt nạ Collagen (P003)</p>
+          <p class="ds-issue-row-sub">Còn ${p?.stock} sp (~${daysLeft} ngày) · ${poLine}</p>
+        </div>
+        <div class="ds-issue-row-actions" onclick="event.stopPropagation()">
+          ${aq ? `<button type="button" class="ds-issue-btn" onclick="navigate('actions')" title="${aq.title}">${icon('clipboard-list', 12)}</button>` : ''}
+          <button type="button" class="ds-issue-btn ds-issue-btn--primary" onclick="runAutomationFlow('FLOW_STOCK')" title="Quy trình gửi PO NCC">${icon('play', 12)}</button>
         </div>
       </div>
     </div>
