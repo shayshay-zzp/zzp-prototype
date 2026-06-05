@@ -326,9 +326,9 @@ function openListingCheck(productId) {
   const p = getProduct(productId);
   if (!p) return;
   const issues = [];
-  if (p.listingScore < 85) issues.push({ t: 'warn', m: 'Listing score dưới 85% — cần tối ưu tiêu đề và mô tả' });
+  if (p.listingScore < 85) issues.push({ t: 'warn', m: 'Điểm tin đăng dưới 85% — cần tối ưu tiêu đề và mô tả' });
   if (p.listingScore < 80) issues.push({ t: 'warn', m: 'Thiếu video demo sản phẩm' });
-  if (p.status === 'review') issues.push({ t: 'err', m: 'Vi phạm compliance — thiếu ảnh nhãn INCI' });
+  if (p.status === 'review') issues.push({ t: 'err', m: 'Vi phạm tuân thủ — thiếu ảnh nhãn INCI' });
   if (p.listingScore >= 85) issues.push({ t: 'ok', m: 'Tiêu đề tối ưu SEO' });
   if (p.listingScore >= 85) issues.push({ t: 'ok', m: 'Đủ 6+ hình ảnh chuẩn TikTok Shop' });
   if (p.listingScore >= 90) issues.push({ t: 'ok', m: 'Video demo chất lượng cao' });
@@ -336,7 +336,7 @@ function openListingCheck(productId) {
   openModal(`
     <div class="p-6">
       <h3 class="font-bold text-lg flex items-center gap-2">${productThumb(p, 20)} ${p.name}</h3>
-      <p class="text-sm text-slate-500 mt-1">SKU: ${p.sku} · Listing Score: ${p.listingScore}%</p>
+      <p class="text-sm text-slate-500 mt-1">SKU: ${p.sku} · Điểm tin đăng: ${p.listingScore}%</p>
       <div class="mt-4 space-y-2">${issues.map(i => {
         const cls = i.t === 'ok' ? 'bg-green-50 text-green-800' : i.t === 'err' ? 'bg-red-50 text-red-800' : 'bg-amber-50 text-amber-800';
         const ic = i.t === 'ok' ? icon('check', 14) : icon('alert-circle', 14);

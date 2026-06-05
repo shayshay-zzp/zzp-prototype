@@ -121,14 +121,14 @@ function renderOnboardingShopPanel() {
 
 function renderOnboardingLaunchPath() {
   const steps = [
-    { n: 1, title: 'Tạo SKU chủ lực với AI', desc: 'Trình 5 bước · điểm listing ≥ 85%', icon: 'sparkles', action: 'openProductCreateWizard()', highlight: true },
-    { n: 2, title: 'Trang trí gian hàng', desc: 'Nhận diện thương hiệu, pin Hero SKU, xuất bản shop', icon: 'store', action: "navigate('store')" },
+    { n: 1, title: 'Tạo SKU chủ lực với AI', desc: 'Trình 5 bước · điểm tin đăng ≥ 85%', icon: 'sparkles', action: 'openProductCreateWizard()', highlight: true },
+    { n: 2, title: 'Trang trí gian hàng', desc: 'Nhận diện thương hiệu, ghim SKU chủ lực, xuất bản shop', icon: 'store', action: "navigate('store')" },
     { n: 3, title: 'Chuẩn bị Mega Live đầu tiên', desc: 'Danh sách kiểm tra live + flash sale + voucher', icon: 'radio', action: "runAutomationFlow('FLOW_LIVE_PREP')" }
   ];
   return `
     <div class="ds-onboard-launch">
       <p class="ds-onboard-launch-title">${icon('rocket', 16)} Lộ trình ra mắt nhanh</p>
-      <p class="ds-onboard-launch-sub">3 bước seller mới nên làm ngay sau khi kết nối shop</p>
+      <p class="ds-onboard-launch-sub">3 bước người bán mới nên làm ngay sau khi kết nối shop</p>
       <div class="ds-onboard-launch-grid">
         ${steps.map(s => `
           <button type="button" class="ds-onboard-launch-card${s.highlight ? ' is-highlight' : ''}" onclick="${s.action}">
@@ -163,7 +163,7 @@ function renderOnboardingSyncStrip() {
 
 function renderOnboardingPage() {
   return dsPage(dsStack(`
-    ${pageHeader('Khởi tạo', 'Thiết lập shop', 'Hoàn thiện danh sách kiểm tra để shop sẵn sàng bán trên TikTok — seller biết còn thiếu gì và làm ở đâu')}
+    ${pageHeader('Khởi tạo', 'Thiết lập shop', 'Hoàn thiện danh sách kiểm tra để shop sẵn sàng bán trên TikTok — người bán biết còn thiếu gì và làm ở đâu')}
     ${renderOnboardingHero()}
     ${dsGrid(2, `
       <div id="onboard-checklist" class="ds-stack-sm">

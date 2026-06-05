@@ -10,7 +10,7 @@ const LAYOUT_PRD = {
   affiliate: 'Trung tâm Affiliate · Chiến lược SAM',
   agency: 'Quản lý agency · Thẻ ROI',
   products: 'Giám sát trạng thái sản phẩm · Vòng đời',
-  returns: 'Trung tâm hoàn hàng · Timeline case',
+  returns: 'Trung tâm hoàn hàng · Dòng thời gian case',
   datahub: 'Trung tâm dữ liệu · Luồng đồng bộ',
   'creator-analytics': 'Bảng điểm KOC · Thẻ xếp hạng',
   actions: 'Trung tâm quyết định · Làn ưu tiên',
@@ -88,7 +88,7 @@ function renderContentCalendar() {
             <p class="text-xs text-slate-500">${koc?.name} · ${v.published}</p>
           </div>
           <div class="flex gap-4 text-xs text-center">
-            <div><p class="font-bold">${fmt(v.views)}</p><p class="text-slate-400">Views</p></div>
+            <div><p class="font-bold">${fmt(v.views)}</p><p class="text-slate-400">Lượt xem</p></div>
             <div><p class="font-bold text-green-600">${fmt(v.gmv)}</p><p class="text-slate-400">GMV</p></div>
             <div><p class="font-bold">${v.ctr}%</p><p class="text-slate-400">CTR</p></div>
           </div>
@@ -122,10 +122,10 @@ function calcSamplePipelineStats() {
 function renderSamplePipelineFlow(stats) {
   const nodes = [
     { label: 'Gửi mẫu', count: stats.total, pct: 100, color: 'bg-teal-600' },
-    { label: 'Chờ content', count: stats.pending.length, pct: stats.total ? Math.round(stats.pending.length / stats.total * 100) : 0, color: 'bg-amber-500' },
-    { label: 'Convert', count: stats.converted.length, pct: stats.convPct, color: 'bg-green-600' },
+    { label: 'Chờ nội dung', count: stats.pending.length, pct: stats.total ? Math.round(stats.pending.length / stats.total * 100) : 0, color: 'bg-amber-500' },
+    { label: 'Chuyển đổi', count: stats.converted.length, pct: stats.convPct, color: 'bg-green-600' },
     { label: 'ROI ≥ 2x', count: stats.roiOk.length, pct: stats.total ? Math.round(stats.roiOk.length / stats.total * 100) : 0, color: 'bg-emerald-600' },
-    { label: 'Scale ≥10x', count: stats.roiScale.length, pct: stats.total ? Math.round(stats.roiScale.length / stats.total * 100) : 0, color: 'bg-zzp-600' }
+    { label: 'Mở rộng ≥10x', count: stats.roiScale.length, pct: stats.total ? Math.round(stats.roiScale.length / stats.total * 100) : 0, color: 'bg-zzp-600' }
   ];
   return `
     <div class="mb-6 overflow-x-auto pb-2">
@@ -153,9 +153,9 @@ function renderSampleCard(s) {
   const days = daysSinceSample(s.sentDate);
   const deadlineLeft = Math.max(0, 14 - days);
   const statusUi = {
-    pending: { border: 'border-amber-200 bg-amber-50/40', badge: ['Chờ content', 'pending'], extra: deadlineLeft > 0 ? `Còn ${deadlineLeft} ngày trong cửa sổ 14 ngày` : 'Sắp hết hạn content' },
-    converted: { border: 'border-green-200 bg-green-50/40', badge: ['Convert', 'ok'], extra: s.roi >= 10 ? 'Scale · ROI xuất sắc' : s.roi >= 2 ? 'Duy trì hợp tác' : 'Review ROI' },
-    no_content: { border: 'border-red-200 bg-red-50/40', badge: ['Chưa có content', 'critical'], extra: `Quá ${days} ngày · đề xuất cắt` }
+    pending: { border: 'border-amber-200 bg-amber-50/40', badge: ['Chờ nội dung', 'pending'], extra: deadlineLeft > 0 ? `Còn ${deadlineLeft} ngày trong cửa sổ 14 ngày` : 'Sắp hết hạn nội dung' },
+    converted: { border: 'border-green-200 bg-green-50/40', badge: ['Chuyển đổi', 'ok'], extra: s.roi >= 10 ? 'Mở rộng · ROI xuất sắc' : s.roi >= 2 ? 'Duy trì hợp tác' : 'Xem lại ROI' },
+    no_content: { border: 'border-red-200 bg-red-50/40', badge: ['Chưa có nội dung', 'critical'], extra: `Quá ${days} ngày · đề xuất cắt` }
   };
   const ui = statusUi[s.status] || statusUi.pending;
   return `
@@ -180,9 +180,9 @@ function renderSampleCard(s) {
 
 function renderSamplePipelineKanban() {
   const cols = [
-    { key: 'pending', title: 'Chờ content', tone: 'amber' },
-    { key: 'converted', title: 'Convert · đo ROI', tone: 'green' },
-    { key: 'no_content', title: 'Chưa có content', tone: 'red' }
+    { key: 'pending', title: 'Chờ nội dung', tone: 'amber' },
+    { key: 'converted', title: 'Chuyển đổi · đo ROI', tone: 'green' },
+    { key: 'no_content', title: 'Chưa có nội dung', tone: 'red' }
   ];
   return dsKanbanBoard(cols.map(col => {
     const items = ZZP_DATA.samples.filter(s => s.status === col.key);
@@ -195,15 +195,15 @@ function renderSampleRoiPipeline() {
   const stats = calcSamplePipelineStats();
   return `
     ${chartGrid([
-      ['Conversion funnel', 'chart-sample-funnel', 'sm'],
-      ['Sample ROI theo mẫu', 'chart-sample-roi', 'sm'],
+      ['Phễu chuyển đổi', 'chart-sample-funnel', 'sm'],
+      ['ROI mẫu theo lần gửi', 'chart-sample-roi', 'sm'],
       ['Phân bổ trạng thái', 'chart-sample-status', 'sm']
     ], 3)}
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
       <div class="p-3 rounded-xl bg-teal-50 border border-teal-100"><p class="text-[10px] text-teal-700 uppercase font-semibold">Tổng gửi mẫu</p><p class="text-xl font-bold text-teal-900">${stats.total}</p></div>
       <div class="p-3 rounded-xl bg-green-50 border border-green-100"><p class="text-[10px] text-green-700 uppercase font-semibold">Tỷ lệ convert</p><p class="text-xl font-bold text-green-900">${stats.convPct}%</p><p class="text-[10px] text-slate-500">${stats.converted.length}/${stats.total} có doanh thu</p></div>
       <div class="p-3 rounded-xl bg-white border border-slate-200"><p class="text-[10px] text-slate-500 uppercase font-semibold">ROI trung bình</p><p class="text-xl font-bold text-zzp-700">${stats.avgRoi}x</p><p class="text-[10px] text-slate-500">${fmt(stats.totalRev)} / ${fmt(stats.totalCost)}</p></div>
-      <div class="p-3 rounded-xl bg-red-50 border border-red-100"><p class="text-[10px] text-red-700 uppercase font-semibold">Cần cắt</p><p class="text-xl font-bold text-red-900">${stats.noContent.length}</p><p class="text-[10px] text-slate-500">Chưa tạo content</p></div>
+      <div class="p-3 rounded-xl bg-red-50 border border-red-100"><p class="text-[10px] text-red-700 uppercase font-semibold">Cần cắt</p><p class="text-xl font-bold text-red-900">${stats.noContent.length}</p><p class="text-[10px] text-slate-500">Chưa tạo nội dung</p></div>
     </div>
     <div class="mb-2 flex items-center justify-between gap-2">
       <p class="text-xs font-semibold text-teal-800 uppercase flex items-center gap-1">${icon('git-branch', 14)} Quy trình ROI mẫu thử</p>
@@ -273,9 +273,9 @@ function renderInventoryGaugeCards() {
 /* —— Affiliate SAM funnel —— */
 function renderAffiliateSamFunnel() {
   const sam = [
-    { step: 'S', label: 'Sample', desc: 'Gửi mẫu KOC tiềm năng', count: ZZP_DATA.samples.length, pg: 'samples' },
+    { step: 'S', label: 'Gửi mẫu', desc: 'Gửi mẫu KOC tiềm năng', count: ZZP_DATA.samples.length, pg: 'samples' },
     { step: 'A', label: 'Affiliate', desc: 'Kích hoạt chương trình hoa hồng', count: ZZP_DATA.kocs.filter(k => k.lifecycle !== 'prospect').length, pg: 'affiliate' },
-    { step: 'M', label: 'Macro Scale', desc: 'Scale KOC ROI > 3x', count: ZZP_DATA.kocs.filter(k => k.tier === 'Macro').length, pg: 'koc' }
+    { step: 'M', label: 'Mở rộng vĩ mô', desc: 'Mở rộng KOC ROI > 3x', count: ZZP_DATA.kocs.filter(k => k.tier === 'Macro').length, pg: 'koc' }
   ];
   return `
     <div class="mb-6 p-5 rounded-2xl border border-rose-200 bg-gradient-to-br from-rose-50/80 to-white">
@@ -431,7 +431,7 @@ function renderDataHubPipeline() {
         </div>
       </div>
     </div>
-    ${card('Chi tiết đồng bộ', tableWrap(['Nguồn','Trạng thái','Records','Latency','Sync cuối'],
+    ${card('Chi tiết đồng bộ', tableWrap(['Nguồn','Trạng thái','Bản ghi','Độ trễ','Đồng bộ cuối'],
       ZZP_DATA.dataSync.map(d => `<tr class="border-b border-slate-50"><td class="py-3 px-3 font-medium">${d.source}</td><td class="px-3">${badge(d.status,d.status)}</td><td class="px-3">${d.records.toLocaleString()}</td><td class="px-3">${d.latency}</td><td class="px-3 text-xs">${d.lastSync}</td></tr>`).join('')))}`;
 }
 
@@ -508,7 +508,7 @@ function renderNotificationInbox() {
       </div>
       <div>
         ${card('Kênh thông báo', `
-          <div class="space-y-3">${['In-App Alert','Email Alert','Zalo Alert','Webhook'].map(ch => `
+          <div class="space-y-3">${['Cảnh báo trong app','Cảnh báo email','Cảnh báo Zalo','Webhook'].map(ch => `
             <label class="flex items-center justify-between p-3 bg-slate-50 rounded-lg cursor-pointer hover:bg-zzp-50">
               <span class="text-sm flex items-center gap-2">${icon(ch.includes('Zalo') ? 'message-circle' : ch.includes('Email') ? 'mail' : ch.includes('Webhook') ? 'webhook' : 'bell', 14)} ${viLabel(ch)}</span>
               <input type="checkbox" checked class="rounded text-zzp-600">

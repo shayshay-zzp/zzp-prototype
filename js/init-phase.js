@@ -29,7 +29,7 @@ PAGES['products-setup'] = () => {
     ${dsCard('Listing Assist — Gợi ý tối ưu', `
       <div class="ds-stack-sm">
         ${dsTip('warning', 'P006 — Son dưỡng môi', `${icon('alert-circle', 12)} Thiếu ảnh INCI · ${icon('alert-circle', 12)} Mô tả ngắn · ${icon('check', 12)} Giá OK`, `<button type="button" class="ds-text-link" style="margin-top:8px;font-size:12px" onclick="navigate('compliance')">Xem tuân thủ →</button>`)}
-        ${dsTip('success', 'P005 — Kem chống nắng SPF50+', 'Listing 94% · 8 ảnh chuẩn · Video demo · Sẵn sàng scale')}
+        ${dsTip('success', 'P005 — Kem chống nắng SPF50+', 'Tin đăng 94% · 8 ảnh chuẩn · Video demo · Sẵn sàng mở rộng')}
       </div>`)}
   `));
 };
@@ -95,7 +95,7 @@ PAGES.education = () => {
       </div>
     </div>`).join('');
   return dsPage(dsStack(`
-    ${pageHeader('Khởi tạo', 'Education Hub & Playbook', 'Tài liệu đào tạo, SOP và lộ trình phát triển cho seller mới')}
+    ${pageHeader('Khởi tạo', 'Education Hub & Playbook', 'Tài liệu đào tạo, SOP và lộ trình phát triển cho người bán mới')}
     ${dsStatGrid([{ label: 'Tiến độ học tập', value: avg + '%', hint: `${ZZP_DATA.education.filter(e => e.progress === 100).length}/${ZZP_DATA.education.length} hoàn thành`, tone: 'brand' }])}
     <div class="ds-grid ds-grid--2">${cards}</div>
   `));

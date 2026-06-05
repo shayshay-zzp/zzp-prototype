@@ -91,7 +91,7 @@ function publishStorefront() {
   ZZP_DATA.store.publishHistory.unshift({
     time: ZZP_DATA.store.lastPublished,
     user: 'Nguyễn Minh Anh',
-    action: 'Xuất bản storefront lên TikTok Shop',
+    action: 'Xuất bản gian hàng lên TikTok Shop',
     status: 'live'
   });
   const c6 = ZZP_DATA.checklist.find(c => c.id === 'c6');

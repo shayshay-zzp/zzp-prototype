@@ -19,11 +19,11 @@ function initExtendedCharts(page, chartsRef, defaults) {
 
   if (page === 'samples') {
     const st = calcSamplePipelineStats();
-    makeBar('chart-sample-funnel', ['Gửi mẫu', 'Chờ content', 'Convert', 'ROI ≥2x', 'Scale ≥10x'],
+    makeBar('chart-sample-funnel', ['Gửi mẫu', 'Chờ nội dung', 'Chuyển đổi', 'ROI ≥2x', 'Mở rộng ≥10x'],
       [st.total, st.pending.length, st.converted.length, st.roiOk.length, st.roiScale.length], 'Số lượng', '#14b8a6');
     makeBar('chart-sample-roi', ZZP_DATA.samples.map(s => s.id),
       ZZP_DATA.samples.map(s => s.roi || 0), 'Sample ROI (x)', undefined, v => v >= 10 ? '#22c55e' : v >= 2 ? '#14b8a6' : v > 0 ? '#f59e0b' : '#ef4444');
-    makeDoughnut('chart-sample-status', ['Chờ content', 'Convert', 'Chưa có content'],
+    makeDoughnut('chart-sample-status', ['Chờ nội dung', 'Chuyển đổi', 'Chưa có nội dung'],
       [st.pending.length, st.converted.length, st.noContent.length], ['#f59e0b', '#22c55e', '#ef4444']);
   }
 
@@ -114,7 +114,7 @@ function initExtendedCharts(page, chartsRef, defaults) {
     makeBar('chart-content-cvr', pub.map(v => v.title.slice(0, 16)),
       pub.map(v => v.views ? (v.orders / v.views * 100).toFixed(2) : 0), 'CVR %', '#14b8a6');
     makeBar('chart-content-views', pub.map(v => v.title.slice(0, 16)),
-      pub.map(v => v.views / 1000), 'Views (nghìn)', '#8b5cf6');
+      pub.map(v => v.views / 1000), 'Lượt xem (nghìn)', '#8b5cf6');
   }
 
   if (page === 'alerts') {

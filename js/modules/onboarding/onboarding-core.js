@@ -18,7 +18,7 @@ const ONBOARDING_PHASES = [
   {
     id: 'growth',
     label: 'Mở rộng bán hàng',
-    desc: 'Affiliate, tuân thủ, đào tạo seller và đồng bộ đa kênh',
+    desc: 'Affiliate, tuân thủ, đào tạo người bán và đồng bộ đa kênh',
     icon: 'trending-up',
     tone: 'violet'
   }

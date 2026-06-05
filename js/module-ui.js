@@ -237,7 +237,7 @@ function renderNewSellerDashboard() {
     ${renderSetupBanner()}
     ${dsCard('Danh sách thiết lập', `<div class="ds-stack-sm">${pending.map(c => renderChecklistRow(c)).join('')}</div>`)}
     ${renderModuleContext('dashboard')}
-    ${dsCard('Tài liệu hướng dẫn seller mới', `<div class="ds-kv">${eduLinks}</div>`)}
+    ${dsCard('Tài liệu hướng dẫn người bán mới', `<div class="ds-kv">${eduLinks}</div>`)}
   `));
 }
 
