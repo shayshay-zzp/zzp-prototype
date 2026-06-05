@@ -29,36 +29,26 @@ function renderOnboardingTimeline() {
 /* —— KOC CRM: Kanban 4 cột lifecycle —— */
 function renderKocCrmPipeline() {
   const stages = [
-    { key: 'prospect', label: 'Tuyển chọn', color: 'border-slate-200 bg-slate-50' },
-    { key: 'sample', label: 'Gửi mẫu', color: 'border-amber-200 bg-amber-50/50' },
-    { key: 'content', label: 'Tạo nội dung', color: 'border-blue-200 bg-blue-50/50' },
-    { key: 'revenue', label: 'Tạo doanh thu', color: 'border-green-200 bg-green-50/50' }
+    { key: 'prospect', label: 'Tuyển chọn', tone: 'slate' },
+    { key: 'sample', label: 'Gửi mẫu', tone: 'amber' },
+    { key: 'content', label: 'Tạo nội dung', tone: 'blue' },
+    { key: 'revenue', label: 'Tạo doanh thu', tone: 'green' }
   ];
   return `
     ${chartGrid([['Lifecycle KOC', 'chart-koc-lifecycle', 'sm'], ['GMV theo creator', 'chart-koc-gmv', 'sm']])}
-    <div class="grid lg:grid-cols-4 gap-4">
-      ${stages.map(st => {
-        const list = ZZP_DATA.kocs.filter(k => k.lifecycle === st.key);
-        return `
-        <div class="rounded-xl border-2 ${st.color} min-h-[280px]">
-          <div class="px-3 py-2.5 border-b border-inherit flex justify-between items-center">
-            <span class="text-xs font-bold uppercase tracking-wide">${st.label}</span>
-            <span class="text-xs px-2 py-0.5 rounded-full bg-white/80">${list.length}</span>
+    ${dsKanbanBoard(stages.map(st => {
+      const list = ZZP_DATA.kocs.filter(k => k.lifecycle === st.key);
+      const cards = list.length ? list.map(k => `
+        <button type="button" class="ds-kanban-card" onclick="openDetail('koc','${k.id}')">
+          <p class="ds-kanban-card-name">${k.name}</p>
+          <p class="ds-kanban-card-sub">${k.tier} · ${fmt(k.followers)} followers</p>
+          <div class="ds-kanban-card-foot">
+            <span class="ds-kanban-card-price">${k.gmv30d ? fmt(k.gmv30d) : '—'}</span>
+            ${badge(k.lifecycle, k.lifecycle === 'revenue' ? 'ok' : 'info')}
           </div>
-          <div class="p-2 space-y-2">
-            ${list.length ? list.map(k => `
-              <button type="button" onclick="openDetail('koc','${k.id}')" class="w-full text-left p-3 bg-white rounded-lg border border-slate-200 hover:border-zzp-300 hover:shadow-sm transition-all">
-                <p class="font-medium text-sm text-zzp-700">${k.name}</p>
-                <p class="text-[10px] text-slate-500 mt-0.5">${k.tier} · ${fmt(k.followers)} followers</p>
-                <div class="flex justify-between mt-2 text-xs">
-                  <span class="${k.score >= 80 ? 'text-green-600' : 'text-amber-600'} font-bold">Score ${k.score}</span>
-                  <span>${k.gmv30d ? fmt(k.gmv30d) : '—'}</span>
-                </div>
-              </button>`).join('') : `<p class="text-xs text-slate-400 text-center py-6">Trống</p>`}
-          </div>
-        </div>`;
-      }).join('')}
-    </div>`;
+        </button>`).join('') : '<p class="ds-kanban-empty">Không có KOC</p>';
+      return dsKanbanColumn(st.label, list.length, st.tone, cards);
+    }).join(''))}`;
 }
 
 /* —— Content: lịch tuần + task cards —— */
@@ -190,29 +180,15 @@ function renderSampleCard(s) {
 
 function renderSamplePipelineKanban() {
   const cols = [
-    { key: 'pending', title: 'Chờ content', sub: 'Theo dõi conversion mẫu → video', border: 'border-amber-200 bg-amber-50/30' },
-    { key: 'converted', title: 'Convert · đo ROI', sub: 'Revenue / chi phí mẫu ≥ 2x', border: 'border-green-200 bg-green-50/30' },
-    { key: 'no_content', title: 'Chưa có content', sub: 'Cut nếu ROI < 2x sau 30 ngày', border: 'border-red-200 bg-red-50/30' }
+    { key: 'pending', title: 'Chờ content', tone: 'amber' },
+    { key: 'converted', title: 'Convert · đo ROI', tone: 'green' },
+    { key: 'no_content', title: 'Chưa có content', tone: 'red' }
   ];
-  return `
-    <div class="grid lg:grid-cols-3 gap-4">
-      ${cols.map(col => {
-        const items = ZZP_DATA.samples.filter(s => s.status === col.key);
-        return `
-        <div class="rounded-xl border-2 ${col.border} min-h-[240px] flex flex-col">
-          <div class="px-3 py-2.5 border-b border-inherit">
-            <div class="flex items-center justify-between">
-              <p class="text-xs font-bold text-slate-800">${col.title}</p>
-              <span class="text-[10px] px-2 py-0.5 rounded-full bg-white/90 font-medium">${items.length}</span>
-            </div>
-            <p class="text-[10px] text-slate-500 mt-0.5">${col.sub}</p>
-          </div>
-          <div class="p-2 space-y-2 flex-1">
-            ${items.length ? items.map(s => renderSampleCard(s)).join('') : `<p class="text-xs text-slate-400 text-center py-8">Không có mẫu ở giai đoạn này</p>`}
-          </div>
-        </div>`;
-      }).join('')}
-    </div>`;
+  return dsKanbanBoard(cols.map(col => {
+    const items = ZZP_DATA.samples.filter(s => s.status === col.key);
+    const cards = items.length ? items.map(s => renderSampleCard(s)).join('') : '<p class="ds-kanban-empty">Không có mẫu ở giai đoạn này</p>';
+    return dsKanbanColumn(col.title, items.length, col.tone, cards);
+  }).join(''));
 }
 
 function renderSampleRoiPipeline() {
@@ -241,39 +217,28 @@ function renderSampleRoiPipeline() {
 /* —— Orders: SLA board theo cột trạng thái —— */
 function renderOrderSlaBoard() {
   const cols = [
-    { status: 'pending', label: 'Chờ xử lý', color: 'border-amber-300 bg-amber-50', slaWarn: true },
-    { status: 'processing', label: 'Đang xử lý', color: 'border-blue-300 bg-blue-50', slaWarn: true },
-    { status: 'shipped', label: 'Đang giao', color: 'border-violet-300 bg-violet-50' },
-    { status: 'delivered', label: 'Hoàn thành', color: 'border-green-300 bg-green-50' }
+    { status: 'pending', label: 'Chờ xử lý', tone: 'amber', slaWarn: true },
+    { status: 'processing', label: 'Đang xử lý', tone: 'blue', slaWarn: true },
+    { status: 'shipped', label: 'Đang giao', tone: 'violet' },
+    { status: 'delivered', label: 'Hoàn thành', tone: 'green' }
   ];
   return `
     ${chartGrid([['Trạng thái đơn hàng', 'chart-order-status', 'sm'], ['Nguồn đơn', 'chart-order-source', 'sm']])}
-    <div class="grid lg:grid-cols-4 gap-4 overflow-x-auto">
-      ${cols.map(col => {
-        const orders = ZZP_DATA.orders.filter(o => o.status === col.status);
-        return `
-        <div class="rounded-xl border-2 ${col.color} min-w-[220px]">
-          <div class="px-3 py-2 border-b border-inherit flex justify-between">
-            <span class="text-xs font-bold">${col.label}</span>
-            <span class="text-xs">${orders.length}</span>
+    ${dsKanbanBoard(cols.map(col => {
+      const orders = ZZP_DATA.orders.filter(o => o.status === col.status);
+      const cards = orders.length ? orders.map(o => `
+        <button type="button" class="ds-kanban-card" onclick="openDetail('order','${o.id}')">
+          <p class="ds-kanban-card-id">${o.id}</p>
+          <p class="ds-kanban-card-name">${o.customer}</p>
+          <p class="ds-kanban-card-sub">${o.productName}</p>
+          <div class="ds-kanban-card-foot">
+            <span class="ds-kanban-card-price">${fmtCurrency(o.total)}</span>
+            ${col.slaWarn && o.sla !== 'ok' ? `<span style="color:var(--ds-danger);font-weight:700">SLA ${o.sla}</span>` : badge(o.source, o.source === 'affiliate' ? 'active' : 'info')}
           </div>
-          <div class="p-2 space-y-2 max-h-[420px] overflow-y-auto">
-            ${orders.map(o => `
-              <button type="button" onclick="openDetail('order','${o.id}')" class="w-full text-left p-3 bg-white rounded-lg border border-slate-200 hover:border-zzp-300 shadow-sm">
-                <p class="font-mono text-xs text-zzp-600">${o.id}</p>
-                <p class="text-sm font-medium mt-1">${o.customer}</p>
-                <p class="text-xs text-slate-500 truncate">${o.productName}</p>
-                <div class="flex justify-between mt-2 text-xs">
-                  <span class="font-semibold">${fmtCurrency(o.total)}</span>
-                  ${col.slaWarn && o.sla !== 'ok' ? `<span class="text-red-600 font-bold">SLA ${o.sla}</span>` : badge(o.source, o.source === 'affiliate' ? 'active' : 'info')}
-                </div>
-                ${o.status === 'pending' ? `<button type="button" onclick="event.stopPropagation();processOrder('${o.id}')" class="mt-2 w-full py-1 text-xs bg-zzp-600 text-white rounded-lg">Xử lý</button>` : ''}
-              </button>`).join('')}
-            ${!orders.length ? '<p class="text-xs text-slate-400 text-center py-4">Không có đơn</p>' : ''}
-          </div>
-        </div>`;
-      }).join('')}
-    </div>`;
+          ${o.status === 'pending' ? `<button type="button" onclick="event.stopPropagation();processOrder('${o.id}')" class="ds-btn ds-btn--primary ds-btn--sm" style="width:100%;margin-top:8px">Xử lý</button>` : ''}
+        </button>`).join('') : '<p class="ds-kanban-empty">Không có đơn</p>';
+      return dsKanbanColumn(col.label, orders.length, col.tone, cards);
+    }).join(''))}`;
 }
 
 /* —— Inventory: gauge cards —— */
@@ -502,31 +467,23 @@ function renderCreatorScorecardGrid() {
 /* —— Action queue: priority lanes —— */
 function renderActionPriorityBoard() {
   const lanes = [
-    { key: 'critical', label: 'Khẩn cấp', color: 'border-red-300 bg-red-50' },
-    { key: 'high', label: 'Cao', color: 'border-amber-300 bg-amber-50' },
-    { key: 'medium', label: 'Trung bình', color: 'border-blue-300 bg-blue-50' }
+    { key: 'critical', label: 'Khẩn cấp', tone: 'red' },
+    { key: 'high', label: 'Cao', tone: 'amber' },
+    { key: 'medium', label: 'Trung bình', tone: 'blue' }
   ];
-  return `
-    <div class="grid lg:grid-cols-3 gap-4">
-      ${lanes.map(lane => {
-        const items = ZZP_DATA.actionQueue.filter(a => a.priority === lane.key);
-        return `
-        <div class="rounded-xl border-2 ${lane.color} min-h-[200px]">
-          <div class="px-3 py-2 border-b font-bold text-xs uppercase">${lane.label} (${items.length})</div>
-          <div class="p-2 space-y-2">
-            ${items.map(a => `
-              <div class="p-3 bg-white rounded-lg border border-slate-200">
-                <p class="text-sm font-medium">${a.title}</p>
-                <p class="text-[10px] text-slate-500 mt-1">${a.source} · ${a.assignee}</p>
-                <div class="flex gap-2 mt-2">
-                  ${badge(a.status, a.status)}
-                  ${a.status === 'pending' ? `<button onclick="approveAction('${a.id}')" class="text-xs text-zzp-600 hover:underline ml-auto">Approve</button>` : `<button onclick="runAutomationFlow('FLOW_AI_ACTION')" class="text-xs text-zzp-600 hover:underline ml-auto">Thực thi</button>`}
-                </div>
-              </div>`).join('')}
-          </div>
-        </div>`;
-      }).join('')}
-    </div>`;
+  return dsKanbanBoard(lanes.map(lane => {
+    const items = ZZP_DATA.actionQueue.filter(a => a.priority === lane.key);
+    const cards = items.length ? items.map(a => `
+      <div class="ds-kanban-card" style="cursor:default">
+        <p class="ds-kanban-card-name">${a.title}</p>
+        <p class="ds-kanban-card-sub">${a.source} · ${a.assignee}</p>
+        <div class="ds-kanban-card-foot">
+          ${badge(a.status, a.status)}
+          ${a.status === 'pending' ? `<button type="button" onclick="approveAction('${a.id}')" class="ds-text-link" style="font-size:11px;margin-left:auto">Approve</button>` : `<button type="button" onclick="runAutomationFlow('FLOW_AI_ACTION')" class="ds-text-link" style="font-size:11px;margin-left:auto">Thực thi</button>`}
+        </div>
+      </div>`).join('') : '<p class="ds-kanban-empty">Không có action</p>';
+    return dsKanbanColumn(lane.label, items.length, lane.tone, cards);
+  }).join(''));
 }
 
 /* —— Notifications: inbox (khác Smart Alerts) —— */

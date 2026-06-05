@@ -1,22 +1,6 @@
 /* Khởi tạo — trang theo ZZP Design System */
 
-PAGES.onboarding = () => {
-  const done = ZZP_DATA.checklist.filter(c => c.done).length;
-  const banner = renderSetupBanner();
-  const grid2 = banner
-    ? dsGrid(2, banner + dsCard('Kết nối TikTok Shop', dsConnectionCard(ZZP_DATA.shop)))
-    : dsCard('Kết nối TikTok Shop', dsConnectionCard(ZZP_DATA.shop));
-  return dsPage(dsStack(`
-    ${pageHeader('Khởi tạo', 'Onboarding & Setup Shop', 'Thiết lập gian hàng, kết nối TikTok Shop và đánh giá mức độ sẵn sàng vận hành')}
-    ${dsStatGrid([
-      { label: 'Shop Health', value: calcHealthScore() + '%', hint: `${done}/${ZZP_DATA.checklist.length} bước`, tone: 'brand' },
-      { label: 'Kết nối shop', value: ZZP_DATA.shop.oauthStatus === 'connected' ? 'Đã kết nối' : 'Chưa kết nối', hint: ZZP_DATA.shop.name, tone: 'success' },
-      { label: 'Cập nhật gần nhất', value: ZZP_DATA.shop.lastSync, hint: 'Đồng bộ tự động', tone: 'default' }
-    ])}
-    ${renderOnboardingTimeline()}
-    ${grid2}
-  `));
-};
+PAGES.onboarding = () => renderOnboardingPage();
 
 PAGES['products-setup'] = () => {
   const c5 = ZZP_DATA.checklist.find(c => c.id === 'c5');

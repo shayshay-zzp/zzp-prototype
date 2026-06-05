@@ -123,6 +123,21 @@ function dsGrid(cols, html) {
   return `<div class="ds-grid ds-grid--${cols}">${html}</div>`;
 }
 
+function dsKanbanBoard(columnsHtml) {
+  return `<div class="ds-kanban">${columnsHtml}</div>`;
+}
+
+function dsKanbanColumn(label, count, tone, bodyHtml) {
+  return `
+    <div class="ds-kanban-col ds-kanban-col--${tone}">
+      <div class="ds-kanban-col-head">
+        <span class="ds-kanban-col-title">${label}</span>
+        <span class="ds-kanban-col-count">${count}</span>
+      </div>
+      <div class="ds-kanban-col-body">${bodyHtml}</div>
+    </div>`;
+}
+
 function dsStack(content, sm) {
   return `<div class="ds-stack${sm ? ' ds-stack-sm' : ''}">${content}</div>`;
 }
