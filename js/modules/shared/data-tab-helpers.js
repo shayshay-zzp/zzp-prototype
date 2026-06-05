@@ -1,7 +1,7 @@
 /* Shared table/card helpers cho module tabs — tách khỏi registry */
 
 function renderKocScoreTable() {
-  return tableWrap(['KOC', 'Tier', 'Score', 'GMV 30d', 'ROI', 'Lifecycle', 'Videos'],
+  return tableWrap(['KOC', 'Hạng', 'Điểm', 'GMV 30d', 'ROI', 'Vòng đời', 'Video'],
     ZZP_DATA.kocs.map(k => `<tr ${rowClick('koc', k.id)} class="border-b border-slate-50">
       <td class="py-3 px-3 font-medium text-zzp-700">${k.name}</td>
       <td class="px-3">${k.tier}</td>
@@ -34,8 +34,8 @@ function renderOrdersAttributionTable() {
   return tableWrap(['Nguồn', 'Số đơn', 'GMV ước tính', 'OAV', 'Ghi chú'],
     [['Affiliate', '1,240', fmt(186000000), fmtCurrency(170354), '38% tổng GMV'],
       ['Livestream', '892', fmt(129000000), fmtCurrency(275000), '31% tổng GMV'],
-      ['Ads', '412', fmt(78600000), fmtCurrency(190000), '15% tổng GMV'],
-      ['Organic', '303', fmt(91500000), fmtCurrency(145000), '10% tổng GMV']
+      ['Quảng cáo', '412', fmt(78600000), fmtCurrency(190000), '15% tổng GMV'],
+      ['Tự nhiên', '303', fmt(91500000), fmtCurrency(145000), '10% tổng GMV']
     ].map(r => `<tr class="border-b border-slate-50">${r.map(c => `<td class="py-3 px-3">${c}</td>`).join('')}</tr>`).join(''));
 }
 
@@ -63,7 +63,7 @@ function renderInventoryForecastTable() {
         <td class="px-3">${daily}</td>
         <td class="px-3">${days} ngày</td>
         <td class="px-3">${days < 7 ? 'PO ' + Math.max(500, daily * 14) + ' sp' : '—'}</td>
-        <td class="px-3">${badge(days < 3 ? 'Critical' : days < 7 ? 'Low' : 'OK', days < 3 ? 'critical' : days < 7 ? 'warning' : 'ok')}</td>
+        <td class="px-3">${badge(days < 3 ? 'Nguy cấp' : days < 7 ? 'Thấp' : 'OK', days < 3 ? 'critical' : days < 7 ? 'warning' : 'ok')}</td>
       </tr>`;
     }).join(''));
 }
@@ -82,8 +82,8 @@ function renderLivestreamSessions() {
     return dsCard(l.title, `
       ${dsGrid(2, `
         <div>
-          <p style="font-size:13px;color:var(--ds-text-secondary)">Host: <button type="button" class="ds-text-link" onclick="openDetail('koc','${l.host}')">${koc?.name}</button> · ${l.date}</p>
-          <p style="margin-top:8px">Checklist: <strong>${l.checklistDone}/${l.checklistTotal}</strong></p>
+          <p style="font-size:13px;color:var(--ds-text-secondary)">Người dẫn: <button type="button" class="ds-text-link" onclick="openDetail('koc','${l.host}')">${koc?.name}</button> · ${l.date}</p>
+          <p style="margin-top:8px">Danh sách kiểm tra: <strong>${l.checklistDone}/${l.checklistTotal}</strong></p>
           ${dsProgress(Math.round(l.checklistDone / l.checklistTotal * 100), 'Chuẩn bị live')}
         </div>
         <div style="text-align:center;padding:16px;background:var(--ds-bg-subtle);border-radius:12px">

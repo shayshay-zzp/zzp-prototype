@@ -1,5 +1,5 @@
 /* Inventory — tab Tồn kho SKU */
 
 function renderInventoryTabStock() {
-  return card('Stock Gauge Monitor', renderInventoryGaugeCards());
+  return card('Giám sát mức tồn kho', renderInventoryGaugeCards());
 }

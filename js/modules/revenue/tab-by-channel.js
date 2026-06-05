@@ -1,6 +1,6 @@
 /* Revenue — tab Theo kênh */
 
 function renderRevenueTabByChannel() {
-  return card('GMV Breakdown — Content Type', renderTtsBreakdownTable('revenue')) +
-    card('Attribution Analysis', '<div class="chart-box"><canvas id="chart-attribution"></canvas></div>');
+  return card('Phân bổ GMV — loại nội dung', renderTtsBreakdownTable('revenue')) +
+    card('Phân tích phân bổ nguồn', '<div class="chart-box"><canvas id="chart-attribution"></canvas></div>');
 }

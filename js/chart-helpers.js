@@ -7,9 +7,10 @@ function chartCanvas(id, size = 'sm') {
 
 function chartGrid(items, cols = 2) {
   const grid = cols === 3 ? 'lg:grid-cols-3' : cols === 1 ? 'grid-cols-1' : 'lg:grid-cols-2';
-  return `<div class="grid ${grid} gap-4 mb-6">${items.map(([title, id, size]) =>
-    `<div class="bg-white rounded-xl border border-slate-200 shadow-sm"><div class="px-4 py-3 border-b border-slate-100"><h4 class="text-sm font-semibold text-slate-800">${title}</h4></div><div class="p-4">${chartCanvas(id, size || 'sm')}</div></div>`
-  ).join('')}</div>`;
+  return `<div class="grid ${grid} gap-4 mb-6">${items.map(([title, id, size]) => {
+    const lbl = typeof viLabel === 'function' ? viLabel(title) : title;
+    return `<div class="bg-white rounded-xl border border-slate-200 shadow-sm"><div class="px-4 py-3 border-b border-slate-100"><h4 class="text-sm font-semibold text-slate-800">${lbl}</h4></div><div class="p-4">${chartCanvas(id, size || 'sm')}</div></div>`;
+  }).join('')}</div>`;
 }
 
 function initExtendedCharts(page, chartsRef, defaults) {
@@ -185,7 +186,7 @@ function initExtendedCharts(page, chartsRef, defaults) {
   if (page === 'automation') {
     makeBar('chart-rule-runs', ZZP_DATA.automationRules.map(r => r.name.slice(0, 18)),
       ZZP_DATA.automationRules.map(r => r.runs), 'Lần chạy', '#6366f1');
-    makeDoughnut('chart-rule-active', ['Active', 'Inactive'],
+    makeDoughnut('chart-rule-active', ['Đang bật', 'Tắt'],
       [ZZP_DATA.automationRules.filter(r => r.active).length, ZZP_DATA.automationRules.filter(r => !r.active).length],
       ['#22c55e', '#94a3b8']);
   }

@@ -232,7 +232,7 @@ function renderNewSellerDashboard() {
   ).join('');
   const progressHtml = `<div class="ds-progress"><div class="ds-progress-track" style="background:rgba(255,255,255,.22)"><div class="ds-progress-fill" style="width:${health}%;background:#fff"></div></div></div>`;
   return dsPage(dsStack(`
-    ${dsHero('init', `${icon('sparkles', 16)} Chào mừng seller mới`, 'Hoàn thiện thiết lập shop trước khi mở rộng', `BeautyViet Official · Sức khỏe shop ${health}% · Còn ${pending.length} bước thiết lập`, progressHtml)}
+    ${dsHero('init', `${icon('sparkles', 16)} Chào mừng người bán mới`, 'Hoàn thiện thiết lập shop trước khi mở rộng', `BeautyViet Official · Sức khỏe shop ${health}% · Còn ${pending.length} bước thiết lập`, progressHtml)}
     ${renderRecommendedSteps()}
     ${renderSetupBanner()}
     ${dsCard('Danh sách thiết lập', `<div class="ds-stack-sm">${pending.map(c => renderChecklistRow(c)).join('')}</div>`)}

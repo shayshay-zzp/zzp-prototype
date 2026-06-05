@@ -1,5 +1,5 @@
 /* Creator Analytics — tab Scorecard */
 
 function renderCreatorAnalyticsTabScorecard() {
-  return card('Creator Scorecards', renderCreatorScorecardGrid());
+  return card('Bảng điểm nhà sáng tạo', renderCreatorScorecardGrid());
 }

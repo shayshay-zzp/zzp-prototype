@@ -30,7 +30,7 @@ function renderStoreBannerEditor() {
           ${dsBtnIcon('Upload ảnh 1200×400', "showToast('Mở media library')", 'image', 'secondary', 'sm')}
           ${dsBtnIcon('Tạo bằng AI', "showToast('AI đang tạo banner…')", 'sparkles', 'primary', 'sm')}
         </div>`)}
-      ${dsCard('Preview banner', `
+      ${dsCard('Xem trước banner', `
         <div class="ds-store-banner-mock" style="background:linear-gradient(135deg, ${bk.primaryColor}, ${bk.secondaryColor});border-radius:12px">
           <p style="margin:0;font-size:11px;opacity:.85">Banner chính · 1200×400</p>
           <p style="margin:8px 0 0;font-size:18px;font-weight:800">${bk.banner}</p>
@@ -42,7 +42,7 @@ function renderStoreBannerEditor() {
 
 function renderStoreHeroPinManager() {
   const heroes = ZZP_DATA.products.filter(p => p.hero || p.listingScore >= 80);
-  return dsCard('Quản lý Hero SKU trên storefront', `
+  return dsCard('Quản lý Hero SKU trên gian hàng', `
     <p style="margin:0 0 14px;font-size:13px;color:var(--ds-text-secondary)">Pin 3–4 sản phẩm chủ lực lên đầu trang shop. Thứ tự = thứ tự hiển thị.</p>
     <div class="ds-pin-grid">${heroes.map(p => {
       const pinned = ZZP_DATA.store.pinnedProductIds.includes(p.id);
@@ -53,11 +53,11 @@ function renderStoreHeroPinManager() {
             ${productThumb(p, 36)}
             <div style="min-width:0;flex:1">
               <p style="margin:0;font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.name}</p>
-              <p style="margin:4px 0 0;font-size:12px;color:var(--ds-text-muted)">${fmtCurrency(p.price)} · Score ${p.listingScore}%</p>
+              <p style="margin:4px 0 0;font-size:12px;color:var(--ds-text-muted)">${fmtCurrency(p.price)} · Điểm ${p.listingScore}%</p>
             </div>
             ${pinned ? `<span class="ui-badge ui-badge--brand">#${order + 1}</span>` : ''}
           </div>
-          <p style="margin:10px 0 0;font-size:11px;color:var(--ds-text-muted)">${pinned ? 'Bấm để bỏ pin' : 'Bấm để pin lên storefront'}</p>
+          <p style="margin:10px 0 0;font-size:11px;color:var(--ds-text-muted)">${pinned ? 'Bấm để bỏ pin' : 'Bấm để pin lên gian hàng'}</p>
         </div>`;
     }).join('')}</div>
     <p style="margin:14px 0 0;font-size:12px;color:var(--ds-text-muted)">Đang pin: <strong>${ZZP_DATA.store.pinnedProductIds.length}/4</strong> · ${ZZP_DATA.store.pinnedProductIds.map(id => getProduct(id)?.name?.slice(0, 16)).join(' · ')}</p>`);
@@ -65,7 +65,7 @@ function renderStoreHeroPinManager() {
 
 function renderStoreSectionBuilder() {
   const sections = [...ZZP_DATA.store.sections].sort((a, b) => a.order - b.order);
-  return dsCard('Section Builder — Bố cục storefront', `
+  return dsCard('Trình tạo section — Bố cục gian hàng', `
     <p style="margin:0 0 14px;font-size:13px;color:var(--ds-text-secondary)">Bật/tắt và sắp xếp các khối nội dung trên trang shop TikTok.</p>
     ${sections.map(sec => `
       <div class="ds-section-row${sec.enabled ? '' : ' is-off'}">
@@ -79,7 +79,7 @@ function renderStoreSectionBuilder() {
           ${sec.enabled ? 'Bật' : 'Tắt'}
         </label>
       </div>`).join('')}
-    <div style="margin-top:14px">${dsBtn('Lưu bố cục', "showToast('Đã lưu bố cục storefront')", 'primary', 'sm')}</div>`);
+    <div style="margin-top:14px">${dsBtn('Lưu bố cục', "showToast('Đã lưu bố cục gian hàng')", 'primary', 'sm')}</div>`);
 }
 
 function renderStoreTabDecoration() {

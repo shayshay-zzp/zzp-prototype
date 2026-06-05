@@ -73,7 +73,7 @@ function renderOnboardingHero() {
             <p class="ds-onboard-hero-stat-lbl">Còn lại</p>
           </div>
           <div class="ds-onboard-hero-stat">
-            <p class="ds-onboard-hero-stat-val">${shop.oauthStatus === 'connected' ? 'Live' : 'Chưa'}</p>
+            <p class="ds-onboard-hero-stat-val">${shop.oauthStatus === 'connected' ? 'Đang live' : 'Chưa'}</p>
             <p class="ds-onboard-hero-stat-lbl">Kết nối OAuth</p>
           </div>
         </div>
@@ -88,7 +88,7 @@ function renderOnboardingHero() {
       </div>
       <div class="ds-onboard-hero-aside">
         ${renderOnboardingHealthRing(health)}
-        <p class="ds-onboard-hero-health-hint">${health >= 80 ? 'Đủ điều kiện scale Ads & Affiliate' : `Cần ${80 - health}% nữa để unlock scale`}</p>
+        <p class="ds-onboard-hero-health-hint">${health >= 80 ? 'Đủ điều kiện mở rộng Ads & Affiliate' : `Cần ${80 - health}% nữa để mở khóa mở rộng`}</p>
       </div>
     </div>`;
 }
@@ -107,9 +107,9 @@ function renderOnboardingShopPanel() {
         ${badge(connected ? 'Đã kết nối' : 'Chưa kết nối', connected ? 'ok' : 'warn')}
       </div>
       ${dsKvRows([
-        ['Shop ID', `<span style="font-family:ui-monospace;font-size:12px">${shop.id}</span>`],
-        ['OAuth', connected ? badge('Seller Center OK', 'ok') : badge('Cần authorize', 'warn')],
-        ['Health Score', `<strong>${calcHealthScore()}%</strong>`],
+        ['ID shop', `<span style="font-family:ui-monospace;font-size:12px">${shop.id}</span>`],
+        ['OAuth', connected ? badge('Seller Center OK', 'ok') : badge('Cần xác thực', 'warn')],
+        ['Điểm sức khỏe', `<strong>${calcHealthScore()}%</strong>`],
         ['Đồng bộ cuối', shop.lastSync]
       ])}
       <div class="ds-onboard-shop-actions">
@@ -121,9 +121,9 @@ function renderOnboardingShopPanel() {
 
 function renderOnboardingLaunchPath() {
   const steps = [
-    { n: 1, title: 'Tạo SKU chủ lực với AI', desc: 'Wizard 5 bước · listing score ≥ 85%', icon: 'sparkles', action: 'openProductCreateWizard()', highlight: true },
-    { n: 2, title: 'Trang trí storefront', desc: 'Brand Kit, pin Hero SKU, xuất bản shop', icon: 'store', action: "navigate('store')" },
-    { n: 3, title: 'Chuẩn bị Mega Live đầu tiên', desc: 'Checklist live + flash sale + voucher', icon: 'radio', action: "runAutomationFlow('FLOW_LIVE_PREP')" }
+    { n: 1, title: 'Tạo SKU chủ lực với AI', desc: 'Trình 5 bước · điểm listing ≥ 85%', icon: 'sparkles', action: 'openProductCreateWizard()', highlight: true },
+    { n: 2, title: 'Trang trí gian hàng', desc: 'Nhận diện thương hiệu, pin Hero SKU, xuất bản shop', icon: 'store', action: "navigate('store')" },
+    { n: 3, title: 'Chuẩn bị Mega Live đầu tiên', desc: 'Danh sách kiểm tra live + flash sale + voucher', icon: 'radio', action: "runAutomationFlow('FLOW_LIVE_PREP')" }
   ];
   return `
     <div class="ds-onboard-launch">
@@ -157,13 +157,13 @@ function renderOnboardingSyncStrip() {
             </div>
           </div>`).join('')}
       </div>
-      <button type="button" class="ds-text-link" style="margin-top:12px;font-size:12px" onclick="navigate('datahub')">Xem Data Hub →</button>
+      <button type="button" class="ds-text-link" style="margin-top:12px;font-size:12px" onclick="navigate('datahub')">Xem trung tâm dữ liệu →</button>
     </div>`;
 }
 
 function renderOnboardingPage() {
   return dsPage(dsStack(`
-    ${pageHeader('Khởi tạo', 'Onboarding & Setup Shop', 'Hoàn thiện checklist để shop sẵn sàng bán trên TikTok — seller biết còn thiếu gì và làm ở đâu')}
+    ${pageHeader('Khởi tạo', 'Thiết lập shop', 'Hoàn thiện danh sách kiểm tra để shop sẵn sàng bán trên TikTok — seller biết còn thiếu gì và làm ở đâu')}
     ${renderOnboardingHero()}
     ${dsGrid(2, `
       <div id="onboard-checklist" class="ds-stack-sm">

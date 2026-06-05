@@ -1,40 +1,40 @@
-/* Affiliate — mô tả tab (seller POV) */
+/* Tiếp thị liên kết — mô tả tab (góc nhìn người bán) */
 
 const AFFILIATE_TAB_META = {
   overview: sellerMeta(
-    'Affiliate Manager · SAM funnel',
-    'Theo dõi funnel Seller Affiliate Marketing — từ outreach creator đến GMV thực tế.',
-    ['Funnel SAM: tiếp cận → sample → content → GMV',
-      'Conversion rate từng bước',
-      'Creator đang active vs tiềm năng',
-      'GMV affiliate 30 ngày'],
-    ['Xác định nút thắt funnel (sample hay content)',
-      'Ưu tiên creator có ROI cao',
-      'Mở chi tiết KOC từ funnel'],
-    'Nếu bước sample convert thấp, kiểm tra brief và SKU gửi mẫu trước khi tăng commission.'
+    'Quản lý tiếp thị liên kết · Phễu SAM (tiếp thị liên kết người bán)',
+    'Theo dõi phễu Tiếp thị liên kết người bán — từ tiếp cận người sáng tạo đến GMV (doanh thu gộp) thực tế.',
+    ['Phễu SAM (tiếp thị liên kết người bán): tiếp cận → gửi mẫu → nội dung → GMV (doanh thu gộp)',
+      'Tỷ lệ chuyển đổi từng bước',
+      'Người sáng tạo đang hoạt động so với tiềm năng',
+      'GMV (doanh thu gộp) tiếp thị liên kết 30 ngày'],
+    ['Xác định nút thắt phễu (gửi mẫu hay nội dung)',
+      'Ưu tiên người sáng tạo có ROI (tỷ suất đầu tư) cao',
+      'Mở chi tiết KOC từ phễu'],
+    'Nếu bước gửi mẫu chuyển đổi thấp, kiểm tra yêu cầu nội dung và SKU gửi mẫu trước khi tăng hoa hồng.'
   ),
   creator_gmv: sellerMeta(
-    'Creator Ops · Hiệu suất affiliate',
-    'So sánh GMV và tier creator để biết ai đáng scale commission hoặc gửi thêm sample.',
-    ['Bảng breakdown GMV theo creator',
-      'Biểu đồ GMV top KOC',
-      'Phân bổ tier (Nano/Micro/Macro)',
-      'ROI từng creator'],
-    ['Scale creator ROAS > 5x',
-      'Gửi sample cho creator có views cao nhưng GMV thấp',
-      'Mở marketplace tìm creator mới'],
-    'Top 20% creator thường mang 80% GMV affiliate — tab này giúp tập trung ngân sách đúng người.'
+    'Vận hành người sáng tạo · Hiệu suất tiếp thị liên kết',
+    'So sánh GMV (doanh thu gộp) và hạng người sáng tạo để biết ai đáng tăng hoa hồng hoặc gửi thêm mẫu.',
+    ['Bảng phân tích GMV (doanh thu gộp) theo người sáng tạo',
+      'Biểu đồ GMV (doanh thu gộp) KOC hàng đầu',
+      'Phân bổ hạng (Nano/Micro/Macro)',
+      'ROI (tỷ suất đầu tư) từng người sáng tạo'],
+    ['Tăng quy mô người sáng tạo có ROAS (tỷ suất quảng cáo) > 5x',
+      'Gửi mẫu cho người sáng tạo có lượt xem cao nhưng GMV (doanh thu gộp) thấp',
+      'Mở sàn giao dịch tìm người sáng tạo mới'],
+    '20% người sáng tạo hàng đầu thường mang 80% GMV (doanh thu gộp) tiếp thị liên kết — tab này giúp tập trung ngân sách đúng người.'
   ),
   campaigns: sellerMeta(
-    'Campaign Ops · Chiến dịch affiliate',
-    'Quản lý chiến dịch affiliate/promotion đang chạy và ROI thực tế.',
-    ['Danh sách campaign affiliate & promotion',
-      'Spent vs budget, thời gian chạy',
-      'ROI và GMV từng campaign',
-      'Trạng thái active/pause'],
-    ['Mở chi tiết campaign để chỉnh commission',
-      'Pause campaign ROI < 2x',
-      'Clone campaign hiệu quả sang SKU mới'],
-    'Campaign promotion flash sale thường kéo GMV ngắn hạn — đối chiếu với margin trước khi kéo dài.'
+    'Vận hành chiến dịch · Chiến dịch tiếp thị liên kết',
+    'Quản lý chiến dịch tiếp thị liên kết/khuyến mãi đang chạy và ROI (tỷ suất đầu tư) thực tế.',
+    ['Danh sách chiến dịch tiếp thị liên kết & khuyến mãi',
+      'Chi tiêu so với ngân sách, thời gian chạy',
+      'ROI (tỷ suất đầu tư) và GMV (doanh thu gộp) từng chiến dịch',
+      'Trạng thái đang chạy/tạm dừng'],
+    ['Mở chi tiết chiến dịch để chỉnh hoa hồng',
+      'Tạm dừng chiến dịch có ROI (tỷ suất đầu tư) < 2x',
+      'Sao chép chiến dịch hiệu quả sang SKU mới'],
+    'Chiến dịch khuyến mãi giảm giá sốc thường kéo GMV (doanh thu gộp) ngắn hạn — đối chiếu với biên lợi nhuận trước khi kéo dài.'
   )
 };

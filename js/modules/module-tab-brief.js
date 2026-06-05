@@ -7,7 +7,7 @@ function renderModuleTabBrief(meta) {
   return `
     <div class="ds-tab-brief">
       <div class="ds-tab-brief-head">
-        <span class="ds-tab-brief-eyebrow">${icon('store', 14)} Góc nhìn seller</span>
+        <span class="ds-tab-brief-eyebrow">${icon('store', 14)} Góc nhìn người bán</span>
         ${meta.sellerRole ? `<span class="ds-tab-brief-role">${meta.sellerRole}</span>` : ''}
       </div>
       <div class="ds-tab-brief-grid">

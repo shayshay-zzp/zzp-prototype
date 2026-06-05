@@ -1,5 +1,5 @@
 /* Content — tab Lịch & task */
 
 function renderContentTabCalendar() {
-  return card('Content Operations', renderContentCalendar());
+  return card('Vận hành nội dung', renderContentCalendar());
 }

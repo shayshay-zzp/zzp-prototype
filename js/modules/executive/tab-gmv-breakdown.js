@@ -1,5 +1,5 @@
 /* Executive — tab Phân bổ GMV */
 
 function renderExecutiveTabGmvBreakdown() {
-  return card('GMV Breakdown', renderTtsBreakdownTable('executive'));
+  return card('Phân bổ GMV', renderTtsBreakdownTable('executive'));
 }

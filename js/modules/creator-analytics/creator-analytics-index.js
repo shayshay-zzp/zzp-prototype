@@ -1,7 +1,7 @@
 /* Creator Analytics — đăng ký tab module */
 
 MODULE_DATA_TABS['creator-analytics'] = () => [
-  { label: 'Scorecard', icon: 'star',
+  { label: 'Bảng điểm', icon: 'star',
     count: ZZP_DATA.kocs.length,
     meta: CREATOR_ANALYTICS_TAB_META.scorecard,
     content: () => renderCreatorAnalyticsTabScorecard() },

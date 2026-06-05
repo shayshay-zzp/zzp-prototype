@@ -1,5 +1,5 @@
 /* Products — tab Lifecycle */
 
 function renderProductsTabLifecycle() {
-  return card('Product Status Monitor', renderProductLifecycleMonitor());
+  return card('Giám sát trạng thái sản phẩm', renderProductLifecycleMonitor());
 }

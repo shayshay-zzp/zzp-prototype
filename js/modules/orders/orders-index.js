@@ -1,7 +1,7 @@
 /* Orders — đăng ký tab module */
 
 MODULE_DATA_TABS.orders = () => [
-  { label: 'SLA Board', icon: 'layout-grid',
+  { label: 'Bảng SLA', icon: 'layout-grid',
     count: ZZP_DATA.orders.length,
     meta: ORDERS_TAB_META.sla_board,
     content: () => renderOrdersTabSlaBoard() },

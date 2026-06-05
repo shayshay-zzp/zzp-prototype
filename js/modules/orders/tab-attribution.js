@@ -1,5 +1,5 @@
 /* Orders — tab Phân loại nguồn */
 
 function renderOrdersTabAttribution() {
-  return card('Attribution theo kênh', renderOrdersAttributionTable());
+  return card('Phân bổ nguồn theo kênh', renderOrdersAttributionTable());
 }

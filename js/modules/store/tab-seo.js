@@ -25,18 +25,18 @@ function renderStoreTabSeo() {
           ${dsBtn('Thêm từ khóa AI', "showToast('AI đề xuất: kem dưỡng ẩm, serum HA, mặt nạ collagen')", 'ghost', 'sm')}
         </div>
         <div style="margin-top:12px">${dsBtn('Lưu SEO', 'saveStoreSeo()', 'primary', 'md')}</div>`)}
-      ${dsCard('Conversion & CTA', `
+      ${dsCard('Chuyển đổi & CTA', `
         ${dsTip('success', 'CTA banner', `Nút "${ZZP_DATA.store.bannerCta}" — rõ ràng, có urgency`)}
-        <div style="margin-top:12px">${dsTip(ZZP_DATA.store.pinnedProductIds.length >= 3 ? 'success' : 'warning', 'Hero SKU visibility', ZZP_DATA.store.pinnedProductIds.length >= 3 ? 'Đủ 3+ hero trên fold đầu' : `Cần pin thêm ${3 - ZZP_DATA.store.pinnedProductIds.length} SKU`)}</div>
-        <div style="margin-top:12px">${dsTip(ZZP_DATA.store.activeTemplateId ? 'success' : 'warning', 'Template campaign', ZZP_DATA.store.activeTemplateId ? 'Template đồng bộ campaign' : 'Chưa áp dụng template — chọn tab Template Center')}</div>
+        <div style="margin-top:12px">${dsTip(ZZP_DATA.store.pinnedProductIds.length >= 3 ? 'success' : 'warning', 'Hiển thị Hero SKU', ZZP_DATA.store.pinnedProductIds.length >= 3 ? 'Đủ 3+ hero trên fold đầu' : `Cần pin thêm ${3 - ZZP_DATA.store.pinnedProductIds.length} SKU`)}</div>
+        <div style="margin-top:12px">${dsTip(ZZP_DATA.store.activeTemplateId ? 'success' : 'warning', 'Mẫu chiến dịch', ZZP_DATA.store.activeTemplateId ? 'Mẫu đồng bộ chiến dịch' : 'Chưa áp dụng mẫu — chọn tab Trung tâm mẫu giao diện')}</div>
         <div style="margin-top:16px">
-          <p style="margin:0 0 8px;font-size:12px;font-weight:600">Checklist conversion</p>
-          ${dsKvRows(ZZP_DATA.store.conversionChecks.slice(0, 4).map(c => [c.label, c.pass ? badge('OK', 'ok') : badge('Fix', 'warn')]))}
+          <p style="margin:0 0 8px;font-size:12px;font-weight:600">Danh sách kiểm tra chuyển đổi</p>
+          ${dsKvRows(ZZP_DATA.store.conversionChecks.slice(0, 4).map(c => [c.label, c.pass ? badge('OK', 'ok') : badge('Sửa', 'warn')]))}
         </div>`)}
     `)}
-    ${dsCard('Preview kết quả tìm kiếm TikTok', `
+    ${dsCard('Xem trước kết quả tìm kiếm TikTok', `
       <div style="padding:16px;border:1px solid var(--ds-border);border-radius:12px;background:var(--ds-bg-subtle)">
-        <p style="margin:0;font-size:11px;color:var(--ds-text-muted)">TikTok Shop Search Preview</p>
+        <p style="margin:0;font-size:11px;color:var(--ds-text-muted)">Xem trước tìm kiếm TikTok Shop</p>
         <p style="margin:8px 0 0;font-size:15px;font-weight:700;color:var(--ds-brand)">${seo.shopTitle}</p>
         <p style="margin:6px 0 0;font-size:12px;color:var(--ds-text-secondary);line-height:1.5">${seo.shopBio.slice(0, 120)}…</p>
         <p style="margin:8px 0 0;font-size:11px;color:var(--ds-text-muted)">tiktok.com/@${seo.slug}</p>

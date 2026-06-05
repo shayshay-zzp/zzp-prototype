@@ -1,40 +1,40 @@
-/* Samples — mô tả tab (seller POV) */
+/* Gửi mẫu — mô tả tab (góc nhìn người bán) */
 
 const SAMPLES_TAB_META = {
   roi_overview: sellerMeta(
-    'Sample Ops · ROI tổng quan',
-    'Đo hiệu quả chương trình gửi mẫu — convert rate và ROI trung bình.',
-    ['Funnel conversion sample',
-      'ROI trung bình chương trình',
-      'Số mẫu chưa có content',
+    'Vận hành mẫu · ROI (tỷ suất đầu tư) tổng quan',
+    'Đo hiệu quả chương trình gửi mẫu — tỷ lệ chuyển đổi và ROI (tỷ suất đầu tư) trung bình.',
+    ['Phễu chuyển đổi gửi mẫu',
+      'ROI (tỷ suất đầu tư) trung bình chương trình',
+      'Số mẫu chưa có nội dung',
       'Biểu đồ trạng thái mẫu'],
-    ['Follow-up mẫu no_content',
-      'Tăng budget sample SKU ROI cao',
-      'Review brief gửi mẫu'],
-    'ROI sample < 3x sau 30 ngày → cân nhắc dừng gửi SKU đó cho creator mới.'
+    ['Theo dõi lại mẫu chưa có nội dung',
+      'Tăng ngân sách mẫu SKU có ROI (tỷ suất đầu tư) cao',
+      'Rà soát yêu cầu nội dung gửi mẫu'],
+    'ROI (tỷ suất đầu tư) mẫu < 3x sau 30 ngày → cân nhắc dừng gửi SKU đó cho người sáng tạo mới.'
   ),
   pipeline: sellerMeta(
-    'Sample Ops · Pipeline tracking',
-    'Theo dõi từng mẫu qua các bước: gửi → nhận → content → convert.',
-    ['Flow diagram pipeline mẫu',
-      'Kanban theo trạng thái',
-      'Mẫu stuck ở từng bước',
-      'Thời gian trung bình convert'],
-    ['Nhắc creator chưa đăng content',
-      'Đánh dấu mẫu converted',
+    'Vận hành mẫu · Theo dõi phễu',
+    'Theo dõi từng mẫu qua các bước: gửi → nhận → nội dung → chuyển đổi.',
+    ['Sơ đồ phễu mẫu',
+      'Bảng cột theo trạng thái',
+      'Mẫu kẹt ở từng bước',
+      'Thời gian chuyển đổi trung bình'],
+    ['Nhắc người sáng tạo chưa đăng nội dung',
+      'Đánh dấu mẫu đã chuyển đổi',
       'Hủy mẫu quá hạn'],
-    'Mẫu ở trạng thái shipped > 7 ngày chưa content cần ping creator trong 24h.'
+    'Mẫu ở trạng thái đã gửi > 7 ngày chưa có nội dung cần nhắn người sáng tạo trong 24h.'
   ),
   table: sellerMeta(
-    'Sample Ops · Bảng tracking',
-    'Tra cứu chi tiết từng mẫu: KOC, SKU, chi phí, ROI.',
+    'Vận hành mẫu · Bảng theo dõi',
+    'Tra cứu chi tiết từng mẫu: KOC, SKU, chi phí, ROI (tỷ suất đầu tư).',
     ['Mã mẫu, KOC, sản phẩm',
       'Ngày gửi, trạng thái',
-      'Chi phí mẫu và ROI',
-      'Click mở chi tiết'],
-    ['Mở chi tiết mẫu converted để học best practice',
-      'Flag mẫu no_content',
-      'Export cho kế toán'],
-    'Sort theo ROI để biết combo KOC × SKU nào nên replicate.'
+      'Chi phí mẫu và ROI (tỷ suất đầu tư)',
+      'Bấm mở chi tiết'],
+    ['Mở chi tiết mẫu đã chuyển đổi để học thực hành tốt',
+      'Đánh dấu mẫu chưa có nội dung',
+      'Xuất cho kế toán'],
+    'Sắp xếp theo ROI (tỷ suất đầu tư) để biết kết hợp KOC × SKU nào nên nhân rộng.'
   )
 };

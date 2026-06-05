@@ -10,7 +10,7 @@ function renderInventoryTabAlerts() {
           <button onclick="runAutomationFlow('FLOW_STOCK')" class="underline font-medium ml-1 inline-flex items-center gap-1">${icon('play', 12)} Chạy nhập hàng</button></p>
       </div>
     </div>
-    ${card('SKU cần chú ý', tableWrap(['SKU', 'Tồn', 'Velocity', 'Còn'],
+    ${card('SKU cần chú ý', tableWrap(['SKU', 'Tồn', 'Tốc độ bán', 'Còn'],
       ZZP_DATA.products.filter(p => p.stock < 200).map(p => {
         const d = Math.round(p.sold30d / 30);
         return `<tr ${rowClick('product', p.id)} class="border-b border-slate-50">

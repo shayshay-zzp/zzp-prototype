@@ -1,5 +1,5 @@
 /* KOC — tab Pipeline CRM */
 
 function renderKocTabPipeline() {
-  return card('KOC Lifecycle Pipeline', renderKocCrmPipeline());
+  return card('Luồng vòng đời KOC', renderKocCrmPipeline());
 }

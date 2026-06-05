@@ -34,9 +34,9 @@ function renderStorefrontMock(mode) {
       <div class="ds-store-shop-avatar" style="background:${bk.primaryColor}">BV</div>
       <div style="min-width:0">
         <p style="margin:0;font-size:13px;font-weight:700">${s.seo.shopTitle.slice(0, 28)}…</p>
-        <p style="margin:2px 0 0;font-size:11px;color:var(--ds-text-muted)">${fmt(128000)} followers · 4.9★</p>
+        <p style="margin:2px 0 0;font-size:11px;color:var(--ds-text-muted)">${fmt(128000)} người theo dõi · 4.9★</p>
       </div>
-      ${badge(s.publishStatus === 'live' ? 'Shop live' : 'Draft', s.publishStatus === 'live' ? 'ok' : 'warn')}
+      ${badge(s.publishStatus === 'live' ? 'Shop đang live' : 'Bản nháp', s.publishStatus === 'live' ? 'ok' : 'warn')}
     </div>`;
 
   const inner = shopHead + bannerHtml + liveHtml + heroHtml;
@@ -60,8 +60,8 @@ function renderStoreTabPreview() {
   return `
     <div class="ds-flex-between" style="margin-bottom:16px">
       <div class="ds-preview-toggle">
-        <button type="button" class="${mode === 'mobile' ? 'is-active' : ''}" onclick="setStorePreviewMode('mobile')">${icon('smartphone', 14)} Mobile</button>
-        <button type="button" class="${mode === 'desktop' ? 'is-active' : ''}" onclick="setStorePreviewMode('desktop')">${icon('monitor', 14)} Desktop</button>
+        <button type="button" class="${mode === 'mobile' ? 'is-active' : ''}" onclick="setStorePreviewMode('mobile')">${icon('smartphone', 14)} Di động</button>
+        <button type="button" class="${mode === 'desktop' ? 'is-active' : ''}" onclick="setStorePreviewMode('desktop')">${icon('monitor', 14)} Máy tính</button>
       </div>
       <div style="display:flex;gap:10px">
         ${dsBtnIcon('Mở tab Trang trí', "selectModuleDataTab('store', 2)", 'layout', 'secondary', 'sm')}
@@ -69,11 +69,11 @@ function renderStoreTabPreview() {
       </div>
     </div>
     ${renderStorefrontMock(mode)}
-    ${dsCard('Thông tin preview', `
+    ${dsCard('Thông tin xem trước', `
       ${dsKvRows([
-        ['Template', ZZP_DATA.store.templateCatalog.find(t => t.id === ZZP_DATA.store.activeTemplateId)?.name || 'Mặc định'],
-        ['Hero pin', `${ZZP_DATA.store.pinnedProductIds.length} SKU`],
+        ['Mẫu giao diện', ZZP_DATA.store.templateCatalog.find(t => t.id === ZZP_DATA.store.activeTemplateId)?.name || 'Mặc định'],
+        ['Pin hero', `${ZZP_DATA.store.pinnedProductIds.length} SKU`],
         ['Section bật', `${ZZP_DATA.store.sections.filter(x => x.enabled).length} khối`],
-        ['Storefront Score', calcStorefrontScore() + '%']
+        ['Điểm gian hàng', calcStorefrontScore() + '%']
       ])}`)}`;
 }

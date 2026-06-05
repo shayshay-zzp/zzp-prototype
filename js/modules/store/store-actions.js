@@ -5,13 +5,13 @@ function toggleStorePin(productId) {
   const idx = s.pinnedProductIds.indexOf(productId);
   if (idx >= 0) {
     s.pinnedProductIds.splice(idx, 1);
-    showToast('Đã bỏ pin sản phẩm khỏi storefront');
+    showToast('Đã bỏ pin sản phẩm khỏi gian hàng');
   } else if (s.pinnedProductIds.length >= 4) {
-    showToast('Tối đa 4 Hero SKU trên storefront', 'warning');
+    showToast('Tối đa 4 SKU chủ lực trên gian hàng', 'warning');
     return;
   } else {
     s.pinnedProductIds.push(productId);
-    showToast('Đã pin sản phẩm lên storefront');
+    showToast('Đã pin sản phẩm lên gian hàng');
   }
   syncStoreConversionChecks();
   if (s.pinnedProductIds.length >= 3) {

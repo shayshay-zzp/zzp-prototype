@@ -1,20 +1,20 @@
 /* Custom module layouts — 1 UI pattern riêng theo PRD, tránh statCard + bảng generic */
 
 const LAYOUT_PRD = {
-  onboarding: 'Shop Setup Checklist · OAuth · Health Score',
-  koc: 'KOC CRM · Lifecycle Pipeline',
-  content: 'Content Calendar · Task Manager',
-  samples: 'Sample Tracking · Sample ROI',
-  orders: 'Order Center · SLA Board',
-  inventory: 'Inventory Monitor · Stock Gauge',
-  affiliate: 'Affiliate Center · SAM Strategy',
-  agency: 'Agency Management · ROI Cards',
-  products: 'Product Status Monitor · Lifecycle',
-  returns: 'Return Center · Case Timeline',
-  datahub: 'Data Hub · Sync Pipeline',
-  'creator-analytics': 'KOC Scorecard · Ranking Cards',
-  actions: 'Decision Center · Priority Lanes',
-  notifications: 'Notification Center · Inbox'
+  onboarding: 'Danh sách thiết lập shop · OAuth · Điểm sức khỏe',
+  koc: 'CRM KOC · Luồng vòng đời',
+  content: 'Lịch nội dung · Quản lý công việc',
+  samples: 'Theo dõi gửi mẫu · ROI mẫu',
+  orders: 'Trung tâm đơn · Bảng SLA',
+  inventory: 'Giám sát tồn kho · Cảnh báo hết hàng',
+  affiliate: 'Trung tâm Affiliate · Chiến lược SAM',
+  agency: 'Quản lý agency · Thẻ ROI',
+  products: 'Giám sát trạng thái sản phẩm · Vòng đời',
+  returns: 'Trung tâm hoàn hàng · Timeline case',
+  datahub: 'Trung tâm dữ liệu · Luồng đồng bộ',
+  'creator-analytics': 'Bảng điểm KOC · Thẻ xếp hạng',
+  actions: 'Trung tâm quyết định · Làn ưu tiên',
+  notifications: 'Trung tâm thông báo · Hộp thư đến'
 };
 
 function layoutPrdBadge(pageId) {
@@ -35,13 +35,13 @@ function renderKocCrmPipeline() {
     { key: 'revenue', label: 'Tạo doanh thu', tone: 'green' }
   ];
   return `
-    ${chartGrid([['Lifecycle KOC', 'chart-koc-lifecycle', 'sm'], ['GMV theo creator', 'chart-koc-gmv', 'sm']])}
+    ${chartGrid([['Vòng đời KOC', 'chart-koc-lifecycle', 'sm'], ['GMV theo nhà sáng tạo', 'chart-koc-gmv', 'sm']])}
     ${dsKanbanBoard(stages.map(st => {
       const list = ZZP_DATA.kocs.filter(k => k.lifecycle === st.key);
       const cards = list.length ? list.map(k => `
         <button type="button" class="ds-kanban-card" onclick="openDetail('koc','${k.id}')">
           <p class="ds-kanban-card-name">${k.name}</p>
-          <p class="ds-kanban-card-sub">${k.tier} · ${fmt(k.followers)} followers</p>
+          <p class="ds-kanban-card-sub">${k.tier} · ${fmt(k.followers)} người theo dõi</p>
           <div class="ds-kanban-card-foot">
             <span class="ds-kanban-card-price">${k.gmv30d ? fmt(k.gmv30d) : '—'}</span>
             ${badge(k.lifecycle, k.lifecycle === 'revenue' ? 'ok' : 'info')}
@@ -445,7 +445,7 @@ function renderCreatorScorecardGrid() {
         <button type="button" onclick="openDetail('koc','${k.id}')" class="text-left p-5 rounded-2xl border-2 ${i === 0 ? 'border-amber-300 bg-amber-50/40' : 'border-slate-200 bg-white'} hover:shadow-lg transition-all">
           <div class="flex justify-between items-start">
             <div>
-              ${i === 0 ? `<span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500 text-white font-medium">#1 Top Creator</span>` : `<span class="text-xs text-slate-400">#${i + 1}</span>`}
+              ${i === 0 ? `<span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500 text-white font-medium">#1 Nhà sáng tạo hàng đầu</span>` : `<span class="text-xs text-slate-400">#${i + 1}</span>`}
               <p class="font-bold text-lg mt-1">${k.name}</p>
               <p class="text-xs text-slate-500">${k.tier} · ${k.videos} videos</p>
             </div>

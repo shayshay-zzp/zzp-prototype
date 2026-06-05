@@ -24,7 +24,7 @@ function renderModuleTabBar(pageId, tabs, active) {
         <button type="button" onclick="selectModuleDataTab('${pageId}', ${i})"
           class="ds-tab${idx === i ? ' is-active' : ''}">
           ${icon(t.icon || 'folder', 14)}
-          <span>${t.label}</span>
+          <span>${typeof viLabel === 'function' ? viLabel(t.label) : t.label}</span>
           ${t.count != null ? `<span class="ds-tab-count">${t.count}</span>` : ''}
         </button>`).join('')}
     </div>

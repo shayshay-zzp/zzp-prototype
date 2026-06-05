@@ -17,28 +17,28 @@ function renderStoreTabBrandKit() {
         </div>
         ${dsKvRows([
           ['Font chính', bk.font],
-          ['Tone of voice', bk.tone],
+          ['Giọng điệu', bk.tone],
           ['Màu primary', `<span style="display:inline-flex;align-items:center;gap:8px"><span style="width:16px;height:16px;border-radius:4px;background:${bk.primaryColor}"></span>${bk.primaryColor}</span>`],
           ['Màu accent', `<span style="display:inline-flex;align-items:center;gap:8px"><span style="width:16px;height:16px;border-radius:4px;background:${bk.secondaryColor}"></span>${bk.secondaryColor}</span>`]
         ])}
         <div style="display:flex;gap:12px;margin-top:16px">
-          <div class="ds-brand-swatch" style="background:${bk.primaryColor}">Primary</div>
-          <div class="ds-brand-swatch" style="background:${bk.secondaryColor}">Accent TikTok</div>
+          <div class="ds-brand-swatch" style="background:${bk.primaryColor}">Màu chính</div>
+          <div class="ds-brand-swatch" style="background:${bk.secondaryColor}">Màu nhấn TikTok</div>
         </div>`)}
-      ${dsCard('Tài sản Brand Kit', `
+      ${dsCard('Tài sản nhận diện', `
         ${dsTable(['Tài sản', 'Quy cách', 'Trạng thái', 'Hành động'], [
           ['Logo vuông', '500×500 PNG', badge('Đã có', 'ok'), `<button class="ds-text-link" onclick="showToast('Tải logo')">Tải</button>`],
           ['Logo ngang', '800×200 PNG', badge('Thiếu', 'warn'), `<button class="ds-text-link" onclick="showToast('Tạo logo ngang')">Tạo</button>`],
           ['Banner shop', '1200×400 JPG', badge('Đã có', 'ok'), `<button class="ds-text-link" onclick="selectModuleDataTab('store', 2)">Sửa</button>`],
           ['Icon favicon', '128×128', badge('Đã có', 'ok'), `<button class="ds-text-link">Tải</button>`],
-          ['Brand guideline PDF', 'A4', badge('Nháp', 'warn'), `<button class="ds-text-link">Xem</button>`]
+          ['Tài liệu hướng dẫn thương hiệu PDF', 'A4', badge('Nháp', 'warn'), `<button class="ds-text-link">Xem</button>`]
         ].map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join(''))}
         <div style="margin-top:16px;display:flex;gap:10px">
-          ${dsBtn('Lưu Brand Kit', 'saveStoreBrandKit()', 'primary', 'md')}
-          ${dsBtn('Đồng bộ Seller Center', "showToast('Đã đồng bộ Brand Kit lên TikTok Shop')", 'secondary', 'md')}
+          ${dsBtn('Lưu nhận diện thương hiệu', 'saveStoreBrandKit()', 'primary', 'md')}
+          ${dsBtn('Đồng bộ Seller Center', "showToast('Đã đồng bộ nhận diện thương hiệu lên TikTok Shop')", 'secondary', 'md')}
         </div>`)}
     `)}
-    ${dsCard('AI Brand Consistency Check', `
+    ${dsCard('Kiểm tra đồng nhất thương hiệu AI', `
       ${dsTip('brand', `${icon('sparkles', 14)} Đánh giá AI`, 'Màu primary #14b8a6 phù hợp ngành beauty · Banner đồng bộ campaign Flash Sale · Gợi ý: thêm logo ngang cho header desktop.')}
-      <div style="margin-top:12px">${dsBtn('Chạy kiểm tra đầy đủ', "showToast('AI đang quét Brand Kit…')", 'ghost', 'sm')}</div>`)}`;
+      <div style="margin-top:12px">${dsBtn('Chạy kiểm tra đầy đủ', "showToast('AI đang quét nhận diện thương hiệu…')", 'ghost', 'sm')}</div>`)}`;
 }

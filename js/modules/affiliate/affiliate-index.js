@@ -4,7 +4,7 @@ MODULE_DATA_TABS.affiliate = () => [
   { label: 'Tổng quan SAM', icon: 'target',
     meta: AFFILIATE_TAB_META.overview,
     content: () => renderAffiliateTabOverview() },
-  { label: 'Creator & GMV', icon: 'users',
+  { label: 'Nhà sáng tạo & GMV', icon: 'users',
     count: ZZP_DATA.kocs.filter(k => k.gmv30d > 0).length,
     meta: AFFILIATE_TAB_META.creator_gmv,
     content: () => renderAffiliateTabCreatorGmv() },

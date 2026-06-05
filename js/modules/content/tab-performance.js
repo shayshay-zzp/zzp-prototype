@@ -1,7 +1,7 @@
 /* Content — tab Hiệu suất video */
 
 function renderContentTabPerformance() {
-  return card('Performance theo nội dung', tableWrap(['Video', 'KOC', 'Views', 'Đơn', 'GMV', 'CTR', 'Trạng thái'],
+  return card('Hiệu suất theo nội dung', tableWrap(['Video', 'KOC', 'Lượt xem', 'Đơn', 'GMV', 'CTR', 'Trạng thái'],
     ZZP_DATA.content.map(c => {
       const k = ZZP_DATA.kocs.find(x => x.id === c.koc);
       return `<tr ${rowClick('content', c.id)} class="border-b border-slate-50">

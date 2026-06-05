@@ -22,7 +22,7 @@ function renderStoreConversionScorecard() {
   syncStoreConversionChecks();
   const passed = ZZP_DATA.store.conversionChecks.filter(c => c.pass).length;
   const total = ZZP_DATA.store.conversionChecks.length;
-  return dsCard('Conversion Readiness', `
+  return dsCard('Sẵn sàng chuyển đổi', `
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
       <div>
         <p style="margin:0;font-size:28px;font-weight:800;color:var(--ds-brand)">${passed}/${total}</p>
@@ -44,7 +44,7 @@ function renderStoreTabOverview() {
     `)}
     ${dsCard('Hành động nhanh', `
       <div style="display:flex;flex-wrap:wrap;gap:10px">
-        ${dsBtnIcon('Brand Kit', "selectModuleDataTab('store', 1)", 'palette', 'secondary', 'md')}
+        ${dsBtnIcon('Nhận diện thương hiệu', "selectModuleDataTab('store', 1)", 'palette', 'secondary', 'md')}
         ${dsBtnIcon('Trang trí & Pin SKU', "selectModuleDataTab('store', 2)", 'layout', 'secondary', 'md')}
         ${dsBtnIcon('Chọn template', "selectModuleDataTab('store', 3)", 'layout-template', 'secondary', 'md')}
         ${dsBtnIcon('Xem trước shop', "selectModuleDataTab('store', 4)", 'smartphone', 'secondary', 'md')}
@@ -53,7 +53,7 @@ function renderStoreTabOverview() {
     ${dsCard('Lịch sử xuất bản', dsTable(
       ['Thời gian', 'Người thực hiện', 'Hành động', 'Trạng thái'],
       s.publishHistory.map(h =>
-        `<tr><td>${h.time}</td><td>${h.user}</td><td>${h.action}</td><td>${badge(h.status === 'live' ? 'Live' : 'Nháp', h.status === 'live' ? 'ok' : 'warn')}</td></tr>`
+        `<tr><td>${h.time}</td><td>${h.user}</td><td>${h.action}</td><td>${badge(h.status === 'live' ? 'Đang live' : 'Nháp', h.status === 'live' ? 'ok' : 'warn')}</td></tr>`
       ).join('')
     ))}`;
 }

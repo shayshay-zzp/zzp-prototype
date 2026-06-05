@@ -1,5 +1,5 @@
 /* Live Analytics — tab Session metrics */
 
 function renderLiveAnalyticsTabSessionMetrics() {
-  return card('Live Session Metrics', renderTtsBreakdownTable('live-analytics'));
+  return card('Chỉ số phiên live', renderTtsBreakdownTable('live-analytics'));
 }

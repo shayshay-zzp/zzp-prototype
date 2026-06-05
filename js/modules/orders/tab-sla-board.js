@@ -1,5 +1,5 @@
 /* Orders — tab SLA Board */
 
 function renderOrdersTabSlaBoard() {
-  return card('Order Center — SLA Board', renderOrderSlaBoard());
+  return card('Trung tâm đơn — Bảng SLA', renderOrderSlaBoard());
 }

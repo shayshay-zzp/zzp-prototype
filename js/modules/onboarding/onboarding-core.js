@@ -10,7 +10,7 @@ const ONBOARDING_PHASES = [
   },
   {
     id: 'catalog',
-    label: 'Sản phẩm & storefront',
+    label: 'Sản phẩm & gian hàng',
     desc: 'Đăng SKU chủ lực và trang trí cửa hàng trên TikTok',
     icon: 'package',
     tone: 'teal'
@@ -66,7 +66,7 @@ function renderOnboardingHealthRing(score) {
       </svg>
       <div class="ds-onboard-ring-center">
         <p class="ds-onboard-ring-val">${score}%</p>
-        <p class="ds-onboard-ring-lbl">Shop Health</p>
+        <p class="ds-onboard-ring-lbl">Sức khỏe shop</p>
       </div>
     </div>`;
 }

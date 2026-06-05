@@ -1,5 +1,5 @@
 /* Inventory — tab Dự báo & PO */
 
 function renderInventoryTabForecast() {
-  return card('Dự báo stockout & đề xuất nhập', renderInventoryForecastTable());
+  return card('Dự báo hết hàng & đề xuất nhập', renderInventoryForecastTable());
 }

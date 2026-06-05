@@ -1,5 +1,5 @@
 /* Samples — tab Bảng mẫu */
 
 function renderSamplesTabTable() {
-  return card('Sample Tracking', renderSamplesTable());
+  return card('Theo dõi mẫu', renderSamplesTable());
 }

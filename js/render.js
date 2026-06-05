@@ -69,7 +69,7 @@ PAGES.koc = () => {
   return modulePage('Vận hành', 'KOC CRM & Lifecycle Tracking', 'Quản lý vòng đời KOC từ tuyển chọn, gửi mẫu đến tạo doanh thu', `
     ${renderTtsMetricsStrip('koc')}
     ${renderModuleDataTabs('koc')}
-    <p class="ds-footer-link">Phân tích sâu → <button type="button" class="ds-text-link" onclick="navigate('creator-analytics')">KOC Scorecard</button></p>`);
+    <p class="ds-footer-link">Phân tích sâu → <button type="button" class="ds-text-link" onclick="navigate('creator-analytics')">Bảng điểm KOC</button></p>`);
 };
 
 PAGES.agency = () => {
@@ -174,7 +174,7 @@ PAGES['live-analytics'] = () => {
 PAGES['customer-analytics'] = () => {
   return modulePage('Phân tích', 'Customer Intelligence', 'Phân tích hành vi khách hàng, phân khúc và LTV', `
     ${card('Customer Segments', tableWrap(['Phân khúc','Số KH','LTV TB','Repeat Rate','Chiến lược'],
-      ZZP_DATA.customers.map(c => `<tr class="border-b border-slate-50"><td class="py-3 px-3 font-medium">${c.segment}</td><td class="px-3">${c.count}</td><td class="px-3">${fmtCurrency(c.ltv)}</td><td class="px-3">${c.repeatRate}%</td><td class="px-3">${c.segment.includes('VIP')?'Retention + upsell':c.segment.includes('At Risk')?'Win-back campaign':'Nurture to repeat'}</td></tr>`).join('')))}
+      ZZP_DATA.customers.map(c => `<tr class="border-b border-slate-50"><td class="py-3 px-3 font-medium">${c.segment}</td><td class="px-3">${c.count}</td><td class="px-3">${fmtCurrency(c.ltv)}</td><td class="px-3">${c.repeatRate}%</td><td class="px-3">${c.segment.includes('VIP')?'Giữ chân + bán thêm':c.segment.includes('At Risk')?'Chiến dịch thu hút lại':'Nuôi dưỡng mua lại'}</td></tr>`).join('')))}
     <div class="mt-6">${card('Cohort Analysis', '<div class="chart-box"><canvas id="chart-cohort"></canvas></div>')}</div>`);
 };
 
@@ -210,9 +210,9 @@ PAGES.alerts = () => {
   return modulePage('Tối ưu', 'Smart Alerts', 'Chủ động phát hiện rủi ro và gửi cảnh báo theo thời gian thực', `
     ${chartGrid([['Phân bổ severity', 'chart-alert-severity', 'sm'], ['Loại cảnh báo', 'chart-alert-type', 'sm']])}
     ${dsStatGrid([
-      { label: 'Critical', value: ZZP_DATA.alerts.filter(a => a.severity === 'critical' && !a.read).length, tone: 'danger' },
-      { label: 'Warning', value: ZZP_DATA.alerts.filter(a => a.severity === 'warning' && !a.read).length, tone: 'warning' },
-      { label: 'Info', value: ZZP_DATA.alerts.filter(a => a.severity === 'info' && !a.read).length, tone: 'info' },
+      { label: 'Khẩn cấp', value: ZZP_DATA.alerts.filter(a => a.severity === 'critical' && !a.read).length, tone: 'danger' },
+      { label: 'Cảnh báo', value: ZZP_DATA.alerts.filter(a => a.severity === 'warning' && !a.read).length, tone: 'warning' },
+      { label: 'Thông tin', value: ZZP_DATA.alerts.filter(a => a.severity === 'info' && !a.read).length, tone: 'info' },
       { label: 'Đã đọc', value: ZZP_DATA.alerts.filter(a => a.read).length, tone: 'brand' }
     ])}
     ${dsCard('Active Alerts', `<div class="ds-stack-sm">${ZZP_DATA.alerts.map(a => `
@@ -240,7 +240,7 @@ PAGES.opportunities = () => {
         <p class="ds-list-card-desc">${o.desc}</p>
         <p style="margin:12px 0 0;font-size:13px;font-weight:700;color:var(--ds-success)">Tiềm năng: ${o.potential}</p>
         <div class="ds-issue-actions" onclick="event.stopPropagation()">
-          <button type="button" class="ds-text-link" onclick="navigate('growth-assistant')">Xem AI recommendation →</button>
+          <button type="button" class="ds-text-link" onclick="navigate('growth-assistant')">Xem gợi ý AI →</button>
           ${dsBtnIcon('Giải quyết', "runAutomationFlow('FLOW_AI_ACTION')", 'play', 'primary', 'sm')}
         </div>
       </div>`).join('')}</div>`);
@@ -251,7 +251,7 @@ PAGES.forecast = () => {
     ${card('GMV Forecast — 7 ngày tới', '<div class="chart-box"><canvas id="chart-forecast"></canvas></div>')}
     <div class="mt-6">${card('Inventory Forecast', tableWrap(['Sản phẩm','Tồn kho','Ngày còn','Dự báo','Khuyến nghị'],
       ZZP_DATA.forecasts.inventory.map(f => { const p = getProduct(f.product);
-        return `<tr ${rowClick('product', f.product)}><td class="py-3 px-3 font-medium">${p?.name}</td><td class="px-3">${p?.stock}</td><td class="px-3 ${f.daysLeft<7?'text-red-600 font-bold':''}">${f.daysLeft} ngày</td><td class="px-3">${f.daysLeft<7?'Stockout risk':'Stable'}</td><td class="px-3">${f.recommendation}</td></tr>`; }).join('')))}</div>`);
+        return `<tr ${rowClick('product', f.product)}><td class="py-3 px-3 font-medium">${p?.name}</td><td class="px-3">${p?.stock}</td><td class="px-3 ${f.daysLeft<7?'text-red-600 font-bold':''}">${f.daysLeft} ngày</td><td class="px-3">${f.daysLeft<7?'Nguy cơ hết hàng':'Ổn định'}</td><td class="px-3">${f.recommendation}</td></tr>`; }).join('')))}</div>`);
 };
 
 PAGES.benchmark = () => {
@@ -289,36 +289,36 @@ PAGES.automation = () => {
 PAGES.optimization = () => {
   return modulePage('Tối ưu', 'Growth Optimizers', 'Tối ưu danh mục, ngân sách, KOC, nội dung và khuyến mãi', `
     <div class="grid lg:grid-cols-2 gap-6">
-      ${card('Product Portfolio Optimizer', `
+      ${card('Tối ưu danh mục sản phẩm', `
         <div class="space-y-3">
-          <div class="p-3 bg-green-50 rounded-lg"><p class="font-medium text-sm flex items-center gap-2">${icon('arrow-up-circle',14,'text-green-600')} Scale: Serum VC, Kem chống nắng</p><p class="text-xs text-slate-600">Tăng inventory +30%, tăng ads budget</p></div>
-          <div class="p-3 bg-amber-50 rounded-lg"><p class="font-medium text-sm flex items-center gap-2">${icon('sliders-horizontal',14,'text-amber-600')} Optimize: Mặt nạ Collagen</p><p class="text-xs text-slate-600">Nhập kho khẩn + chuyển Ads sang Affiliate</p></div>
-          <div class="p-3 bg-red-50 rounded-lg"><p class="font-medium text-sm flex items-center gap-2">${icon('wrench',14,'text-red-600')} Fix: Son dưỡng môi P006</p><p class="text-xs text-slate-600">Cập nhật listing + compliance</p></div>
+          <div class="p-3 bg-green-50 rounded-lg"><p class="font-medium text-sm flex items-center gap-2">${icon('arrow-up-circle',14,'text-green-600')} Mở rộng: Serum VC, Kem chống nắng</p><p class="text-xs text-slate-600">Tăng tồn kho +30%, tăng ngân sách quảng cáo</p></div>
+          <div class="p-3 bg-amber-50 rounded-lg"><p class="font-medium text-sm flex items-center gap-2">${icon('sliders-horizontal',14,'text-amber-600')} Tối ưu: Mặt nạ Collagen</p><p class="text-xs text-slate-600">Nhập kho khẩn + chuyển quảng cáo sang Affiliate</p></div>
+          <div class="p-3 bg-red-50 rounded-lg"><p class="font-medium text-sm flex items-center gap-2">${icon('wrench',14,'text-red-600')} Sửa: Son dưỡng môi P006</p><p class="text-xs text-slate-600">Cập nhật tin đăng + tuân thủ</p></div>
         </div>`)}
-      ${card('KOC Discovery & Recommendation', `
+      ${card('Khám phá & gợi ý KOC', `
         <div class="space-y-3">
-          <div class="p-3 border rounded-lg"><p class="font-medium text-sm">@skintips_daily — Match 87%</p><p class="text-xs text-slate-600">ROI 3.5x · Recommend: Tăng tier Mid→Macro</p></div>
-          <div class="p-3 border rounded-lg"><p class="font-medium text-sm">@newcreator_test — Match 32%</p><p class="text-xs text-slate-600">Chưa tạo content · Recommend: Wait or cut</p></div>
+          <div class="p-3 border rounded-lg"><p class="font-medium text-sm">@skintips_daily — Khớp 87%</p><p class="text-xs text-slate-600">ROI 3.5x · Gợi ý: Nâng hạng Trung bình → Vĩ mô</p></div>
+          <div class="p-3 border rounded-lg"><p class="font-medium text-sm">@newcreator_test — Khớp 32%</p><p class="text-xs text-slate-600">Chưa tạo nội dung · Gợi ý: Chờ hoặc cắt</p></div>
         </div>`)}
       ${card('Nhân rộng nội dung thành công', `
         <p class="text-sm text-slate-600 mb-3">Phân tích video thành công và đề xuất nhân rộng:</p>
         <div class="p-3 bg-zzp-50 rounded-lg"><p class="font-medium">Pattern: "Routine 3 bước" (V001)</p><p class="text-xs mt-1">→ Tạo 3 video tương tự với K002, K005, K001</p><p class="text-xs text-green-600 mt-1">Dự kiến +18M GMV</p></div>`)}
-      ${card('Campaign & Budget Optimizer', `
+      ${card('Tối ưu chiến dịch & ngân sách', `
         <div class="space-y-2 text-sm">
-          <div class="flex justify-between p-2 bg-slate-50 rounded"><span>Spark Ads Serum VC</span><span class="text-green-600">+30% budget</span></div>
-          <div class="flex justify-between p-2 bg-slate-50 rounded"><span>Product Ads Mặt nạ</span><span class="text-red-600">Pause · chuyển 8M sang Affiliate</span></div>
+          <div class="flex justify-between p-2 bg-slate-50 rounded"><span>Spark Ads Serum VC</span><span class="text-green-600">+30% ngân sách</span></div>
+          <div class="flex justify-between p-2 bg-slate-50 rounded"><span>Quảng cáo sản phẩm Mặt nạ</span><span class="text-red-600">Tạm dừng · chuyển 8M sang Affiliate</span></div>
           <div class="flex justify-between p-2 bg-slate-50 rounded"><span>Flash Sale 6/6 Bundle</span><span class="text-blue-600">Tạo bundle P001+P005</span></div>
         </div>`)}
-      ${card('Discount Strategy Automation', `
+      ${card('Tự động hóa chiến lược giảm giá', `
         <p class="text-sm text-slate-600">AI đề xuất chiến lược giá tối ưu:</p>
         <div class="mt-3 space-y-2 text-sm">
           <p>• BEAUTY20: Giữ nguyên (ROAS tốt)</p>
           <p>• NEW50K: Giảm xuống 30K (CVR thấp)</p>
-          <p>• Live-only voucher 15% cho Mega Live 6/6</p>
+          <p>• Voucher chỉ live 15% cho Mega Live 6/6</p>
         </div>`)}
       ${card('Giữ chân khách hàng', `
-        <p class="text-sm text-slate-600">Win-back campaign cho 456 KH At Risk:</p>
-        <div class="mt-3 p-3 bg-blue-50 rounded-lg text-sm"><p class="font-medium">Gửi voucher FREESHIP + Mini Kit 99K</p><p class="text-xs text-slate-500 mt-1">Dự kiến recover 12% · +8.5M GMV</p></div>`)}
+        <p class="text-sm text-slate-600">Chiến dịch thu hút lại 456 KH có nguy cơ rời:</p>
+        <div class="mt-3 p-3 bg-blue-50 rounded-lg text-sm"><p class="font-medium">Gửi voucher FREESHIP + Mini Kit 99K</p><p class="text-xs text-slate-500 mt-1">Dự kiến thu hút lại 12% · +8,5M GMV</p></div>`)}
     </div>`);
 };
 

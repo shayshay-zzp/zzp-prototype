@@ -1,28 +1,28 @@
-/* Content — mô tả tab (seller POV) */
+/* Nội dung — mô tả tab (góc nhìn người bán) */
 
 const CONTENT_TAB_META = {
   calendar: sellerMeta(
-    'Content Ops · Lịch sản xuất',
-    'Lên lịch video, brief và deadline đăng content từ KOC/agency.',
-    ['Calendar content theo tuần',
-      'Task pending vs published',
+    'Vận hành nội dung · Lịch sản xuất',
+    'Lên lịch video, yêu cầu nội dung và hạn đăng nội dung từ KOC/đại lý.',
+    ['Lịch nội dung theo tuần',
+      'Nhiệm vụ chờ xử lý so với đã đăng',
       'KOC gắn từng video',
-      'Deadline và trạng thái'],
-    ['Thêm task content mới',
-      'Nhắc KOC deadline',
-      'Gắn Spark Ads cho video hot'],
-    'Publish đều 3–4 video/tuần giúp algorithm TikTok Shop ổn định hơn burst rồi im.'
+      'Hạn chót và trạng thái'],
+    ['Thêm nhiệm vụ nội dung mới',
+      'Nhắc KOC hạn chót',
+      'Gắn Spark Ads cho video đang nổi'],
+    'Đăng đều 3–4 video/tuần giúp thuật toán TikTok Shop ổn định hơn đăng ồ ạt rồi im lặng.'
   ),
   performance: sellerMeta(
-    'Content Analyst · Hiệu suất video',
-    'Đo views, CTR, đơn và GMV từng video để scale nội dung hiệu quả.',
-    ['Views, CTR, orders, GMV/video',
+    'Phân tích nội dung · Hiệu suất video',
+    'Đo lượt xem, tỷ lệ nhấp, đơn và GMV (doanh thu gộp) từng video để tăng quy mô nội dung hiệu quả.',
+    ['Lượt xem, tỷ lệ nhấp, đơn hàng, GMV (doanh thu gộp)/video',
       'KOC sản xuất',
-      'Trạng thái published/pending',
-      'Click mở chi tiết video'],
-    ['Boost video CTR > 3% bằng Spark Ads',
-      'Brief lại format video convert cao',
-      'Archive video performance thấp'],
-    'Video views cao nhưng CTR thấp → thường do hook yếu hoặc SKU link sai.'
+      'Trạng thái đã đăng/chờ xử lý',
+      'Bấm mở chi tiết video'],
+    ['Tăng tốc video có tỷ lệ nhấp > 3% bằng Spark Ads',
+      'Gửi lại yêu cầu nội dung định dạng video chuyển đổi cao',
+      'Lưu trữ video hiệu suất thấp'],
+    'Video lượt xem cao nhưng tỷ lệ nhấp thấp → thường do mở đầu yếu hoặc liên kết SKU sai.'
   )
 };

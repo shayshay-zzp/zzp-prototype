@@ -46,25 +46,25 @@ function renderStoreKpiStrip() {
   return `
     <div class="ds-metric-strip">
       <div class="ds-metric-strip-head">
-        <p class="ds-metric-strip-label">${icon('store', 14)} Storefront · ${ZZP_DATA.shop.name}</p>
+        <p class="ds-metric-strip-label">${icon('store', 14)} Gian hàng · ${ZZP_DATA.shop.name}</p>
         <span class="ds-metric-strip-sync">${s.publishStatus === 'live' ? badge('Đang live', 'ok') : badge('Bản nháp', 'warn')} · Sửa ${s.lastEdited}</span>
       </div>
       <div class="ds-metric-strip-grid">
         <div class="ds-metric-cell ds-metric-cell--highlight">
           <p class="ds-metric-cell-val is-brand">${score}%</p>
-          <p class="ds-metric-cell-lbl">Storefront Score</p>
+          <p class="ds-metric-cell-lbl">Điểm gian hàng</p>
         </div>
         <div class="ds-metric-cell">
           <p class="ds-metric-cell-val">${s.pinnedProductIds.length}/4</p>
-          <p class="ds-metric-cell-lbl">Hero SKU pin</p>
+          <p class="ds-metric-cell-lbl">Pin SKU chủ lực</p>
         </div>
         <div class="ds-metric-cell">
           <p class="ds-metric-cell-val">${tpl ? tpl.name.slice(0, 12) + '…' : '—'}</p>
-          <p class="ds-metric-cell-lbl">Template active</p>
+          <p class="ds-metric-cell-lbl">Mẫu đang dùng</p>
         </div>
         <div class="ds-metric-cell">
           <p class="ds-metric-cell-val">${prog.done}/${prog.total}</p>
-          <p class="ds-metric-cell-lbl">Setup checklist</p>
+          <p class="ds-metric-cell-lbl">Danh sách thiết lập</p>
         </div>
         <div class="ds-metric-cell">
           <p class="ds-metric-cell-val">${s.sections.filter(x => x.enabled).length}/${s.sections.length}</p>
