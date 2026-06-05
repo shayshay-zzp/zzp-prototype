@@ -43,19 +43,59 @@ function isNewSeller() {
   return done < 7 || calcHealthScore() < 82;
 }
 
-function getShopIssues() {
+function getShopIssues(opts = {}) {
+  const { includeSetup = false } = opts;
   const issues = [];
+  const seen = new Set();
+
   ZZP_DATA.alerts.filter(a => !a.read).forEach(a => {
-    issues.push({ kind: 'alert', id: a.id, severity: a.severity, title: a.title, desc: a.desc, action: a.action, module: a.module, flow: alertToFlow(a.id), entity: ALERT_ENTITY[a.id] });
+    issues.push({
+      kind: 'alert',
+      id: a.id,
+      severity: a.severity,
+      title: a.title,
+      desc: a.desc,
+      action: a.action,
+      module: a.module,
+      flow: alertToFlow(a.id),
+      entity: ALERT_ENTITY[a.id]
+    });
+    seen.add('alert:' + a.id);
+    if (ALERT_ENTITY[a.id]?.id) seen.add('product:' + ALERT_ENTITY[a.id].id);
   });
-  ZZP_DATA.checklist.filter(c => !c.done).forEach(c => {
-    issues.push({ kind: 'setup', id: c.id, severity: 'info', title: c.title, desc: c.desc, action: 'Hoàn thành bước setup', module: c.module || 'onboarding', flow: null, entity: null });
+
+  ZZP_DATA.products.forEach(p => {
+    if (seen.has('product:' + p.id)) return;
+    const daysLeft = typeof getProductStockDays === 'function' ? getProductStockDays(p) : Math.floor(p.stock / Math.max(1, p.sold30d / 30));
+    if (daysLeft >= 7) return;
+    const copy = typeof getStockIssueCopy === 'function' ? getStockIssueCopy(p) : null;
+    if (!copy) return;
+    issues.push({
+      kind: 'stock',
+      id: p.id,
+      severity: daysLeft <= 3 ? 'critical' : 'warning',
+      entity: { type: 'product', id: p.id },
+      ...copy
+    });
+    seen.add('product:' + p.id);
   });
-  ZZP_DATA.products.filter(p => p.stock < 100).forEach(p => {
-    if (!issues.find(i => i.entity?.id === p.id)) {
-      issues.push({ kind: 'stock', id: p.id, severity: 'critical', title: `Tồn kho thấp: ${p.name}`, desc: `Còn ${p.stock} sp — cần nhập hàng`, action: 'Đặt PO nhập kho', module: 'inventory', flow: 'FLOW_STOCK', entity: { type: 'product', id: p.id } });
-    }
-  });
+
+  if (includeSetup) {
+    ZZP_DATA.checklist.filter(c => !c.done).forEach(c => {
+      issues.push({
+        kind: 'setup',
+        id: c.id,
+        severity: 'info',
+        title: c.title,
+        desc: c.desc,
+        action: 'Hoàn thành bước thiết lập',
+        module: c.module || 'onboarding',
+        flow: null,
+        entity: null
+      });
+    });
+  }
+
   return issues;
 }
 
@@ -67,7 +107,12 @@ function alertToFlow(alertId) {
 function getModuleIssues(pageId) {
   const modMap = { 'products-setup': 'products', products: 'products', 'product-analytics': 'products' };
   const mod = modMap[pageId] || pageId;
-  return getShopIssues().filter(i => i.module === mod || i.module === pageId || (pageId === 'dashboard' && true));
+  const includeSetup = pageId === 'onboarding';
+  return getShopIssues({ includeSetup }).filter(i => {
+    if (i.kind === 'setup') return pageId === 'onboarding';
+    if (pageId === 'dashboard') return true;
+    return i.module === mod || i.module === pageId;
+  });
 }
 
 function detailLink(type, id, label, cls = '') {
@@ -98,6 +143,7 @@ function renderIssueCard(issue, compact) {
       <div>${badge(issue.kind === 'setup' ? 'Thiết lập' : 'Vấn đề', issue.severity)}</div>
       <p class="ds-issue-title">${issue.title}</p>
       <p class="ds-issue-desc">${issue.desc}</p>
+      ${issue.action ? `<p class="ds-issue-desc" style="margin-top:6px;font-weight:600;color:var(--ds-text-secondary)">→ ${issue.action}</p>` : ''}
       <div class="ds-issue-actions">
         ${entityBtn}
         ${flowBtn}
@@ -212,8 +258,21 @@ function renderWorkflowCardInline(f, isPrimary, pageId) {
     </div>`;
 }
 
+function renderDashboardIssuesOverview() {
+  const issues = getShopIssues({ includeSetup: false });
+  if (!issues.length) {
+    return dsCard('Vấn đề cần xử lý', '<p class="text-sm text-slate-500">Không có vấn đề vận hành cần xử lý ngay.</p>');
+  }
+  return `
+    <div class="ds-context-block">
+      <h3 class="ds-context-head">${icon('alert-circle', 18)} Vấn đề cần xử lý (${issues.length})</h3>
+      <div class="ds-stack-sm">${issues.map(i => renderIssueCard(i)).join('')}</div>
+      <button type="button" class="ds-text-link" style="margin-top:16px" onclick="navigate('alerts')">Xem tất cả cảnh báo →</button>
+    </div>`;
+}
+
 function renderModuleContext(pageId) {
-  const issues = getModuleIssues(pageId).slice(0, pageId === 'dashboard' ? 99 : 3);
+  const issues = getModuleIssues(pageId).filter(i => i.kind !== 'setup').slice(0, pageId === 'dashboard' ? 6 : 3);
   if (!issues.length) return '';
   return `
     <div class="ds-context-block">
@@ -235,15 +294,15 @@ function renderNewSellerDashboard() {
     ${dsHero('init', `${icon('sparkles', 16)} Chào mừng người bán mới`, 'Hoàn thiện thiết lập shop trước khi mở rộng', `BeautyViet Official · Sức khỏe shop ${health}% · Còn ${pending.length} bước thiết lập`, progressHtml)}
     ${renderRecommendedSteps()}
     ${renderSetupBanner()}
+    ${renderDashboardIssuesOverview()}
     ${dsCard('Danh sách thiết lập', `<div class="ds-stack-sm">${pending.map(c => renderChecklistRow(c)).join('')}</div>`)}
-    ${renderModuleContext('dashboard')}
     ${dsCard('Tài liệu hướng dẫn người bán mới', `<div class="ds-kv">${eduLinks}</div>`)}
   `));
 }
 
 function renderActiveSellerDashboard() {
   const p = calcProfit();
-  const issues = getShopIssues().filter(i => i.kind !== 'setup').slice(0, 6);
+  const issues = getShopIssues({ includeSetup: false });
   const insights = ZZP_DATA.aiInsights.slice(0, 3).map(i =>
     `<button type="button" onclick="openDetail('insight','${i.id}')" class="ds-kv-row" style="border:none;padding:12px 0;cursor:pointer;background:none;width:100%;font:inherit;text-align:left">
       <span style="display:flex;align-items:center;gap:10px"><span class="ds-step-num" style="margin:0;width:28px;height:28px;font-size:12px">${i.priority}</span><span><strong style="display:block;font-size:13px">${i.title}</strong><span style="font-size:12px;color:var(--ds-success)">${i.impact}</span></span></span>
@@ -257,9 +316,7 @@ function renderActiveSellerDashboard() {
       { label: 'Sức khỏe shop', value: calcHealthScore() + '%', hint: 'Ổn định', tone: 'info' },
       { label: 'Vấn đề', value: issues.length, hint: 'Cần xử lý', tone: issues.length ? 'danger' : 'success' }
     ])}
-    ${issues.length ? dsCard(`Vấn đề shop — ${issues.length} cần giải quyết`, `
-      <div class="ds-stack-sm">${issues.map(i => renderIssueCard(i)).join('')}</div>
-      <button type="button" class="ds-text-link" style="margin-top:16px" onclick="navigate('alerts')">Xem tất cả cảnh báo →</button>`) : ''}
+    ${renderDashboardIssuesOverview()}
     ${dsGrid(2, `
       ${dsCard('Doanh thu gộp & Lợi nhuận', '<div class="chart-box"><canvas id="chart-main"></canvas></div>')}
       ${dsCard('Nguồn doanh thu', '<div class="chart-box-sm"><canvas id="chart-revenue-src"></canvas></div>')}

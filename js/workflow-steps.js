@@ -170,7 +170,7 @@ function renderStepInventory(action) {
           <p class="text-sm text-red-700">Tồn: <strong>${p.stock}</strong> · Velocity: ${daily}/ngày · Còn <strong>${days} ngày</strong></p>
         </div>
       </div>
-      <button type="button" onclick="runAutomationFlow('FLOW_STOCK')" class="mt-3 text-xs text-red-700 hover:underline inline-flex items-center gap-1">${icon('play', 12)} Chạy quy trình nhập hàng</button>
+      <button type="button" onclick="runAutomationFlow('FLOW_STOCK')" class="mt-3 text-xs text-red-700 hover:underline inline-flex items-center gap-1">${icon('play', 12)} Quy trình gửi PO NCC</button>
     </div>`;
 }
 

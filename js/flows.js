@@ -314,7 +314,7 @@ async function runAutomationFlow(flowId) {
 function applyFlowEffects(flow, stepIndex) {
   if (flow.id === 'FLOW_STOCK' && stepIndex === 3) {
     if (!ZZP_DATA.actionQueue.find(a => a.id === 'AQ002')) {
-      ZZP_DATA.actionQueue.unshift({ id: 'AQ002', title: 'Đặt PO nhập kho P003 — 2000 sp', source: 'FLOW_STOCK', status: 'pending', assignee: 'Trần Văn Hùng', priority: 'critical' });
+      ZZP_DATA.actionQueue.unshift({ id: 'AQ002', title: 'Gửi PO 2000 sp Mặt nạ Collagen cho NCC', source: 'FLOW_STOCK', status: 'pending', assignee: 'Trần Văn Hùng', priority: 'critical' });
     }
   }
   if (flow.id === 'FLOW_ADS' && stepIndex === 3) {

@@ -21,8 +21,8 @@ const ZZP_DATA = {
     { id: 'c5', phase: 1, title: 'Đăng 5+ sản phẩm SKU chủ lực', desc: 'Tin đăng đạt chất lượng ≥85%', done: false, module: 'products' },
     { id: 'c6', phase: 1, title: 'Trang trí cửa hàng & bộ nhận diện', desc: 'Banner, logo, màu thương hiệu', done: false, module: 'store' },
     { id: 'c7', phase: 1, title: 'Kích hoạt chương trình tiếp thị liên kết', desc: 'Hoa hồng 10-15% cho KOC', done: true, module: 'affiliate' },
-    { id: 'c8', phase: 1, title: 'Hoàn thành kiểm tra tuân thủ', desc: 'Không vi phạm chính sách', done: false, module: 'compliance' },
-    { id: 'c9', phase: 1, title: 'Đọc sổ tay hướng dẫn seller', desc: '5 mô-đun đào tạo cơ bản', done: false, module: 'education' },
+    { id: 'c8', phase: 1, title: 'Hoàn thành kiểm tra tuân thủ', desc: 'P006 thiếu ảnh INCI (POL001) — listing đang review · AQ003 xử lý', done: false, module: 'compliance' },
+    { id: 'c9', phase: 1, title: 'Đọc sổ tay hướng dẫn người bán', desc: '5 mô-đun đào tạo cơ bản', done: false, module: 'education' },
     { id: 'c10', phase: 1, title: 'Đồng bộ SKU đa kênh', desc: 'Ánh xạ Shopee, Lazada', done: false, module: 'channels' }
   ],
 
@@ -109,7 +109,7 @@ const ZZP_DATA = {
   policies: [
     { id: 'POL001', title: 'Cập nhật tiêu chuẩn hình ảnh sản phẩm mỹ phẩm', date: '2026-06-01', impact: 'high', affected: ['P006'], status: 'action_required', aiSummary: 'Yêu cầu ảnh có nhãn thành phần INCI rõ ràng. Sản phẩm P006 cần cập nhật trong 7 ngày.' },
     { id: 'POL002', title: 'Thay đổi commission cap Affiliate Q3', date: '2026-05-28', impact: 'medium', affected: [], status: 'monitoring', aiSummary: 'Commission tối đa giảm từ 20% xuống 15% cho ngành mỹ phẩm. Đánh giá lại chiến lược KOC Macro.' },
-    { id: 'POL003', title: 'Quy định mới về claim "Organic"', date: '2026-05-15', impact: 'high', affected: ['P006'], status: 'compliant', aiSummary: 'Sản phẩm P006 đã có chứng nhận. Duy trì compliance.' }
+    { id: 'POL003', title: 'Quy định mới về claim "Organic"', date: '2026-05-15', impact: 'high', affected: ['P006'], status: 'compliant', aiSummary: 'Chứng nhận Organic hợp lệ. Ảnh INCI theo POL001 đang xử lý riêng (AQ003 · listing review).' }
   ],
 
   education: [
@@ -170,18 +170,18 @@ const ZZP_DATA = {
   ],
 
   alerts: [
-    { id: 'A001', type: 'inventory', severity: 'critical', title: 'Tồn kho thấp: Mặt nạ Collagen', desc: 'Chỉ còn 45 sp — dự kiến hết hàng trong 2 ngày với tốc độ bán hiện tại', action: 'Đặt hàng nhập kho', module: 'inventory', read: false },
-    { id: 'A002', type: 'profit', severity: 'warning', title: 'ROAS thấp: Product Ads Mặt nạ', desc: 'ROAS 1.2x — chi phí ads vượt ngưỡng lợi nhuận 2.0x', action: 'Tạm dừng chiến dịch', module: 'ads', read: false },
-    { id: 'A003', type: 'cost', severity: 'warning', title: 'Voucher NEW50K gần vượt guardrail', desc: 'Đã sử dụng 63% ngân sách — CVR thấp hơn benchmark 40%', action: 'Giảm mức voucher', module: 'vouchers', read: false },
-    { id: 'A004', type: 'operation', severity: 'info', title: '3 đơn hàng sắp quá SLA', desc: 'ORD-88421, ORD-88414 cần xử lý trong 2-6 giờ', action: 'Xử lý đơn hàng', module: 'orders', read: false },
-    { id: 'A005', type: 'compliance', severity: 'critical', title: 'Vi phạm tiềm ẩn: P006 Listing', desc: 'Thiếu ảnh nhãn INCI theo chính sách mới POL001', action: 'Cập nhật listing', module: 'compliance', read: false },
+    { id: 'A001', type: 'inventory', severity: 'critical', title: 'Sắp hết hàng: Mặt nạ Collagen', desc: 'Còn 45 sp (~2 ngày, ~40 sp/ngày) · PO-DRAFT-P003 chưa gửi NCC · AD002 đã tạm dừng nhưng push KOC vẫn cần giảm', action: 'Gửi đơn NCC & giảm push KOC', module: 'inventory', read: false },
+    { id: 'A002', type: 'profit', severity: 'warning', title: 'ROAS thấp: Product Ads Mặt nạ', desc: 'AD002 ROAS 1.2x · đã pause lúc 14:20 · AQ001 chờ duyệt chuyển 8M sang Affiliate', action: 'Duyệt chuyển ngân sách', module: 'ads', read: false },
+    { id: 'A003', type: 'cost', severity: 'warning', title: 'Voucher NEW50K gần vượt ngưỡng kiểm soát', desc: 'Đã sử dụng 63% ngân sách — CVR thấp hơn chuẩn ngành 40%', action: 'Giảm mức voucher', module: 'vouchers', read: false },
+    { id: 'A004', type: 'operation', severity: 'info', title: '3 đơn hàng sắp quá SLA', desc: 'ORD-88421, ORD-88414 cần xử lý trong 2–6 giờ', action: 'Xử lý đơn hàng', module: 'orders', read: false },
+    { id: 'A005', type: 'compliance', severity: 'critical', title: 'Tuân thủ: Son dưỡng môi thiếu ảnh INCI', desc: 'POL001 · listing đang review · AQ003 Phạm Đức An đang upload ảnh nhãn', action: 'Theo dõi cập nhật listing', module: 'compliance', read: false },
     { id: 'A006', type: 'profit', severity: 'info', title: 'Margin tăng: Serum Vitamin C', desc: 'Biên lợi nhuận tăng 3.2% nhờ giảm chi phí mẫu', action: 'Scale sản phẩm', module: 'products', read: true }
   ],
 
   aiInsights: [
     { id: 'AI001', priority: 1, title: 'Scale Serum Vitamin C qua Spark Ads', desc: 'ROAS 3.8x, margin 66%. Video K001 đang viral — tăng budget 30% trong 7 ngày.', impact: '+45M GMV', confidence: 89, actions: ['Tăng budget AD001', 'Gửi thêm mẫu cho K001', 'Tạo voucher bundle P001+P005'] },
     { id: 'AI002', priority: 2, title: 'Tối ưu chi phí Ads Mặt nạ Collagen', desc: 'ROAS 1.2x gây thua lỗ. Chuyển ngân sách sang Affiliate thay vì Product Ads.', impact: '+12M lợi nhuận', confidence: 92, actions: ['Pause AD002', 'Tăng commission K002 cho P003', 'Livestream flash sale P003'] },
-    { id: 'AI003', priority: 3, title: 'Nhập kho khẩn Mặt nạ Collagen', desc: 'Stock 45, velocity 40/sp/ngày. Risk mất 15M GMV/tuần nếu hết hàng.', impact: 'Tránh mất doanh thu', confidence: 95, actions: ['Đặt PO 2000 sp', 'Thông báo KOC giảm push', 'Kích hoạt pre-order'] },
+    { id: 'AI003', priority: 3, title: 'Gửi PO khẩn Mặt nạ Collagen cho NCC', desc: 'Còn 45 sp · ~40 sp/ngày · chưa có PO xác nhận · lead time NCC ~7 ngày. Tạm dừng Ads & giảm push KOC trước khi hết hàng.', impact: 'Tránh mất ~15M GMV/tuần', confidence: 95, actions: ['Gửi PO-DRAFT-P003 cho NCC', 'Duyệt tạm dừng AD002', 'Thông báo KOC giảm push P003'] },
     { id: 'AI004', priority: 4, title: 'Phát hiện KOC tiềm năng: @skintips_daily', desc: 'ROI 3.5x, đang tăng trưởng. Mở rộng hợp tác từ Mid lên Macro tier.', impact: '+25M GMV', confidence: 78, actions: ['Tăng commission 10→12%', 'Gửi Hero SKU bundle', 'Book live session'] }
   ],
 
@@ -192,11 +192,15 @@ const ZZP_DATA = {
     { id: 'O004', type: 'campaign', title: 'Bundle P001+P005 cho Live 6/6', desc: 'Cross-sell rate dự kiến 28%', potential: '+32M', status: 'new' }
   ],
 
+  purchaseOrders: [
+    { id: 'PO-DRAFT-P003', productId: 'P003', qty: 2000, status: 'draft', supplier: 'Nhà cung cấp Mỹ phẩm Đại Việt', orderedAt: null, eta: null, note: 'Nháp — chờ Trần Văn Hùng gửi NCC (AQ002)' }
+  ],
+
   forecasts: {
     gmv7d: [62000000, 68000000, 71000000, 75000000, 82000000, 95000000, 88000000],
     gmvLabels: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'],
     inventory: [
-      { product: 'P003', daysLeft: 2, recommendation: 'Nhập khẩn 2000 sp' },
+      { product: 'P003', daysLeft: 2, recommendation: 'Gửi PO 2000 sp · lead time NCC ~7 ngày · tạm dừng Ads' },
       { product: 'P001', daysLeft: 14, recommendation: 'Ổn định' },
       { product: 'P002', daysLeft: 18, recommendation: 'Ổn định' }
     ]
@@ -211,7 +215,7 @@ const ZZP_DATA = {
   },
 
   automationRules: [
-    { id: 'R001', name: 'Tồn kho Shop < 100 sp', trigger: 'inventory.available < 100', action: 'Webhook → cảnh báo + tạo PO nhập hàng', active: true, runs: 12, platform: 'shop', flowId: 'FLOW_STOCK' },
+    { id: 'R001', name: 'Tồn kho Shop < 100 sp', trigger: 'inventory.available < 100', action: 'Webhook → cảnh báo + tạo việc gửi PO NCC', active: true, runs: 12, platform: 'shop', flowId: 'FLOW_STOCK' },
     { id: 'R002', name: 'Pause Ads khi ROAS < 1.5x', trigger: 'campaign.roas < 1.5', action: 'Tạm dừng campaign TikTok Ads + notify', active: true, runs: 3, platform: 'ads', flowId: 'FLOW_ADS' },
     { id: 'R003', name: 'Báo cáo GMV hàng ngày 8h', trigger: 'cron 08:00', action: 'Email + Zalo · dữ liệu TikTok Shop', active: true, runs: 156, platform: 'shop', flowId: null },
     { id: 'R004', name: 'Auto duyệt sample · KOC score ≥ 80', trigger: 'creator.score >= 80', action: 'Gửi mẫu qua Affiliate Center', active: false, runs: 0, platform: 'affiliate', flowId: 'FLOW_SAMPLE' },
@@ -219,9 +223,9 @@ const ZZP_DATA = {
   ],
 
   actionQueue: [
-    { id: 'AQ001', title: 'Pause Product Ads Mặt nạ', source: 'AI002', status: 'pending', assignee: 'Lê Thị Hoa', priority: 'high' },
-    { id: 'AQ002', title: 'Đặt PO nhập kho P003', source: 'AI003', status: 'pending', assignee: 'Trần Văn Hùng', priority: 'critical' },
-    { id: 'AQ003', title: 'Cập nhật ảnh INCI cho P006', source: 'A005', status: 'in_progress', assignee: 'Phạm Đức An', priority: 'high' },
+    { id: 'AQ001', title: 'Duyệt tạm dừng Product Ads Mặt nạ', source: 'AI002', status: 'pending', assignee: 'Lê Thị Hoa', priority: 'high' },
+    { id: 'AQ002', title: 'Gửi PO 2000 sp Mặt nạ Collagen cho NCC', source: 'AI003', status: 'pending', assignee: 'Trần Văn Hùng', priority: 'critical' },
+    { id: 'AQ003', title: 'Upload ảnh INCI cho P006 (POL001)', source: 'A005', status: 'in_progress', assignee: 'Phạm Đức An', priority: 'high' },
     { id: 'AQ004', title: 'Tăng budget Spark Ads +30%', source: 'AI001', status: 'approved', assignee: 'Lê Thị Hoa', priority: 'medium' }
   ],
 
@@ -372,6 +376,57 @@ function fmtCurrency(n) {
 
 function getProduct(id) {
   return ZZP_DATA.products.find(p => p.id === id);
+}
+
+function getProductDailyVelocity(product) {
+  return Math.max(1, Math.round((product?.sold30d || 0) / 30));
+}
+
+function getProductStockDays(product) {
+  if (!product) return 0;
+  return Math.floor(product.stock / getProductDailyVelocity(product));
+}
+
+function getProductPurchaseOrder(productId) {
+  return (ZZP_DATA.purchaseOrders || []).find(po => po.productId === productId && po.status !== 'received');
+}
+
+function getStockIssueCopy(product) {
+  const velocity = getProductDailyVelocity(product);
+  const daysLeft = getProductStockDays(product);
+  const po = getProductPurchaseOrder(product.id);
+  const pendingPo = ZZP_DATA.actionQueue.find(a =>
+    a.status !== 'approved' && (a.title.includes(product.id) || a.title.includes(product.name.split(' ').slice(-2).join(' ')))
+  );
+
+  if (po?.status === 'in_transit' || po?.status === 'awaiting_supplier') {
+    return {
+      title: `Chờ hàng về: ${product.name}`,
+      desc: `${po.id}: ${po.qty} sp · ETA ${po.eta || 'chưa xác nhận'} · còn ${product.stock} sp (~${daysLeft} ngày) · tạm giảm push bán`,
+      action: 'Theo dõi PO & giảm push KOC',
+      flow: null,
+      module: 'inventory'
+    };
+  }
+
+  if (po?.status === 'draft' || pendingPo) {
+    const ref = po?.id || pendingPo?.id;
+    return {
+      title: `Sắp hết hàng: ${product.name}`,
+      desc: `Còn ${product.stock} sp (~${daysLeft} ngày, ${velocity}/ngày) · ${ref} chưa gửi NCC · Ads vẫn có thể đang chạy`,
+      action: 'Gửi đơn NCC & tạm dừng Ads',
+      flow: 'FLOW_STOCK',
+      module: 'inventory'
+    };
+  }
+
+  return {
+    title: `Sắp hết hàng: ${product.name}`,
+    desc: `Còn ${product.stock} sp (~${daysLeft} ngày) · chưa lên đơn NCC · lead time ~7 ngày`,
+    action: 'Tạo đơn đặt hàng NCC',
+    flow: 'FLOW_STOCK',
+    module: 'inventory'
+  };
 }
 
 function calcHealthScore() {

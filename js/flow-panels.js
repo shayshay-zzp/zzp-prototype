@@ -114,7 +114,7 @@ function getFlowStepContent(pageId, stepIndex, step, flow) {
         out.body = `<div class="p-3 rounded-lg border border-red-200 bg-red-50 text-sm">${a.title}</div>`;
         out.actions.push(btnPrimary('Tạo đơn nhập', `approveAction('AQ002')`));
       } else {
-        out.actions.push(btnPrimary('Đặt nhập hàng', `runAutomationFlow('FLOW_STOCK')`));
+        out.actions.push(btnPrimary('Gửi PO NCC', `runAutomationFlow('FLOW_STOCK')`));
         out.body = `<ol class="text-xs list-decimal list-inside space-y-1 text-slate-600"><li>Tạo PO 2000 sp</li><li>Gửi duyệt Ops</li><li>Cập nhật tồn đa kênh</li></ol>`;
       }
       break;
@@ -314,7 +314,7 @@ const FLOW_STEP_PANELS = {
       <p class="font-semibold">Phát hiện tồn kho thấp — ${p.name}</p>
       ${flowMetrics([{ l: 'Tồn', v: p.stock, color: 'text-red-600' }, { l: 'Bán/ngày', v: daily + ' sp' }, { l: 'Còn', v: Math.round(p.stock / daily) + ' ngày', color: 'text-red-600' }])}
       <div class="h-3 bg-slate-100 rounded-full mt-2"><div class="h-3 bg-red-500 rounded-full" style="width:${Math.min(100, p.stock / 10)}%"></div></div>
-      ${flowActions([btnPrimary('Đặt nhập hàng', `runAutomationFlow('FLOW_STOCK')`), btnSecondary('Chi tiết SP', `openDetail('product','P003')`)])}`);
+      ${flowActions([btnPrimary('Gửi PO NCC', `runAutomationFlow('FLOW_STOCK')`), btnSecondary('Chi tiết SP', `openDetail('product','P003')`)])}`);
   },
   'MOD_INVENTORY:s3': (step, flow, pageId, i) => {
     const a = ZZP_DATA.alerts.find(x => x.id === 'A001');

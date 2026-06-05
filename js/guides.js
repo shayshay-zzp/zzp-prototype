@@ -92,8 +92,8 @@ const MODULE_GUIDES = {
     steps: [
       { title: 'Theo dõi tồn kho thời gian thực', desc: 'Đồng bộ từ ERP + TikTok Shop, cập nhật mỗi 15s.', done: () => true, action: null, link: 'inventory' },
       { title: 'Tính tốc độ bán & ngày còn lại', desc: 'bán30ng/30 = tốc độ bán. tồn kho/tốc độ bán = số ngày còn lại.', done: () => true, action: null, link: 'inventory' },
-      { title: 'Cảnh báo tồn kho < ngưỡng', desc: 'Quy tắc tự động: tồn kho < 100 → cảnh báo + tạo nhiệm vụ nhập hàng.', done: () => ZZP_DATA.automationRules.find(r=>r.id==='R001')?.active, action: 'runFlowStock', link: 'inventory' },
-      { title: 'Đặt PO nhập kho', desc: 'P003 cần nhập 2000 sp khẩn — chạy luồng tự động.', done: () => false, action: 'runFlowStock', link: 'forecast' }
+      { title: 'Cảnh báo tồn kho < ngưỡng', desc: 'Quy tắc tự động: tồn kho < 100 → cảnh báo + tạo việc gửi PO NCC.', done: () => ZZP_DATA.automationRules.find(r=>r.id==='R001')?.active, action: 'runFlowStock', link: 'inventory' },
+      { title: 'Gửi PO cho NCC', desc: 'P003 còn ~2 ngày tồn · PO-DRAFT-P003 chưa gửi · lead time ~7 ngày.', done: () => false, action: 'runFlowStock', link: 'forecast' }
     ]
   },
   returns: {
