@@ -551,19 +551,18 @@ function getModuleMetrics(pageId) {
 
 function renderTtsMetricsStrip(pageId, opts = {}) {
   const metrics = getModuleMetrics(pageId).slice(0, opts.limit || 6);
-  const cols = Math.min(metrics.length, opts.cols || 6);
   return `
-    <div class="mb-6 rounded-xl border border-slate-200 bg-gradient-to-r from-slate-50 to-white overflow-hidden">
-      <div class="px-4 py-2 border-b border-slate-100 flex items-center justify-between gap-2">
-        <p class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1">${icon('bar-chart-2', 12)} Chỉ số TikTok Shop · ${viPage(pageId)}</p>
-        <span class="text-[10px] text-slate-400">Sync ${TTS_METRICS.shop.syncAt}</span>
+    <div class="ds-metric-strip">
+      <div class="ds-metric-strip-head">
+        <p class="ds-metric-strip-label">${icon('bar-chart-2', 14)} Chỉ số TikTok Shop · ${viPage(pageId)}</p>
+        <span class="ds-metric-strip-sync">Sync ${TTS_METRICS.shop.syncAt}</span>
       </div>
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-${cols} gap-px bg-slate-100">
+      <div class="ds-metric-strip-grid">
         ${metrics.map(m => `
-          <div class="bg-white p-3 ${m.highlight ? 'ring-1 ring-inset ring-zzp-200' : ''}">
-            <p class="text-lg font-bold ${m.color || (m.highlight ? 'text-zzp-700' : 'text-slate-800')}">${m.v}</p>
-            <p class="text-[10px] text-slate-500 mt-0.5">${m.l}</p>
-            ${m.sub ? `<p class="text-[9px] text-slate-400">${m.sub}</p>` : ''}
+          <div class="ds-metric-cell${m.highlight ? ' ds-metric-cell--highlight' : ''}">
+            <p class="ds-metric-cell-val${m.highlight || m.color ? ' is-brand' : ''}">${m.v}</p>
+            <p class="ds-metric-cell-lbl">${m.l}</p>
+            ${m.sub ? `<p class="ds-metric-cell-sub">${m.sub}</p>` : ''}
           </div>`).join('')}
       </div>
     </div>`;

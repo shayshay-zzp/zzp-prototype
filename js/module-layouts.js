@@ -23,36 +23,7 @@ function layoutPrdBadge(pageId) {
 
 /* —— Onboarding: timeline dọc (khác dashboard lộ trình 3 bước) —— */
 function renderOnboardingTimeline() {
-  const items = ZZP_DATA.checklist;
-  const done = items.filter(c => c.done).length;
-  return `
-    <div class="mb-6 rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50/80 to-white overflow-hidden">
-      <div class="px-5 py-4 border-b border-blue-100 flex flex-wrap justify-between gap-3">
-        <div>
-          <p class="text-xs font-semibold text-blue-700 uppercase tracking-wide flex items-center gap-1">${icon('list-checks', 14)} Shop Setup Checklist</p>
-          <h3 class="font-bold text-slate-800 mt-0.5">Lộ trình thiết lập gian hàng</h3>
-        </div>
-        <div class="text-right">
-          <p class="text-2xl font-bold text-blue-700">${done}/${items.length}</p>
-          <p class="text-xs text-slate-500">Health ${calcHealthScore()}%</p>
-        </div>
-      </div>
-      <div class="p-5 space-y-0">
-        ${items.map((c, i) => {
-          const isLast = i === items.length - 1;
-          return `
-          <div class="flex gap-4 ${!isLast ? 'pb-5' : ''}">
-            <div class="flex flex-col items-center">
-              <div class="w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${c.done ? 'bg-green-500 text-white' : 'bg-white border-2 border-blue-300 text-blue-600'}">${c.done ? icon('check', 16) : `<span class="text-xs font-bold">${i + 1}</span>`}</div>
-              ${!isLast ? `<div class="w-0.5 flex-1 mt-1 ${c.done ? 'bg-green-300' : 'bg-blue-100'} min-h-[24px]"></div>` : ''}
-            </div>
-            <div class="flex-1 min-w-0 pt-1">
-              ${renderChecklistRow(c)}
-            </div>
-          </div>`;
-        }).join('')}
-      </div>
-    </div>`;
+  return dsTimelineChecklist(ZZP_DATA.checklist, renderChecklistRow);
 }
 
 /* —— KOC CRM: Kanban 4 cột lifecycle —— */

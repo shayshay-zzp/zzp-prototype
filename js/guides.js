@@ -25,8 +25,8 @@ const MODULE_GUIDES = {
     steps: [
       { title: 'Thiết lập Brand Kit', desc: 'Logo, màu primary/secondary, font, tone of voice thương hiệu.', done: () => !!ZZP_DATA.brandKit.logo, action: null, link: 'store' },
       { title: 'Tạo banner cửa hàng', desc: 'Banner 1200×400px, CTA rõ ràng, đồng bộ campaign đang chạy.', done: () => !!ZZP_DATA.brandKit.banner, action: 'applyTemplate', link: 'store' },
-      { title: 'Sắp xếp Hero SKU trên storefront', desc: 'Pin 3-4 sản phẩm chủ lực lên đầu trang shop.', done: () => false, action: 'previewStore', link: 'store' },
-      { title: 'Áp dụng Template Center', desc: 'Chọn template Flash Sale / New Arrival / Live Countdown.', done: () => false, action: 'applyTemplate', link: 'store' }
+      { title: 'Sắp xếp Hero SKU trên storefront', desc: 'Pin 3-4 sản phẩm chủ lực lên đầu trang shop.', done: () => ZZP_DATA.store.pinnedProductIds.length >= 3, action: 'previewStore', link: 'store' },
+      { title: 'Áp dụng Template Center', desc: 'Chọn template Flash Sale / New Arrival / Live Countdown.', done: () => !!ZZP_DATA.store.activeTemplateId, action: 'applyTemplate', link: 'store' }
     ]
   },
   compliance: {

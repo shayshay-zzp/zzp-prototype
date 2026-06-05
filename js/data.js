@@ -238,7 +238,55 @@ const ZZP_DATA = {
     secondaryColor: '#fe2c55',
     logo: 'BeautyViet',
     banner: 'Bộ sưu tập Summer Glow 2026',
+    font: 'Inter',
+    tone: 'Tươi sáng · Clean beauty · Gen Z Việt',
     templates: ['Banner flash sale', 'Hàng mới', 'Đếm ngược live', 'Khuyến mãi tiếp thị liên kết']
+  },
+
+  store: {
+    publishStatus: 'draft',
+    lastPublished: '2026-06-04 18:30',
+    lastEdited: '2026-06-05 14:10',
+    activeTemplateId: null,
+    previewMode: 'mobile',
+    pinnedProductIds: ['P001', 'P005', 'P003'],
+    bannerCta: 'Mua ngay — Flash Sale 6/6',
+    bannerSub: 'Giảm đến 30% · Freeship toàn quốc',
+    sections: [
+      { id: 'banner', label: 'Banner chính', desc: '1200×400 · CTA + campaign link', enabled: true, order: 1 },
+      { id: 'hero', label: 'Hero SKU nổi bật', desc: 'Pin 3–4 sản phẩm chủ lực', enabled: true, order: 2 },
+      { id: 'categories', label: 'Danh mục sản phẩm', desc: 'Serum · Kem dưỡng · Chống nắng', enabled: true, order: 3 },
+      { id: 'live', label: 'Live đang diễn ra', desc: 'Widget Mega Live + countdown', enabled: false, order: 4 },
+      { id: 'affiliate', label: 'Creator đề xuất', desc: 'Top KOC + video bán hàng', enabled: true, order: 5 },
+      { id: 'reviews', label: 'Đánh giá nổi bật', desc: 'Social proof 4.9★', enabled: true, order: 6 }
+    ],
+    templateCatalog: [
+      { id: 'T1', name: 'Banner flash sale', tag: 'Flash Sale', desc: 'Countdown đỏ + CTA nổi bật, đồng bộ campaign khuyến mãi', campaignId: 'CP001', recommended: true, lastUsed: '2026-05-28' },
+      { id: 'T2', name: 'Hàng mới', tag: 'New Arrival', desc: 'Grid sản phẩm mới, badge New, ưu tiên P007 Mini Kit', campaignId: 'CP003', recommended: false, lastUsed: null },
+      { id: 'T3', name: 'Đếm ngược live', tag: 'Live', desc: 'Widget live countdown + pin host KOC, voucher live-only', campaignId: null, recommended: false, lastUsed: '2026-06-01' },
+      { id: 'T4', name: 'Khuyến mãi tiếp thị liên kết', tag: 'Affiliate', desc: 'Highlight commission 12% + top creator GMV', campaignId: 'CP002', recommended: false, lastUsed: null }
+    ],
+    seo: {
+      shopTitle: 'BeautyViet Official — Skincare TikTok Shop',
+      shopBio: 'Thương hiệu mỹ phẩm clean beauty hàng đầu TikTok Shop VN. Serum Vitamin C, kem chống nắng SPF50+, routine 3 bước chuẩn dermatologist.',
+      keywords: ['serum vitamin c', 'kem chống nắng', 'skincare tiktok', 'beautyviet', 'mỹ phẩm clean beauty'],
+      slug: 'beautyviet-official'
+    },
+    conversionChecks: [
+      { id: 'cc1', label: 'Banner có CTA rõ ràng', weight: 15, pass: true },
+      { id: 'cc2', label: '≥3 Hero SKU được pin', weight: 20, pass: false },
+      { id: 'cc3', label: 'Template đồng bộ campaign', weight: 15, pass: false },
+      { id: 'cc4', label: 'Tiêu đề shop SEO ≥ 40 ký tự', weight: 10, pass: true },
+      { id: 'cc5', label: 'Bio shop ≥ 80 ký tự', weight: 10, pass: true },
+      { id: 'cc6', label: 'Logo + màu Brand Kit', weight: 15, pass: true },
+      { id: 'cc7', label: 'Section Live bật (nếu có live)', weight: 10, pass: false },
+      { id: 'cc8', label: 'Đồng bộ TikTok Shop OK', weight: 15, pass: true }
+    ],
+    publishHistory: [
+      { time: '2026-06-04 18:30', user: 'Nguyễn Minh Anh', action: 'Xuất bản storefront', status: 'live' },
+      { time: '2026-06-03 11:20', user: 'Nguyễn Minh Anh', action: 'Cập nhật banner Summer Glow', status: 'draft' },
+      { time: '2026-06-01 09:00', user: 'System', action: 'Template Live Countdown áp dụng', status: 'draft' }
+    ]
   },
 
   dataSync: [

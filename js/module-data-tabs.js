@@ -13,17 +13,22 @@ function selectModuleDataTab(pageId, index) {
 
 function renderModuleTabBar(pageId, tabs, active) {
   const idx = Math.min(active, tabs.length - 1);
+  const activeTab = tabs[idx];
+  const brief = typeof renderModuleTabBrief === 'function' && activeTab?.meta
+    ? renderModuleTabBrief(activeTab.meta)
+    : '';
   return `
-    <div class="flex flex-wrap gap-1.5 p-1.5 rounded-2xl bg-slate-100/90 border border-slate-200 mb-5">
+    <div class="ds-tabs">
       ${tabs.map((t, i) => `
         <button type="button" onclick="selectModuleDataTab('${pageId}', ${i})"
-          class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-medium transition-all ${idx === i ? 'bg-white text-zzp-700 shadow-sm ring-1 ring-zzp-200' : 'text-slate-600 hover:bg-white/80'}">
+          class="ds-tab${idx === i ? ' is-active' : ''}">
           ${icon(t.icon || 'folder', 14)}
           <span>${t.label}</span>
-          ${t.count != null ? `<span class="text-[10px] px-1.5 py-0.5 rounded-full ${idx === i ? 'bg-zzp-100 text-zzp-700' : 'bg-slate-200 text-slate-500'}">${t.count}</span>` : ''}
+          ${t.count != null ? `<span class="ds-tab-count">${t.count}</span>` : ''}
         </button>`).join('')}
     </div>
-    <div class="module-data-panel space-y-6">${tabs[idx].content()}</div>`;
+    ${brief}
+    <div class="ds-tab-panel">${activeTab.content()}</div>`;
 }
 
 function renderModuleDataTabs(pageId) {

@@ -75,31 +75,34 @@ function detailLink(type, id, label, cls = '') {
 }
 
 function rowClick(type, id, extraCls = '') {
-  return `onclick="openDetail('${type}','${id}')" class="cursor-pointer hover:bg-zzp-50/60 transition-colors border-b border-slate-50 ${extraCls}"`.trim();
+  return `onclick="openDetail('${type}','${id}')" class="is-clickable ${extraCls}"`.trim();
 }
 
 function renderIssueCard(issue, compact) {
-  const sev = issue.severity === 'critical' ? 'border-red-200 bg-red-50' : issue.severity === 'warning' ? 'border-amber-200 bg-amber-50' : 'border-blue-200 bg-blue-50';
-  const entityBtn = issue.entity ? detailLink(issue.entity.type, issue.entity.id, 'Xem chi tiết →', 'text-xs') : '';
-  const flowBtn = issue.flow ? `<button type="button" onclick="runAutomationFlow('${issue.flow}')" class="px-3 py-1.5 bg-zzp-600 text-white rounded-lg text-xs inline-flex items-center gap-1">${icon('play', 12)} Giải quyết ngay</button>` : '';
-  const modBtn = `<button type="button" onclick="navigate('${issue.module === 'products' ? 'products-setup' : issue.module}')" class="px-3 py-1.5 border border-slate-200 rounded-lg text-xs hover:bg-white">${icon('external-link', 12)} Mô-đun</button>`;
+  const sevCls = issue.severity === 'critical' ? 'critical' : issue.severity === 'warning' ? 'warning' : 'info';
+  const entityBtn = issue.entity ? detailLink(issue.entity.type, issue.entity.id, 'Xem chi tiết →', 'ds-text-link') : '';
+  const flowBtn = issue.flow ? dsBtnIcon('Giải quyết ngay', `runAutomationFlow('${issue.flow}')`, 'play', 'primary', 'sm') : '';
+  const modBtn = dsBtnIcon('Mô-đun', `navigate('${issue.module === 'products' ? 'products-setup' : issue.module}')`, 'external-link', 'secondary', 'sm');
   if (compact) {
-    return `<div class="flex items-center gap-3 p-3 rounded-xl border ${sev}"><div class="flex-1 min-w-0"><p class="font-medium text-sm">${issue.title}</p><p class="text-xs text-slate-500 truncate">${issue.desc}</p></div>${flowBtn || modBtn}</div>`;
+    return `
+      <div class="ds-issue ds-issue--${sevCls}" style="display:flex;align-items:center;gap:12px">
+        <div style="flex:1;min-width:0">
+          <p class="ds-issue-title" style="margin-top:0">${issue.title}</p>
+          <p class="ds-issue-desc truncate-safe">${issue.desc}</p>
+        </div>
+        ${flowBtn || modBtn}
+      </div>`;
   }
   return `
-    <div class="p-4 rounded-xl border ${sev}">
-      <div class="flex flex-wrap items-start justify-between gap-3">
-        <div class="flex-1 min-w-0">
-          <div class="flex items-center gap-2 mb-1">${badge(issue.kind === 'setup' ? 'Thiết lập' : 'Vấn đề', issue.severity)}</div>
-          <p class="font-semibold">${issue.title}</p>
-          <p class="text-sm text-slate-600 mt-1">${issue.desc}</p>
-        </div>
-        <div class="flex flex-wrap gap-2 shrink-0">
-          ${entityBtn}
-          ${flowBtn}
-          ${modBtn}
-          ${issue.kind === 'alert' ? `<button type="button" onclick="openDetail('alert','${issue.id}')" class="px-3 py-1.5 border border-zzp-200 text-zzp-700 rounded-lg text-xs">Chi tiết vấn đề</button>` : ''}
-        </div>
+    <div class="ds-issue ds-issue--${sevCls}">
+      <div>${badge(issue.kind === 'setup' ? 'Thiết lập' : 'Vấn đề', issue.severity)}</div>
+      <p class="ds-issue-title">${issue.title}</p>
+      <p class="ds-issue-desc">${issue.desc}</p>
+      <div class="ds-issue-actions">
+        ${entityBtn}
+        ${flowBtn}
+        ${modBtn}
+        ${issue.kind === 'alert' ? dsBtn('Chi tiết vấn đề', `openDetail('alert','${issue.id}')`, 'secondary', 'sm') : ''}
       </div>
     </div>`;
 }
@@ -213,69 +216,57 @@ function renderModuleContext(pageId) {
   const issues = getModuleIssues(pageId).slice(0, pageId === 'dashboard' ? 99 : 3);
   if (!issues.length) return '';
   return `
-    <div class="mb-6">
-      <h3 class="font-semibold text-slate-800 mb-3 flex items-center gap-2">${icon('alert-circle', 18)} Vấn đề cần xử lý (${issues.length})</h3>
-      <div class="space-y-3">${issues.map(i => renderIssueCard(i, pageId !== 'dashboard')).join('')}</div>
+    <div class="ds-context-block">
+      <h3 class="ds-context-head">${icon('alert-circle', 18)} Vấn đề cần xử lý (${issues.length})</h3>
+      <div class="ds-stack-sm">${issues.map(i => renderIssueCard(i, pageId !== 'dashboard')).join('')}</div>
     </div>`;
 }
 
 function renderNewSellerDashboard() {
   const pending = ZZP_DATA.checklist.filter(c => !c.done);
   const health = calcHealthScore();
-  return `
-    <div class="space-y-6">
-      <div class="p-6 rounded-2xl bg-gradient-to-r from-blue-600 to-zzp-600 text-white">
-        <p class="text-sm opacity-90 flex items-center gap-2">${icon('sparkles', 16)} Chào mừng seller mới</p>
-        <h2 class="text-2xl font-bold mt-2">Hoàn thiện thiết lập shop trước khi mở rộng</h2>
-        <p class="text-sm opacity-90 mt-2">BeautyViet Official · Sức khỏe shop ${health}% · Còn ${pending.length} bước thiết lập</p>
-        <div class="mt-4 h-2 bg-white/20 rounded-full"><div class="h-2 bg-white rounded-full transition-all" style="width:${health}%"></div></div>
-      </div>
-
-      ${renderRecommendedSteps()}
-
-      ${renderSetupBanner()}
-
-      ${card('Danh sách thiết lập — bấm Thiết lập từng bước', pending.map(c => renderChecklistRow(c)).join(''))}
-
-      ${renderModuleContext('dashboard')}
-
-      <div class="grid lg:grid-cols-2 gap-4">
-        ${card('Tài liệu hướng dẫn seller mới', ZZP_DATA.education.slice(0, 3).map(e => `
-          <button type="button" onclick="navigate('education')" class="w-full text-left py-2 border-b border-slate-50 flex justify-between items-center hover:text-zzp-600">
-            <span class="text-sm">${e.title}</span><span class="text-xs text-slate-400">${e.progress}%</span>
-          </button>`).join(''))}
-      </div>
-    </div>`;
+  const eduLinks = ZZP_DATA.education.slice(0, 3).map(e =>
+    `<button type="button" onclick="navigate('education')" class="ds-kv-row" style="border:none;padding:10px 0;cursor:pointer;background:none;width:100%;font:inherit;text-align:left">
+      <span>${e.title}</span><span class="ds-kv-value">${e.progress}%</span>
+    </button>`
+  ).join('');
+  const progressHtml = `<div class="ds-progress"><div class="ds-progress-track" style="background:rgba(255,255,255,.22)"><div class="ds-progress-fill" style="width:${health}%;background:#fff"></div></div></div>`;
+  return dsPage(dsStack(`
+    ${dsHero('init', `${icon('sparkles', 16)} Chào mừng seller mới`, 'Hoàn thiện thiết lập shop trước khi mở rộng', `BeautyViet Official · Sức khỏe shop ${health}% · Còn ${pending.length} bước thiết lập`, progressHtml)}
+    ${renderRecommendedSteps()}
+    ${renderSetupBanner()}
+    ${dsCard('Danh sách thiết lập', `<div class="ds-stack-sm">${pending.map(c => renderChecklistRow(c)).join('')}</div>`)}
+    ${renderModuleContext('dashboard')}
+    ${dsCard('Tài liệu hướng dẫn seller mới', `<div class="ds-kv">${eduLinks}</div>`)}
+  `));
 }
 
 function renderActiveSellerDashboard() {
   const p = calcProfit();
   const issues = getShopIssues().filter(i => i.kind !== 'setup').slice(0, 6);
-  return `
-    <div class="space-y-6">
-      ${renderTtsMetricsStrip('dashboard')}
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        ${statCard('Doanh thu gộp 30 ngày', fmt(ZZP_DATA.shop.gmv30d), '↑ 28%', 'green')}
-        ${statCard('Lợi nhuận', fmt(p.profit), `Biên lợi nhuận ${p.margin}%`, 'zzp')}
-        ${statCard('Sức khỏe shop', calcHealthScore() + '%', 'Ổn định', 'blue')}
-        ${statCard('Vấn đề', issues.length, 'Cần xử lý', issues.length ? 'red' : 'green')}
-      </div>
-
-      ${issues.length ? card(`Vấn đề shop — ${issues.length} cần giải quyết`, `
-        <div class="space-y-3">${issues.map(i => renderIssueCard(i)).join('')}</div>
-        <button type="button" onclick="navigate('alerts')" class="mt-4 text-sm text-zzp-600 hover:underline">Xem tất cả cảnh báo →</button>`) : ''}
-
-      <div class="grid lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-2">${card('Doanh thu gộp & Lợi nhuận', '<div class="chart-box"><canvas id="chart-main"></canvas></div>')}</div>
-        <div>${card('Nguồn doanh thu', '<div class="chart-box-sm"><canvas id="chart-revenue-src"></canvas></div>')}</div>
-      </div>
-      <div class="grid lg:grid-cols-2 gap-6">
-        <div>${card('Cấu trúc chi phí', '<div class="chart-box-sm"><canvas id="chart-dashboard-cost"></canvas></div>')}</div>
-        <div>${card('Gợi ý AI — bấm để hành động', ZZP_DATA.aiInsights.slice(0, 3).map(i => `
-          <button type="button" onclick="openDetail('insight','${i.id}')" class="w-full text-left flex gap-3 py-3 border-b border-slate-50 hover:bg-zzp-50/50 rounded-lg px-2 -mx-2 transition-colors">
-            <span class="w-7 h-7 rounded-full bg-zzp-100 text-zzp-700 flex items-center justify-center text-sm font-bold shrink-0">${i.priority}</span>
-            <div><p class="font-medium text-sm">${i.title}</p><p class="text-xs text-green-600">${i.impact}</p></div>
-          </button>`).join(''))}</div>
-      </div>
-    </div>`;
+  const insights = ZZP_DATA.aiInsights.slice(0, 3).map(i =>
+    `<button type="button" onclick="openDetail('insight','${i.id}')" class="ds-kv-row" style="border:none;padding:12px 0;cursor:pointer;background:none;width:100%;font:inherit;text-align:left">
+      <span style="display:flex;align-items:center;gap:10px"><span class="ds-step-num" style="margin:0;width:28px;height:28px;font-size:12px">${i.priority}</span><span><strong style="display:block;font-size:13px">${i.title}</strong><span style="font-size:12px;color:var(--ds-success)">${i.impact}</span></span></span>
+    </button>`
+  ).join('');
+  return dsPage(dsStack(`
+    ${renderTtsMetricsStrip('dashboard')}
+    ${dsStatGrid([
+      { label: 'Doanh thu gộp 30 ngày', value: fmt(ZZP_DATA.shop.gmv30d), hint: '↑ 28%', tone: 'success' },
+      { label: 'Lợi nhuận', value: fmt(p.profit), hint: `Biên lợi nhuận ${p.margin}%`, tone: 'brand' },
+      { label: 'Sức khỏe shop', value: calcHealthScore() + '%', hint: 'Ổn định', tone: 'info' },
+      { label: 'Vấn đề', value: issues.length, hint: 'Cần xử lý', tone: issues.length ? 'danger' : 'success' }
+    ])}
+    ${issues.length ? dsCard(`Vấn đề shop — ${issues.length} cần giải quyết`, `
+      <div class="ds-stack-sm">${issues.map(i => renderIssueCard(i)).join('')}</div>
+      <button type="button" class="ds-text-link" style="margin-top:16px" onclick="navigate('alerts')">Xem tất cả cảnh báo →</button>`) : ''}
+    ${dsGrid(2, `
+      ${dsCard('Doanh thu gộp & Lợi nhuận', '<div class="chart-box"><canvas id="chart-main"></canvas></div>')}
+      ${dsCard('Nguồn doanh thu', '<div class="chart-box-sm"><canvas id="chart-revenue-src"></canvas></div>')}
+    `)}
+    ${dsGrid(2, `
+      ${dsCard('Cấu trúc chi phí', '<div class="chart-box-sm"><canvas id="chart-dashboard-cost"></canvas></div>')}
+      ${dsCard('Gợi ý AI', `<div class="ds-kv">${insights}</div>`)}
+    `)}
+  `));
 }

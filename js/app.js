@@ -21,13 +21,11 @@ function updateGuideRail(pageId) {
   const g = MODULE_GUIDES[pageId];
   const showGuide = !!(g && !currentDetail);
   if (!showGuide) {
-    rail.classList.add('hidden');
-    rail.classList.remove('lg:flex');
+    rail.classList.remove('is-visible');
     fabRoot?.classList.remove('lg:right-[calc(18rem+1.5rem)]');
     return;
   }
-  rail.classList.remove('hidden');
-  rail.classList.add('lg:flex');
+  rail.classList.add('is-visible');
   fabRoot?.classList.add('lg:right-[calc(18rem+1.5rem)]');
   if (title) title.textContent = viPage(pageId);
   content.innerHTML = renderGuideSidebar(pageId);
@@ -49,11 +47,12 @@ function renderCurrentView() {
   let html = renderer();
   const selfContextPages = ['dashboard', 'workflows', 'settings', 'education'];
   if (!selfContextPages.includes(currentPage)) {
-    const mb6 = html.indexOf('class="mb-6"');
-    const splitIdx = mb6 > -1 ? html.indexOf('</div>', mb6) + 6 : html.indexOf('<div class="grid');
-    const headerPart = splitIdx > 0 ? html.substring(0, splitIdx) : '';
-    const bodyPart = splitIdx > 0 ? html.substring(splitIdx) : html;
-    html = headerPart + renderModuleContext(currentPage) + bodyPart;
+    const headerEnd = html.indexOf('</header>');
+    if (headerEnd > -1) {
+      html = html.slice(0, headerEnd + 9) + renderModuleContext(currentPage) + html.slice(headerEnd + 9);
+    } else {
+      html = renderModuleContext(currentPage) + html;
+    }
   }
   document.getElementById('main-content').innerHTML = html;
   destroyCharts();
@@ -69,11 +68,11 @@ function renderCurrentView() {
 function renderNav() {
   const menu = document.getElementById('nav-menu');
   menu.innerHTML = NAV.map(section => `
-    <div class="mb-2">
-      <p class="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400">${section.section}</p>
+    <div class="zzp-nav-section">
+      <p class="zzp-nav-label">${section.section}</p>
       ${section.items.map(item => `
         <a href="#${item.id}" data-page="${item.id}" onclick="event.preventDefault();navigate('${item.id}')"
-           class="sidebar-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-50 transition-colors">
+           class="zzp-nav-link sidebar-link">
           ${icon(item.icon, 16)}<span>${item.label}</span>
         </a>`).join('')}
     </div>`).join('');
@@ -98,7 +97,7 @@ function navigate(page) {
   const renderer = PAGES[page];
   if (!renderer) return;
 
-  document.querySelectorAll('.sidebar-link').forEach(el => {
+  document.querySelectorAll('.zzp-nav-link, .sidebar-link').forEach(el => {
     el.classList.toggle('active', el.dataset.page === page);
   });
 

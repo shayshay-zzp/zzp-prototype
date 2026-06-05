@@ -17,19 +17,10 @@ let productWizard = null;
 
 function renderChecklistRow(c) {
   const done = c.done;
-  return `
-    <div class="flex items-start gap-3 py-3 border-b border-slate-50 px-2 rounded-lg ${done ? '' : 'hover:bg-zzp-50/40'} transition-colors">
-      <input type="checkbox" ${done ? 'checked' : ''} onchange="toggleChecklist('${c.id}')" class="mt-1 rounded border-slate-300 text-zzp-600 focus:ring-zzp-500 shrink-0">
-      <div class="flex-1 min-w-0">
-        <p class="font-medium text-sm ${done ? 'line-through text-slate-400' : 'text-slate-800'}">${c.title}</p>
-        <p class="text-xs text-slate-500 mt-0.5">${c.desc}</p>
-      </div>
-      <div class="shrink-0 ml-2">
-        ${done
-          ? `<span class="text-xs text-green-600 inline-flex items-center gap-1">${icon('check', 14)} Hoàn thành</span>`
-          : `<button type="button" onclick="startSetup('${c.id}')" class="px-3 py-1.5 bg-zzp-600 text-white rounded-lg text-xs font-medium hover:bg-zzp-700 inline-flex items-center gap-1">${icon('settings', 12)} Thiết lập</button>`}
-      </div>
-    </div>`;
+  const action = done
+    ? `<span style="font-size:12px;color:var(--ds-success);display:inline-flex;align-items:center;gap:4px">${icon('check', 14)} Hoàn thành</span>`
+    : dsBtnIcon('Thiết lập', `startSetup('${c.id}')`, 'settings', 'primary', 'sm');
+  return dsChecklistItem(c, action);
 }
 
 function startSetup(checklistId) {
@@ -338,34 +329,42 @@ function renderRecommendedSteps(compact) {
     { n: 3, title: 'Chạy Mega Live đầu tiên', desc: 'Quy trình chuẩn bị live + chiến dịch flash sale', action: "runAutomationFlow('FLOW_LIVE_PREP')", cta: 'Chạy quy trình' }
   ];
   if (compact) {
-    return card('Bước tiếp theo được đề xuất', `
-      <ol class="space-y-3 text-sm">${steps.map(s => `
-        <li class="flex gap-3 items-start">
-          <span class="w-7 h-7 rounded-full ${s.highlight ? 'bg-zzp-600 text-white' : 'bg-zzp-100 text-zzp-700'} flex items-center justify-center text-xs font-bold shrink-0">${s.n}</span>
-          <div class="flex-1 min-w-0"><button type="button" onclick="${s.action}" class="font-medium text-zzp-600 hover:underline text-left">${s.title}</button><p class="text-xs text-slate-500">${s.desc}</p></div>
-          <button type="button" onclick="${s.action}" class="text-xs px-2.5 py-1 border border-zzp-200 text-zzp-700 rounded-lg hover:bg-zzp-50 shrink-0">${s.cta}</button>
+    return dsCard('Bước tiếp theo được đề xuất', `
+      <ol class="ds-stack-sm" style="list-style:none;margin:0;padding:0;font-size:13px">${steps.map(s => `
+        <li style="display:flex;gap:12px;align-items:flex-start">
+          <span class="ds-step-num" style="margin:0;${s.highlight ? 'background:var(--ds-brand);color:#fff' : ''}">${s.n}</span>
+          <div style="flex:1;min-width:0">
+            <button type="button" class="ds-text-link" style="font-weight:600;text-align:left" onclick="${s.action}">${s.title}</button>
+            <p style="margin:4px 0 0;font-size:12px;color:var(--ds-text-muted)">${s.desc}</p>
+          </div>
+          ${dsBtn(s.cta, s.action, 'secondary', 'sm')}
         </li>`).join('')}</ol>`);
   }
+  const nextBtn = next
+    ? dsBtnIcon(`Làm ngay: ${next.title.length > 28 ? next.title.slice(0, 28) + '…' : next.title}`, `startSetup('${next.id}')`, 'play', 'primary', 'md')
+    : '';
   return `
-    <div class="mb-6 rounded-2xl border border-zzp-200 bg-white shadow-sm overflow-hidden">
-      <div class="px-5 py-4 bg-gradient-to-r from-zzp-50 to-white border-b border-zzp-100 flex flex-wrap items-center justify-between gap-3">
+    <div class="ds-panel ds-panel--init" style="margin-bottom:24px">
+      <div class="ds-panel-head">
         <div>
-          <p class="text-xs font-semibold uppercase tracking-wide text-zzp-600 flex items-center gap-1">${icon('route', 14)} Lộ trình đề xuất</p>
-          <h3 class="font-bold text-slate-800 mt-0.5">3 bước tiếp theo để bắt đầu bán</h3>
+          <p class="ds-panel-eyebrow">${icon('route', 14)} Lộ trình đề xuất</p>
+          <h3 class="ds-panel-title">3 bước tiếp theo để bắt đầu bán</h3>
         </div>
-        ${next ? `<button type="button" onclick="startSetup('${next.id}')" class="px-4 py-2 bg-zzp-600 text-white rounded-xl text-sm font-medium inline-flex items-center gap-2 hover:bg-zzp-700">${icon('play', 14)} Làm ngay: ${next.title.length > 28 ? next.title.slice(0, 28) + '…' : next.title}</button>` : ''}
+        ${nextBtn}
       </div>
-      <div class="p-5 grid md:grid-cols-3 gap-4">
-        ${steps.map(s => `
-          <button type="button" onclick="${s.action}" class="text-left p-4 rounded-xl border-2 transition-all hover:shadow-md ${s.highlight ? 'border-zzp-400 bg-zzp-50/80 ring-1 ring-zzp-200' : 'border-slate-200 hover:border-zzp-300 bg-white'}">
-            <div class="flex items-center gap-2 mb-2">
-              <span class="w-8 h-8 rounded-full ${s.highlight ? 'bg-zzp-600 text-white' : 'bg-slate-100 text-slate-600'} flex items-center justify-center text-sm font-bold">${s.n}</span>
-              ${s.highlight ? `<span class="text-[10px] px-2 py-0.5 rounded-full bg-zzp-600 text-white font-medium">Ưu tiên</span>` : ''}
-            </div>
-            <p class="font-semibold text-sm text-slate-800">${s.title}</p>
-            <p class="text-xs text-slate-500 mt-1 leading-relaxed">${s.desc}</p>
-            <span class="inline-flex items-center gap-1 text-xs text-zzp-600 font-medium mt-3">${s.cta} ${icon('arrow-right', 12)}</span>
-          </button>`).join('')}
+      <div class="ds-panel-body">
+        <div class="ds-step-grid">
+          ${steps.map(s => `
+            <button type="button" onclick="${s.action}" class="ds-step-card${s.highlight ? ' ds-step-card--active' : ''}">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+                <span class="ds-step-num">${s.n}</span>
+                ${s.highlight ? '<span class="ui-badge ui-badge--brand">Ưu tiên</span>' : ''}
+              </div>
+              <p class="ds-step-title">${s.title}</p>
+              <p class="ds-step-desc">${s.desc}</p>
+              <span class="ds-step-cta">${s.cta} ${icon('arrow-right', 12)}</span>
+            </button>`).join('')}
+        </div>
       </div>
     </div>`;
 }
@@ -373,10 +372,10 @@ function renderRecommendedSteps(compact) {
 function renderSetupBanner() {
   const pending = ZZP_DATA.checklist.filter(c => !c.done);
   if (!pending.length) return '';
-  return `
-    <div class="mb-6 p-4 rounded-xl bg-amber-50 border border-amber-200 flex flex-wrap items-center justify-between gap-3">
-      <div><p class="font-medium text-amber-900">Còn ${pending.length} bước thiết lập chưa hoàn thành</p>
-        <p class="text-sm text-amber-700">Bấm <strong>Thiết lập</strong> từng mục hoặc chạy wizard tạo sản phẩm AI</p></div>
-      <button type="button" onclick="startSetup('${pending[0].id}')" class="px-4 py-2 bg-zzp-600 text-white rounded-lg text-sm font-medium inline-flex items-center gap-2">${icon('play', 14)} Tiếp tục thiết lập</button>
-    </div>`;
+  return dsAlert(
+    'warning',
+    `Còn ${pending.length} bước thiết lập chưa hoàn thành`,
+    'Bấm Thiết lập từng mục hoặc chạy wizard tạo sản phẩm AI',
+    dsBtnIcon('Tiếp tục thiết lập', `startSetup('${pending[0].id}')`, 'play', 'primary', 'md')
+  );
 }
