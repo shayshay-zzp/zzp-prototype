@@ -1,0 +1,191 @@
+/* Trang chi tiết entity — drill-down 1:1 */
+const DETAIL_RENDERERS = {
+  product: (id) => {
+    const p = getProduct(id);
+    if (!p) return notFound('Sản phẩm', id);
+    const gmv = p.sold30d * p.price;
+    const margin = ((p.price - p.cost) / p.price * 100).toFixed(1);
+    const orders = ZZP_DATA.orders.filter(o => o.product === id);
+    const kocSales = ZZP_DATA.kocs.filter(k => orders.some(o => o.koc === k.id));
+    const relatedContent = ZZP_DATA.content.filter(c => c.title.toLowerCase().includes(p.name.split(' ')[0].toLowerCase()) || c.title.includes(p.category));
+    const alerts = ZZP_DATA.alerts.filter(a => a.desc.includes(p.name.split(' ')[0]) || (a.module === 'inventory' && p.stock < 100));
+    const flows = getFlowsForModule('products').concat(getFlowsForModule('inventory'));
+
+    return detailLayout('product', id, `<span class="inline-flex items-center gap-2">${productThumb(p, 20)} ${p.name}</span>`, 'products', `
+      <div class="grid lg:grid-cols-4 gap-4 mb-6">
+        ${statCard('GMV 30d', fmt(gmv))}${statCard('Đã bán', p.sold30d + ' sp')}${statCard('Tồn kho', p.stock, p.stock < 100 ? 'Thấp' : '', p.stock < 100 ? 'red' : 'zzp')}${statCard('Margin', margin + '%')}
+      </div>
+      <div class="grid lg:grid-cols-2 gap-6">
+        ${card('Thông tin SKU', `
+          <div class="grid grid-cols-2 gap-3 text-sm">
+            <div><span class="text-slate-500">SKU</span><p class="font-medium">${p.sku}</p></div>
+            <div><span class="text-slate-500">Giá bán</span><p class="font-medium">${fmtCurrency(p.price)}</p></div>
+            <div><span class="text-slate-500">Giá vốn</span><p class="font-medium">${fmtCurrency(p.cost)}</p></div>
+            <div><span class="text-slate-500">Listing Score</span><p class="font-medium">${p.listingScore}% ${badge(p.status, p.status)}</p></div>
+            <div><span class="text-slate-500">Hero SKU</span><p>${p.hero ? 'Có' : 'Không'}</p></div>
+            <div><span class="text-slate-500">Kênh</span><p>${p.channels.join(', ')}</p></div>
+          </div>
+          <div class="mt-4 flex gap-2">
+            <button onclick="openListingCheck('${p.id}')" class="px-3 py-1.5 bg-zzp-600 text-white rounded-lg text-xs">Listing Checker</button>
+            <button onclick="navigate('product-analytics')" class="px-3 py-1.5 border rounded-lg text-xs">Analytics →</button>
+          </div>`)}
+        ${card('Đơn hàng liên quan (' + orders.length + ')', orders.slice(0, 5).map(o =>
+          `<div class="flex justify-between py-2 border-b border-slate-50 text-sm cursor-pointer hover:bg-slate-50 px-1 rounded" onclick="openDetail('order','${o.id}')">
+            <span>${o.id} · ${o.customer}</span><span>${fmtCurrency(o.total)} ${badge(o.status, o.status)}</span>
+          </div>`).join('') || '<p class="text-sm text-slate-500">Chưa có đơn</p>')}
+        ${card('KOC bán sản phẩm', kocSales.map(k =>
+          `<div class="flex justify-between py-2 border-b border-slate-50 text-sm cursor-pointer hover:bg-slate-50" onclick="openDetail('koc','${k.id}')">
+            <span>${k.name}</span><span>${fmt(k.gmv30d)} · ROI ${k.roi}x</span></div>`).join('') || '<p class="text-sm text-slate-500">Chưa có KOC</p>')}
+        ${card('Content liên quan', relatedContent.map(v =>
+          `<div class="py-2 border-b border-slate-50 text-sm"><p class="font-medium">${v.title}</p><p class="text-xs text-slate-500">${fmt(v.views)} views · ${fmt(v.gmv)} GMV</p></div>`).join('') || '<p class="text-sm text-slate-500">Chưa có content</p>')}
+      </div>
+      ${alerts.length ? `<div class="mt-6 p-4 bg-red-50 border border-red-200 rounded-xl"><p class="font-semibold text-red-800">Cảnh báo liên quan</p>${alerts.map(a => `<p class="text-sm text-red-700 mt-1">${a.title}</p>`).join('')}</div>` : ''}
+      ${renderDetailFlows(flows)}
+    `);
+  },
+
+  order: (id) => {
+    const o = ZZP_DATA.orders.find(x => x.id === id);
+    if (!o) return notFound('Đơn hàng', id);
+    const p = getProduct(o.product);
+    const koc = o.koc ? ZZP_DATA.kocs.find(k => k.id === o.koc) : null;
+    const ret = ZZP_DATA.returns.find(r => r.orderId === id);
+
+    return detailLayout('order', id, `Đơn ${o.id}`, 'orders', `
+      <div class="grid lg:grid-cols-4 gap-4 mb-6">
+        ${statCard('Tổng tiền', fmtCurrency(o.total))}${statCard('SLA', o.sla, o.sla !== 'ok' ? 'Cần xử lý' : 'OK', o.sla !== 'ok' ? 'red' : 'green')}${statCard('Nguồn', o.source)}${statCard('Trạng thái', o.status)}
+      </div>
+      <div class="grid lg:grid-cols-2 gap-6">
+        ${card('Chi tiết đơn hàng', `
+          <div class="space-y-3 text-sm">
+            <div class="flex justify-between"><span class="text-slate-500">Khách hàng</span><span>${o.customer}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">Sản phẩm</span><button class="text-zzp-600 hover:underline" onclick="openDetail('product','${o.product}')">${o.productName}</button></div>
+            <div class="flex justify-between"><span class="text-slate-500">Số lượng</span><span>${o.qty}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">Thời gian</span><span>${o.created}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">Nguồn doanh thu</span>${badge(o.source, 'info')}</div>
+            ${koc ? `<div class="flex justify-between"><span class="text-slate-500">KOC</span><button class="text-zzp-600 hover:underline" onclick="openDetail('koc','${koc.id}')">${koc.name}</button></div>` : ''}
+          </div>
+          <div class="mt-4 flex gap-2">
+            ${o.status === 'pending' ? `<button onclick="processOrder('${o.id}');openDetail('order','${o.id}')" class="px-4 py-2 bg-zzp-600 text-white rounded-lg text-sm">Xử lý đơn</button>` : ''}
+            <button onclick="runAutomationFlow('FLOW_ORDER_SLA')" class="px-4 py-2 border rounded-lg text-sm">Chạy flow SLA →</button>
+          </div>`)}
+        ${card('Timeline vận hành', `
+          <div class="space-y-3">
+            ${['pending','processing','shipped','delivered'].map((s, i) => {
+              const order = ['pending','processing','shipped','delivered','return_requested','cancelled'];
+              const idx = order.indexOf(o.status);
+              const sIdx = ['pending','processing','shipped','delivered'].indexOf(s);
+              const done = idx >= sIdx && o.status !== 'cancelled';
+              return `<div class="flex gap-3 items-center"><span class="w-8 h-8 rounded-full flex items-center justify-center text-sm ${done?'bg-green-500 text-white':'bg-slate-100'}">${done?'✓':i+1}</span><span class="text-sm ${done?'font-medium':''}">${{pending:'Chờ xử lý',processing:'Đang đóng gói',shipped:'Đang giao',delivered:'Đã giao'}[s]}</span></div>`;
+            }).join('')}
+          </div>`)}
+        ${ret ? card('Hoàn trả / Hủy', `<p class="text-sm"><strong>${ret.id}</strong> · ${ret.reason}</p><p class="text-sm mt-2">${fmtCurrency(ret.amount)} · ${badge(ret.status, ret.status)}</p>`) : ''}
+      </div>
+    `);
+  },
+
+  koc: (id) => {
+    const k = ZZP_DATA.kocs.find(x => x.id === id);
+    if (!k) return notFound('KOC', id);
+    const samples = ZZP_DATA.samples.filter(s => s.koc === id);
+    const videos = ZZP_DATA.content.filter(c => c.koc === id);
+    const orders = ZZP_DATA.orders.filter(o => o.koc === id);
+
+    return detailLayout('koc', id, k.name, 'koc', `
+      <div class="grid lg:grid-cols-4 gap-4 mb-6">
+        ${statCard('GMV 30d', fmt(k.gmv30d))}${statCard('ROI', k.roi ? k.roi + 'x' : '-')}${statCard('CVR', k.cvr ? k.cvr + '%' : '-')}${statCard('Score', k.score, k.tier)}
+      </div>
+      <div class="grid lg:grid-cols-2 gap-6">
+        ${card('Hồ sơ Creator', `
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between"><span class="text-slate-500">Tier</span><span>${k.tier}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">Followers</span><span>${fmt(k.followers)}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">Lifecycle</span>${badge(k.lifecycle, k.lifecycle === 'revenue' ? 'ok' : 'info')}</div>
+            <div class="flex justify-between"><span class="text-slate-500">Commission</span><span>${k.commission}%</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">Videos</span><span>${k.videos}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">Mẫu đã gửi</span><span>${k.samplesSent}</span></div>
+          </div>`)}
+        ${card('Lifecycle Pipeline', `
+          <div class="flex gap-1 mb-4">${['prospect','sample','content','revenue'].map((l, i) => {
+            const stages = ['prospect','sample','content','revenue'];
+            const idx = stages.indexOf(k.lifecycle);
+            return `<div class="flex-1 h-2 rounded-full ${i<=idx?'bg-zzp-500':'bg-slate-100'}"></div>`;
+          }).join('')}</div>
+          <p class="text-xs text-slate-500">Prospect → Sample → Content → Revenue</p>
+          <button onclick="runAutomationFlow('FLOW_SAMPLE')" class="mt-4 text-sm text-zzp-600 hover:underline">Chạy flow Sample → Revenue →</button>`)}
+        ${card('Videos (' + videos.length + ')', videos.map(v =>
+          `<div class="py-2 border-b text-sm"><p class="font-medium">${v.title}</p><p class="text-xs text-slate-500">${fmt(v.views)} views · ${fmt(v.gmv)} GMV · ${badge(v.status, v.status)}</p></div>`).join('') || '<p class="text-sm text-slate-500">Chưa có video</p>')}
+        ${card('Samples (' + samples.length + ')', samples.map(s => {
+          const prod = getProduct(s.product);
+          return `<div class="py-2 border-b text-sm flex justify-between"><span>${prod?.name}</span><span>${badge(s.status, s.status==='converted'?'ok':'pending')} ROI ${s.roi?s.roi+'x':'-'}</span></div>`;
+        }).join('') || '<p class="text-sm text-slate-500">Chưa gửi mẫu</p>')}
+      </div>
+    `);
+  },
+
+  campaign: (id) => {
+    const c = ZZP_DATA.campaigns.find(x => x.id === id);
+    if (!c) return notFound('Campaign', id);
+    const products = c.products.map(pid => getProduct(pid)).filter(Boolean);
+    return detailLayout('campaign', id, c.name, 'campaigns', `
+      <div class="grid lg:grid-cols-4 gap-4 mb-6">
+        ${statCard('Budget', fmt(c.budget))}${statCard('Spent', fmt(c.spent))}${statCard('GMV', fmt(c.gmv))}${statCard('ROI', (c.gmv / c.spent).toFixed(1) + 'x', '', 'green')}
+      </div>
+      ${card('Chi tiết chiến dịch', `
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between"><span class="text-slate-500">Loại</span><span>${c.type}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Giảm giá</span><span>${c.discount ? c.discount + '%' : '-'}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Thời gian</span><span>${c.start} → ${c.end}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Trạng thái</span>${badge(c.status, 'active')}</div>
+        </div>
+        <p class="text-sm font-medium mt-4 mb-2">Sản phẩm tham gia:</p>
+        ${products.map(p => `<button onclick="openDetail('product','${p.id}')" class="flex items-center gap-2 text-sm text-zzp-600 hover:underline">${productThumb(p,14)} ${p.name}</button>`).join('')}
+      `)}
+    `);
+  },
+
+  policy: (id) => {
+    const pol = ZZP_DATA.policies.find(x => x.id === id);
+    if (!pol) return notFound('Policy', id);
+    return detailLayout('policy', id, pol.title, 'compliance', `
+      ${card('AI Impact Assessment', `
+        <div class="mb-4">${badge(pol.impact, pol.impact)} ${badge(pol.status, pol.status === 'action_required' ? 'critical' : 'ok')}</div>
+        <p class="text-sm text-slate-600">${pol.aiSummary}</p>
+        <p class="text-xs text-slate-400 mt-2">Cập nhật: ${pol.date}</p>
+        <div class="mt-4 flex gap-2">
+          <button onclick="runAutomationFlow('FLOW_COMPLIANCE')" class="px-4 py-2 bg-zzp-600 text-white rounded-lg text-sm">Chạy flow Compliance →</button>
+          ${pol.affected.map(pid => `<button onclick="openDetail('product','${pid}')" class="px-3 py-2 border rounded-lg text-xs">${getProduct(pid)?.name}</button>`).join('')}
+        </div>`)}
+    `);
+  }
+};
+
+function notFound(type, id) {
+  return `<div class="text-center py-12"><p class="text-slate-500">${type} "${id}" không tìm thấy</p><button onclick="goBack()" class="mt-4 text-zzp-600 hover:underline">← Quay lại</button></div>`;
+}
+
+function detailLayout(type, id, title, backPage, content) {
+  return `
+    <div>
+      <div class="flex items-center gap-3 mb-6">
+        <button onclick="goBack()" class="p-2 rounded-lg hover:bg-slate-100 text-slate-500">←</button>
+        <div><h2 class="text-xl font-bold">${title}</h2><p class="text-xs text-slate-500">${type.toUpperCase()} · ${id}</p></div>
+      </div>
+      ${content}
+    </div>`;
+}
+
+function renderDetailFlows(flows) {
+  if (!flows.length) return '';
+  const unique = [...new Map(flows.map(f => [f.id, f])).values()];
+  return `<div class="mt-6">${card('Flow tự động liên quan', unique.slice(0, 3).map(f =>
+    `<div class="flex items-center justify-between py-3 border-b border-slate-50">
+      <div><p class="font-medium text-sm">${f.icon} ${f.name}</p><p class="text-xs text-slate-500">${f.trigger}</p></div>
+      <button onclick="runAutomationFlow('${f.id}')" class="px-3 py-1.5 bg-zzp-600 text-white rounded-lg text-xs">Chạy flow</button>
+    </div>`).join(''))}</div>`;
+}
+
+function renderDetailPage(type, id) {
+  const renderer = DETAIL_RENDERERS[type];
+  return renderer ? renderer(id) : notFound(type, id);
+}

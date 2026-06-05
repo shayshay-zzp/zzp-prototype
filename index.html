@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZZP — Nền tảng vận hành TikTok Shop</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            zzp: { 50:'#f0fdfa',100:'#ccfbf1',200:'#99f6e4',300:'#5eead4',400:'#2dd4bf',500:'#14b8a6',600:'#0d9488',700:'#0f766e',800:'#115e59',900:'#134e4a' },
+            tiktok: '#fe2c55'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .sidebar-link.active { background: rgba(20,184,166,.15); color: #0d9488; border-left: 3px solid #14b8a6; }
+    .phase-badge-1 { background: #dbeafe; color: #1d4ed8; }
+    .phase-badge-2 { background: #d1fae5; color: #047857; }
+    .phase-badge-3 { background: #fef3c7; color: #b45309; }
+    .phase-badge-4 { background: #fce7f3; color: #be185d; }
+    .chart-box { position: relative; height: 260px; }
+    .chart-box-sm { position: relative; height: 200px; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    .toast-enter { animation: slideIn .3s ease; }
+    .lucide-icon { display: inline-block; vertical-align: middle; stroke: currentColor; fill: none; }
+    .sidebar-link .lucide-icon { opacity: .72; }
+    .sidebar-link.active .lucide-icon { opacity: 1; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+  <div id="app" class="flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="w-72 bg-white border-r border-slate-200 flex flex-col shrink-0 transition-all duration-300">
+      <div class="p-4 border-b border-slate-100">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-zzp-500 to-zzp-700 flex items-center justify-center text-white">
+            <i data-lucide="layers" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h1 class="font-bold text-lg leading-tight">ZZP Platform</h1>
+            <p class="text-xs text-slate-500">TikTok Shop Operations</p>
+          </div>
+        </div>
+      </div>
+      <nav id="nav-menu" class="flex-1 overflow-y-auto py-2 px-2 space-y-1"></nav>
+      <div class="p-3 border-t border-slate-100 text-xs text-slate-400 text-center">Demo v2.0 · Mock Data</div>
+    </aside>
+
+    <!-- Main -->
+    <div class="flex-1 flex flex-col min-w-0">
+      <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shrink-0">
+        <div class="flex items-center gap-4">
+          <button id="toggle-sidebar" class="lg:hidden p-2 rounded-lg hover:bg-slate-100">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+          <div>
+            <h2 id="page-title" class="font-semibold text-lg">Tổng quan</h2>
+            <p id="page-subtitle" class="text-xs text-slate-500">BeautyViet Official · TikTok Shop</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <div id="health-badge" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-zzp-50 text-zzp-700 text-sm font-medium">
+            <span class="w-2 h-2 rounded-full bg-zzp-500 animate-pulse"></span>
+            Shop Health: <span id="health-score">78</span>%
+          </div>
+          <button id="notif-btn" class="relative p-2 rounded-lg hover:bg-slate-100 text-slate-600">
+            <i data-lucide="bell" class="w-5 h-5"></i>
+            <span id="notif-count" class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-tiktok text-white text-[10px] rounded-full flex items-center justify-center">5</span>
+          </button>
+          <div class="flex items-center gap-2 pl-3 border-l border-slate-200">
+            <div class="w-8 h-8 rounded-full bg-zzp-100 flex items-center justify-center text-zzp-700 font-semibold text-sm">BV</div>
+            <div class="hidden md:block">
+              <p class="text-sm font-medium leading-tight">Nguyễn Minh Anh</p>
+              <p class="text-xs text-slate-500">Shop Owner</p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main id="main-content" class="flex-1 overflow-y-auto p-6"></main>
+    </div>
+  </div>
+
+  <!-- Notification Panel -->
+  <div id="notif-panel" class="fixed inset-y-0 right-0 w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50 flex flex-col">
+    <div class="p-4 border-b flex items-center justify-between">
+      <h3 class="font-semibold">Thông báo & Cảnh báo</h3>
+      <button id="close-notif" class="p-1 rounded hover:bg-slate-100">&times;</button>
+    </div>
+    <div id="notif-list" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
+  </div>
+  <div id="notif-overlay" class="fixed inset-0 bg-black/20 z-40 hidden"></div>
+
+  <!-- Modal -->
+  <div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/40" id="modal-overlay"></div>
+    <div class="relative bg-white rounded-2xl shadow-xl max-w-lg w-full max-h-[85vh] overflow-y-auto" id="modal-body"></div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast-container" class="fixed top-4 right-4 z-[60] space-y-2"></div>
+
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/guides.js"></script>
+  <script src="js/flows.js"></script>
+  <script src="js/details.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
