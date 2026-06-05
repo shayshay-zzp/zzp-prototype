@@ -1,6 +1,5 @@
 /* ZZP App — Router, Charts, Interactions */
 let currentPage = 'dashboard';
-let currentTab = 'overview';
 let currentDetail = null;
 let previousPage = 'dashboard';
 let charts = {};
@@ -13,33 +12,26 @@ function init() {
   runAutoFlowsOnLoad();
 }
 
-function renderModuleTabs(pageId) {
-  if (!MODULE_GUIDES[pageId] || currentDetail) return '';
-  const prog = getGuideProgress(pageId);
-  const flows = getFlowsForModule(pageId);
-  return `
-    <div class="flex gap-1 mb-6 border-b border-slate-200 -mt-2">
-      <button onclick="setTab('overview')" class="px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${currentTab === 'overview' ? 'border-zzp-500 text-zzp-700' : 'border-transparent text-slate-500 hover:text-slate-700'}">Tổng quan</button>
-      <button onclick="setTab('guide')" class="px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${currentTab === 'guide' ? 'border-zzp-500 text-zzp-700' : 'border-transparent text-slate-500 hover:text-slate-700'}">Hướng dẫn <span class="text-xs ml-1 px-1.5 py-0.5 rounded-full ${prog.pct === 100 ? 'bg-green-100 text-green-700' : 'bg-slate-100'}">${prog.done}/${prog.total}</span></button>
-      <button onclick="setTab('flow')" class="px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${currentTab === 'flow' ? 'border-zzp-500 text-zzp-700' : 'border-transparent text-slate-500 hover:text-slate-700'}">Flow tự động ${flows.length ? `<span class="text-xs ml-1 px-1.5 py-0.5 rounded-full bg-zzp-100 text-zzp-700">${flows.length}</span>` : ''}</button>
-    </div>`;
-}
-
-function setTab(tab) {
-  currentTab = tab;
-  renderCurrentView();
-}
-
-function openDetail(type, id) {
-  previousPage = currentPage;
-  currentDetail = { type, id };
-  currentTab = 'overview';
-  renderCurrentView();
-}
-
-function goBack() {
-  currentDetail = null;
-  navigate(previousPage || 'dashboard');
+function updateGuideRail(pageId) {
+  const rail = document.getElementById('guide-rail');
+  const content = document.getElementById('guide-rail-content');
+  const title = document.getElementById('guide-rail-title');
+  const fabRoot = document.getElementById('automation-fab-root');
+  if (!rail || !content) return;
+  const g = MODULE_GUIDES[pageId];
+  const showGuide = !!(g && !currentDetail);
+  if (!showGuide) {
+    rail.classList.add('hidden');
+    rail.classList.remove('lg:flex');
+    fabRoot?.classList.remove('lg:right-[calc(18rem+1.5rem)]');
+    return;
+  }
+  rail.classList.remove('hidden');
+  rail.classList.add('lg:flex');
+  fabRoot?.classList.add('lg:right-[calc(18rem+1.5rem)]');
+  if (title) title.textContent = viPage(pageId);
+  content.innerHTML = renderGuideSidebar(pageId);
+  refreshIcons(content);
 }
 
 function renderCurrentView() {
@@ -48,24 +40,30 @@ function renderCurrentView() {
     document.getElementById('page-title').textContent = currentDetail.id;
     destroyCharts();
     refreshIcons(document.getElementById('main-content'));
+    updateGuideRail(currentPage);
+    updateAutomationFab(currentPage);
     return;
   }
   const renderer = PAGES[currentPage];
   if (!renderer) return;
   let html = renderer();
-  if (MODULE_GUIDES[currentPage]) {
+  const selfContextPages = ['dashboard', 'workflows'];
+  if (!selfContextPages.includes(currentPage)) {
     const mb6 = html.indexOf('class="mb-6"');
     const splitIdx = mb6 > -1 ? html.indexOf('</div>', mb6) + 6 : html.indexOf('<div class="grid');
-    const headerPart = splitIdx > 0 ? html.substring(0, splitIdx) : html;
-    const bodyPart = splitIdx > 0 ? html.substring(splitIdx) : '';
-    if (currentTab === 'guide') html = headerPart + renderModuleTabs(currentPage) + renderGuidePanel(currentPage);
-    else if (currentTab === 'flow') html = headerPart + renderModuleTabs(currentPage) + renderFlowPanel(currentPage);
-    else html = headerPart + renderModuleTabs(currentPage) + bodyPart;
+    const headerPart = splitIdx > 0 ? html.substring(0, splitIdx) : '';
+    const bodyPart = splitIdx > 0 ? html.substring(splitIdx) : html;
+    html = headerPart + renderModuleContext(currentPage) + bodyPart;
   }
   document.getElementById('main-content').innerHTML = html;
   destroyCharts();
-  requestAnimationFrame(() => { initCharts(currentPage); refreshIcons(document.getElementById('main-content')); });
+  requestAnimationFrame(() => {
+    initCharts(currentPage);
+    refreshIcons(document.getElementById('main-content'));
+  });
   updateHealthBadge();
+  updateGuideRail(currentPage);
+  updateAutomationFab(currentPage);
 }
 
 function renderNav() {
@@ -82,9 +80,19 @@ function renderNav() {
   refreshIcons(menu);
 }
 
+function openDetail(type, id) {
+  previousPage = currentPage;
+  currentDetail = { type, id };
+  renderCurrentView();
+}
+
+function goBack() {
+  currentDetail = null;
+  navigate(previousPage || 'dashboard');
+}
+
 function navigate(page) {
   if (!currentDetail && page !== currentPage) previousPage = currentPage;
-  if (page !== currentPage) currentTab = 'overview';
   currentPage = page;
   currentDetail = null;
   const renderer = PAGES[page];
@@ -121,39 +129,39 @@ function initCharts(page) {
         data: {
           labels: Array.from({ length: 14 }, (_, i) => `${22 + i}/5`),
           datasets: [
-            { label: 'GMV', data: ZZP_DATA.gmvTrend, borderColor: '#14b8a6', backgroundColor: 'rgba(20,184,166,.1)', fill: true, tension: .4 },
+            { label: 'Doanh thu gộp', data: ZZP_DATA.gmvTrend, borderColor: '#14b8a6', backgroundColor: 'rgba(20,184,166,.1)', fill: true, tension: .4 },
             { label: 'Lợi nhuận', data: ZZP_DATA.profitTrend, borderColor: '#6366f1', tension: .4 }
           ]
         },
         options: { ...chartDefaults, scales: { y: { ticks: { callback: v => fmt(v) } } } }
       });
     }
-    makePie('chart-revenue-src', ['Organic', 'Affiliate', 'Ads', 'Livestream'],
+    makePie('chart-revenue-src', ['Tự nhiên', 'Tiếp thị liên kết', 'Quảng cáo', 'Livestream'],
       [ZZP_DATA.revenueBreakdown.organic, ZZP_DATA.revenueBreakdown.affiliate, ZZP_DATA.revenueBreakdown.ads, ZZP_DATA.revenueBreakdown.livestream],
       ['#94a3b8', '#14b8a6', '#fe2c55', '#6366f1']);
   }
 
   if (page === 'affiliate') {
     makeBar('chart-affiliate', ZZP_DATA.kocs.filter(k => k.gmv30d > 0).map(k => k.name.replace('@', '')),
-      ZZP_DATA.kocs.filter(k => k.gmv30d > 0).map(k => k.gmv30d / 1e6), 'GMV (triệu)', '#14b8a6');
+      ZZP_DATA.kocs.filter(k => k.gmv30d > 0).map(k => k.gmv30d / 1e6), 'Doanh thu gộp (triệu)', '#14b8a6');
   }
 
   if (page === 'executive') {
-    makeLine('chart-executive', Array.from({ length: 14 }, (_, i) => `${22 + i}/5`), ZZP_DATA.gmvTrend, 'GMV', '#14b8a6');
-    makeDoughnut('chart-costs', ['COGS', 'Shipping', 'Commission', 'Ads', 'Voucher', 'Other'],
+    makeLine('chart-executive', Array.from({ length: 14 }, (_, i) => `${22 + i}/5`), ZZP_DATA.gmvTrend, 'Doanh thu gộp', '#14b8a6');
+    makeDoughnut('chart-costs', ['Giá vốn', 'Vận chuyển', 'Hoa hồng', 'Quảng cáo', 'Voucher', 'Khác'],
       [ZZP_DATA.costs.cogs, ZZP_DATA.costs.shipping, ZZP_DATA.costs.commission, ZZP_DATA.costs.ads, ZZP_DATA.costs.voucher,
         ZZP_DATA.costs.sample + ZZP_DATA.costs.agency + ZZP_DATA.costs.platform]);
   }
 
   if (page === 'revenue') {
-    makeDoughnut('chart-attribution', ['Affiliate', 'Livestream', 'Ads', 'Organic'],
+    makeDoughnut('chart-attribution', ['Tiếp thị liên kết', 'Livestream', 'Quảng cáo', 'Tự nhiên'],
       [ZZP_DATA.revenueBreakdown.affiliate, ZZP_DATA.revenueBreakdown.livestream, ZZP_DATA.revenueBreakdown.ads, ZZP_DATA.revenueBreakdown.organic],
       ['#14b8a6', '#6366f1', '#fe2c55', '#94a3b8']);
   }
 
   if (page === 'profit') {
     const p = calcProfit();
-    makeBar('chart-pnl', ['Doanh thu', 'COGS', 'Vận chuyển', 'Commission', 'Ads', 'Voucher', 'Khác', 'Lợi nhuận'],
+    makeBar('chart-pnl', ['Doanh thu', 'Giá vốn', 'Vận chuyển', 'Hoa hồng', 'Quảng cáo', 'Voucher', 'Khác', 'Lợi nhuận'],
       [p.revenue, -ZZP_DATA.costs.cogs, -ZZP_DATA.costs.shipping, -ZZP_DATA.costs.commission, -ZZP_DATA.costs.ads, -ZZP_DATA.costs.voucher,
         -(ZZP_DATA.costs.sample + ZZP_DATA.costs.agency + ZZP_DATA.costs.platform), p.profit],
       'VND', undefined, v => v < 0 ? '#ef4444' : '#14b8a6');
@@ -166,7 +174,7 @@ function initCharts(page) {
 
   if (page === 'customer-analytics') {
     makeLine('chart-cohort', ['T1', 'T2', 'T3', 'T4', 'T5', 'T6'],
-      [100, 42, 28, 22, 18, 15], 'Retention %', '#6366f1');
+      [100, 42, 28, 22, 18, 15], 'Tỷ lệ giữ chân %', '#6366f1');
   }
 
   if (page === 'forecast') {
@@ -177,14 +185,16 @@ function initCharts(page) {
         data: {
           labels: ZZP_DATA.forecasts.gmvLabels,
           datasets: [
-            { label: 'Dự báo GMV', data: ZZP_DATA.forecasts.gmv7d.map(v => v / 1e6), backgroundColor: 'rgba(20,184,166,.7)', borderRadius: 6 },
-            { label: 'Confidence range', data: ZZP_DATA.forecasts.gmv7d.map(v => v * 0.85 / 1e6), backgroundColor: 'rgba(148,163,184,.3)', borderRadius: 6 }
+            { label: 'Dự báo doanh thu gộp', data: ZZP_DATA.forecasts.gmv7d.map(v => v / 1e6), backgroundColor: 'rgba(20,184,166,.7)', borderRadius: 6 },
+            { label: 'Khoảng tin cậy', data: ZZP_DATA.forecasts.gmv7d.map(v => v * 0.85 / 1e6), backgroundColor: 'rgba(148,163,184,.3)', borderRadius: 6 }
           ]
         },
         options: { ...chartDefaults, scales: { y: { title: { display: true, text: 'Triệu VND' } } } }
       });
     }
   }
+
+  initExtendedCharts(page, charts, chartDefaults);
 }
 
 function makePie(id, labels, data, colors) {
@@ -205,7 +215,7 @@ function makeDoughnut(id, labels, data, colors) {
 function makeBar(id, labels, data, label, color, colorFn) {
   const ctx = document.getElementById(id);
   if (!ctx) return;
-  const bg = colorFn ? data.map(colorFn) : (color || '#14b8a6');
+  const bg = Array.isArray(color) ? color : colorFn ? data.map(colorFn) : (color || '#14b8a6');
   charts[id] = new Chart(ctx, {
     type: 'bar',
     data: { labels, datasets: [{ label, data: data.map(v => typeof v === 'number' && Math.abs(v) > 1e6 ? v / 1e6 : v), backgroundColor: bg, borderRadius: 4 }] },
@@ -237,6 +247,12 @@ function bindGlobalEvents() {
   document.getElementById('notif-overlay').addEventListener('click', closeNotifPanel);
   document.getElementById('modal-overlay')?.addEventListener('click', closeModal);
 
+  document.addEventListener('click', (e) => {
+    const root = document.getElementById('automation-fab-root');
+    if (!root || root.classList.contains('hidden')) return;
+    if (!root.contains(e.target)) closeAutomationFab();
+  });
+
   window.addEventListener('hashchange', () => {
     const page = location.hash.slice(1);
     if (page && PAGES[page] && page !== currentPage) navigate(page);
@@ -255,10 +271,13 @@ function updateNotifPanel() {
   document.getElementById('notif-count').classList.toggle('hidden', unread.length === 0);
 
   list.innerHTML = ZZP_DATA.alerts.map(a => `
-    <div class="p-3 rounded-xl border ${a.read ? 'border-slate-100' : 'border-zzp-200 bg-zzp-50'} cursor-pointer" onclick="handleAlertNav('${a.id}','${a.module}')">
+    <div class="p-3 rounded-xl border ${a.read ? 'border-slate-100' : 'border-zzp-200 bg-zzp-50'} cursor-pointer hover:shadow-sm transition-shadow" onclick="handleAlertNav('${a.id}')">
       <p class="text-sm font-medium">${a.title}</p>
       <p class="text-xs text-slate-500 mt-1">${a.desc}</p>
-      <p class="text-xs text-zzp-600 mt-2">${a.action} →</p>
+      <div class="flex gap-2 mt-2">
+        <span class="text-xs text-zzp-600">Chi tiết →</span>
+        ${!a.read ? `<button type="button" onclick="event.stopPropagation();runAutomationFlow('${alertToFlow(a.id) || 'FLOW_OPTIMIZE'}')" class="text-xs text-white bg-zzp-600 px-2 py-0.5 rounded">${icon('play',10)} Giải quyết</button>` : ''}
+      </div>
     </div>`).join('');
 }
 
@@ -278,11 +297,14 @@ function showToast(msg, type = 'success') {
   setTimeout(() => toast.remove(), 4000);
 }
 
-function openModal(html) {
-  document.getElementById('modal-body').innerHTML = html;
+function openModal(html, wide = false) {
+  const body = document.getElementById('modal-body');
+  body.classList.toggle('max-w-2xl', wide);
+  body.classList.toggle('max-w-lg', !wide);
+  body.innerHTML = html;
   document.getElementById('modal').classList.remove('hidden');
   document.getElementById('modal').classList.add('flex');
-  refreshIcons(document.getElementById('modal-body'));
+  refreshIcons(body);
 }
 
 function closeModal() {
@@ -296,8 +318,8 @@ function toggleChecklist(id) {
   if (item) {
     item.done = !item.done;
     updateHealthBadge();
-    showToast(item.done ? `✓ Hoàn thành: ${item.title}` : `↩ Đã bỏ chọn: ${item.title}`);
-    navigate('onboarding');
+    showToast(item.done ? `Hoàn thành: ${item.title}` : `Đã bỏ chọn: ${item.title}`);
+    renderCurrentView();
   }
 }
 
@@ -359,16 +381,19 @@ function handleAlert(alertId) {
   if (moduleMap[alert.module]) navigate(moduleMap[alert.module]);
 }
 
-function handleAlertNav(alertId, module) {
+function handleAlertNav(alertId) {
   closeNotifPanel();
-  markAlertRead(alertId);
-  const moduleMap = { inventory: 'inventory', ads: 'ads', vouchers: 'vouchers', orders: 'orders', compliance: 'compliance', products: 'products-setup' };
-  if (moduleMap[module]) navigate(moduleMap[module]);
+  openDetail('alert', alertId);
 }
 
 function markAlertRead(alertId) {
   const alert = ZZP_DATA.alerts.find(a => a.id === alertId);
-  if (alert) { alert.read = true; updateNotifPanel(); navigate('alerts'); }
+  if (alert) {
+    alert.read = true;
+    updateNotifPanel();
+    if (currentDetail?.type === 'alert' && currentDetail?.id === alertId) renderCurrentView();
+    else navigate('alerts');
+  }
 }
 
 function createAction(actionText) {
@@ -376,14 +401,14 @@ function createAction(actionText) {
     id: 'AQ' + Date.now(), title: actionText, source: 'AI Assistant', status: 'pending',
     assignee: 'Nguyễn Minh Anh', priority: 'medium'
   });
-  showToast(`Đã thêm vào Action Queue: ${actionText}`);
+  showToast(`Đã thêm vào hàng đợi hành động: ${actionText}`);
 }
 
 function toggleRule(ruleId) {
   const rule = ZZP_DATA.automationRules.find(r => r.id === ruleId);
   if (rule) {
     rule.active = !rule.active;
-    showToast(rule.active ? `Đã bật rule: ${rule.name}` : `Đã tắt rule: ${rule.name}`);
+    showToast(rule.active ? `Đã bật quy tắc: ${rule.name}` : `Đã tắt quy tắc: ${rule.name}`);
     navigate('automation');
   }
 }
@@ -391,7 +416,7 @@ function toggleRule(ruleId) {
 function runAutoFlowsOnLoad() {
   setTimeout(() => {
     if (ZZP_DATA.products.find(p => p.id === 'P003')?.stock < 100) {
-      showToast('⚡ Auto-flow: Phát hiện tồn kho P003 thấp — xem tab Flow tại Inventory', 'info');
+      showToast('Phát hiện tồn kho P003 thấp — xem quy trình tại Quản lý tồn kho', 'info');
     }
   }, 2000);
 }

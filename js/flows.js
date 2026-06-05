@@ -25,11 +25,11 @@ const AUTOMATION_FLOWS = [
     icon: 'megaphone-off',
     steps: [
       { id: 's1', label: 'Monitor ROAS real-time', module: 'ads', action: 'AD002 ROAS 1.2x detected' },
-      { id: 's2', label: 'Rule R002 kích hoạt', module: 'automation', action: 'Auto trigger: roas < 1.5' },
+      { id: 's2', label: 'Quy tắc ROAS kích hoạt', module: 'automation', action: 'Auto trigger: roas < 1.5' },
       { id: 's3', label: 'Tạo cảnh báo chi phí', module: 'alerts', action: 'Alert A002 warning' },
       { id: 's4', label: 'Pause campaign', module: 'ads', action: 'AD002 status → paused' },
       { id: 's5', label: 'AI đề xuất chuyển budget', module: 'growth-assistant', action: 'AI002: chuyển 8M sang Affiliate K002' },
-      { id: 's6', label: 'Tạo action & audit log', module: 'actions', action: 'AQ001 pending → Lê Thị Hoa approve' }
+      { id: 's6', label: 'Tạo việc chờ duyệt', module: 'actions', action: 'AQ001 pending → Lê Thị Hoa approve' }
     ]
   },
   {
@@ -56,11 +56,11 @@ const AUTOMATION_FLOWS = [
     trigger: 'AI insight priority ≤ 2',
     icon: 'brain-circuit',
     steps: [
-      { id: 's1', label: 'AI Engine phân tích', module: 'growth-assistant', action: 'AI001: Scale Serum VC Spark Ads' },
+      { id: 's1', label: 'AI phân tích & ưu tiên', module: 'growth-assistant', action: 'AI001: Scale Serum VC Spark Ads' },
       { id: 's2', label: 'Tạo action tự động', module: 'actions', action: 'AQ004: Tăng budget +30%' },
       { id: 's3', label: 'Owner approve', module: 'actions', action: 'Nguyễn Minh Anh approve AQ004' },
       { id: 's4', label: 'Thực thi trên Ads', module: 'ads', action: 'AD001 budget 15M → 19.5M' },
-      { id: 's5', label: 'Ghi audit log', module: 'audit', action: 'Log: Budget increased AD001' }
+      { id: 's5', label: 'Lưu lịch sử thay đổi', module: 'audit', action: 'Log: Budget increased AD001' }
     ]
   },
   {
@@ -131,6 +131,17 @@ function getFlowsForModule(pageId) {
   return AUTOMATION_FLOWS.filter(f => f.modules.includes(pageId));
 }
 
+function humanTrigger(trigger) {
+  if (!trigger) return 'Theo tình huống vận hành';
+  return String(trigger)
+    .replace(/cron/gi, 'lịch hẹn')
+    .replace(/manual/gi, 'thủ công')
+    .replace(/roas/gi, 'ROAS')
+    .replace(/FLOW_[A-Z_]+/g, '')
+    .replace(/\//g, ' · ')
+    .trim() || 'Theo tình huống vận hành';
+}
+
 function executeFlowStep(flow, stepIndex) {
   return new Promise(resolve => {
     setTimeout(resolve, 800);
@@ -138,8 +149,12 @@ function executeFlowStep(flow, stepIndex) {
 }
 
 async function runAutomationFlow(flowId) {
-  const flow = AUTOMATION_FLOWS.find(f => f.id === flowId);
-  if (!activeFlowRun) activeFlowRun = { flowId, step: 0, status: 'running' };
+  let flow = AUTOMATION_FLOWS.find(f => f.id === flowId);
+  if (!flow && flowId.startsWith('MOD_')) {
+    flow = Object.values(MODULE_FLOWS).find(f => f.id === flowId);
+  }
+  if (!flow) return;
+  activeFlowRun = { flowId, step: 0, status: 'running' };
 
   openFlowRunner(flow, 0);
 
@@ -153,15 +168,19 @@ async function runAutomationFlow(flowId) {
     updateFlowRunnerUI(flow, i, 'done');
   }
 
-  activeFlowRun.status = 'completed';
+  activeFlowRun = { flowId, step: flow.steps.length - 1, status: 'completed' };
   updateFlowRunnerUI(flow, flow.steps.length - 1, 'complete');
   ZZP_DATA.auditLog.unshift({
     time: new Date().toLocaleString('vi-VN'),
     user: 'System',
-    action: `Flow completed: ${flow.name}`,
-    module: 'Automation'
+    action: `Quy trình hoàn tất: ${flow.name}`,
+    module: 'Tự động hóa'
   });
-  showToast(`✓ Flow hoàn tất: ${flow.name}`);
+  showToast(`Quy trình hoàn tất: ${flow.name}`);
+  updateNotifPanel();
+  updateHealthBadge();
+  activeFlowRun = null;
+  if (!currentDetail) renderCurrentView();
 }
 
 function applyFlowEffects(flow, stepIndex) {
@@ -205,27 +224,26 @@ function updateFlowRunnerUI(flow, currentStep, phase) {
 
 function renderFlowPanel(pageId) {
   const flows = getFlowsForModule(pageId);
-  if (!flows.length) return `<div class="text-center py-12 bg-slate-50 rounded-xl"><p class="text-slate-500">Module này chưa có flow tự động liên kết.</p><button onclick="navigate('workflows')" class="mt-3 text-sm text-zzp-600 hover:underline">Xem tất cả flows →</button></div>`;
+  if (!flows.length) return `<div class="text-center py-12 bg-slate-50 rounded-xl"><p class="text-slate-500">Mô-đun này chưa có quy trình tự động liên kết.</p><button onclick="navigate('workflows')" class="mt-3 text-sm text-zzp-600 hover:underline">Xem tất cả quy trình →</button></div>`;
   return `
     <div class="space-y-4">
-      <p class="text-sm text-slate-500">${flows.length} flow tự động liên kết module này với các module khác. Nhấn "Chạy flow" để xem từng bước thực thi.</p>
+      <p class="text-sm text-slate-500">${flows.length} quy trình tự động liên kết mô-đun này với các mô-đun khác. Nhấn "Chạy quy trình" để xem từng bước thực thi.</p>
       ${flows.map(f => `
         <div class="p-5 bg-white rounded-xl border border-slate-200 hover:border-zzp-300 transition-colors">
           <div class="flex items-start justify-between gap-4">
             <div class="flex gap-3">
               <span class="flex shrink-0">${iconBox(FLOW_ICONS[f.id] || f.icon || 'workflow', 20, 'bg-zzp-50 text-zzp-600')}</span>
               <div><p class="font-semibold">${f.name}</p><p class="text-sm text-slate-500 mt-1">${f.desc}</p>
-                <p class="text-xs text-slate-400 mt-2">Trigger: ${f.trigger}</p>
-                <div class="flex flex-wrap gap-1 mt-2">${f.modules.map(m => `<span class="text-[10px] px-2 py-0.5 bg-slate-100 rounded-full">${m}</span>`).join('')}</div>
+                <div class="flex flex-wrap gap-1 mt-2">${f.modules.map(m => `<span class="text-[10px] px-2 py-0.5 bg-slate-100 rounded-full">${viPage(m)}</span>`).join('')}</div>
               </div>
             </div>
-            <button onclick="runAutomationFlow('${f.id}')" class="shrink-0 px-4 py-2 bg-zzp-600 text-white rounded-lg text-sm hover:bg-zzp-700">▶ Chạy flow</button>
+            <button onclick="runAutomationFlow('${f.id}')" class="shrink-0 px-4 py-2 bg-zzp-600 text-white rounded-lg text-sm hover:bg-zzp-700">▶ Chạy quy trình</button>
           </div>
           <div class="mt-4 pl-4 border-l-2 border-zzp-200 space-y-2">
-            ${f.steps.map((s, i) => `<div class="text-xs text-slate-600"><span class="font-semibold text-zzp-600">${i + 1}.</span> ${s.label} <span class="text-slate-400">→ ${s.module}</span></div>`).join('')}
+            ${f.steps.map((s, i) => `<div class="text-xs text-slate-600"><span class="font-semibold text-zzp-600">${i + 1}.</span> ${s.label}</div>`).join('')}
           </div>
         </div>`).join('')}
-      <button onclick="navigate('workflows')" class="w-full py-3 border border-dashed border-slate-300 rounded-xl text-sm text-slate-500 hover:border-zzp-400 hover:text-zzp-600">Xem Workflow Center — ${AUTOMATION_FLOWS.length} flows →</button>
+      <button onclick="navigate('workflows')" class="w-full py-3 border border-dashed border-slate-300 rounded-xl text-sm text-slate-500 hover:border-zzp-400 hover:text-zzp-600">Xem trung tâm quy trình — ${AUTOMATION_FLOWS.length} quy trình →</button>
     </div>`;
 }
 
@@ -236,18 +254,18 @@ function renderFlowRunner(flow, currentStep, phase) {
         <span class="flex shrink-0">${iconBox(FLOW_ICONS[flow.id] || flow.icon || 'workflow', 24, 'bg-zzp-50 text-zzp-600')}</span>
         <div><h3 class="font-bold text-lg">${flow.name}</h3><p class="text-sm text-slate-500">${flow.desc}</p></div>
       </div>
-      <p class="text-xs text-slate-400 mb-4">Trigger: ${flow.trigger}</p>
+      <p class="text-xs text-slate-400 mb-4">Điều kiện: ${humanTrigger(flow.trigger)}</p>
       <div class="space-y-2 mb-6">
         ${flow.steps.map((s, i) => {
           let cls = 'border-slate-200 bg-slate-50';
-          let icon = '○';
-          if (i < currentStep || (i === currentStep && phase === 'done') || phase === 'complete') { cls = 'border-green-200 bg-green-50'; icon = '✓'; }
-          else if (i === currentStep && phase === 'running') { cls = 'border-zzp-300 bg-zzp-50 ring-2 ring-zzp-200'; icon = '▶'; }
+          let stepIcon = '○';
+          if (i < currentStep || (i === currentStep && phase === 'done') || phase === 'complete') { cls = 'border-green-200 bg-green-50'; stepIcon = '✓'; }
+          else if (i === currentStep && phase === 'running') { cls = 'border-zzp-300 bg-zzp-50 ring-2 ring-zzp-200'; stepIcon = '▶'; }
           return `<div class="flex gap-3 p-3 rounded-xl border ${cls} transition-all">
-            <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${icon==='✓'?'bg-green-500 text-white':icon==='▶'?'bg-zzp-500 text-white animate-pulse':'bg-slate-200'}">${icon}</span>
+            <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${stepIcon==='✓'?'bg-green-500 text-white':stepIcon==='▶'?'bg-zzp-500 text-white animate-pulse':'bg-slate-200'}">${stepIcon}</span>
             <div class="flex-1 min-w-0">
               <p class="font-medium text-sm">${s.label}</p>
-              <p class="text-xs text-slate-500">${s.module} · ${s.action}</p>
+              <p class="text-xs text-slate-500">${viPage(s.module)}</p>
             </div>
             ${s.module ? `<button onclick="closeModal();navigate('${s.module}')" class="text-xs text-zzp-600 hover:underline shrink-0">Xem →</button>` : ''}
           </div>`;
@@ -255,10 +273,10 @@ function renderFlowRunner(flow, currentStep, phase) {
       </div>
       ${phase === 'complete' ? `
         <div class="p-4 bg-green-50 rounded-xl text-center mb-4">
-          <p class="font-semibold text-green-800">✓ Flow hoàn tất thành công</p>
-          <p class="text-xs text-green-600 mt-1">Đã cập nhật dữ liệu & audit log</p>
+          <p class="font-semibold text-green-800">Quy trình hoàn tất thành công</p>
+          <p class="text-xs text-green-600 mt-1">Đã cập nhật dữ liệu shop</p>
         </div>
         <button onclick="closeModal()" class="w-full px-4 py-2.5 bg-zzp-600 text-white rounded-xl text-sm font-medium">Đóng</button>
-      ` : `<div class="flex items-center gap-2 justify-center text-sm text-zzp-600"><span class="w-4 h-4 border-2 border-zzp-600 border-t-transparent rounded-full animate-spin"></span> Đang chạy flow tự động...</div>`}
+      ` : `<div class="flex items-center gap-2 justify-center text-sm text-zzp-600"><span class="w-4 h-4 border-2 border-zzp-600 border-t-transparent rounded-full animate-spin"></span> Đang chạy quy trình tự động...</div>`}
     </div>`;
 }

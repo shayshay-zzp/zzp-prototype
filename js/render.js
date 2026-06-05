@@ -2,15 +2,19 @@
 const PAGES = {};
 
 function card(title, body, cls = '') {
-  return `<div class="bg-white rounded-xl border border-slate-200 shadow-sm ${cls}"><div class="px-5 py-4 border-b border-slate-100"><h3 class="font-semibold text-slate-800">${title}</h3></div><div class="p-5">${body}</div></div>`;
+  const t = typeof viLabel === 'function' ? viLabel(title) : title;
+  return `<div class="bg-white rounded-xl border border-slate-200 shadow-sm ${cls}"><div class="px-5 py-4 border-b border-slate-100"><h3 class="font-semibold text-slate-800">${t}</h3></div><div class="p-5">${body}</div></div>`;
 }
 
 function statCard(label, value, sub = '', color = 'zzp') {
+  const l = typeof viLabel === 'function' ? viLabel(label) : label;
+  const s = sub && typeof viLabel === 'function' ? viLabel(sub) : sub;
   const colors = { zzp: 'bg-zzp-50 text-zzp-700', red: 'bg-red-50 text-red-700', amber: 'bg-amber-50 text-amber-700', blue: 'bg-blue-50 text-blue-700', green: 'bg-green-50 text-green-700' };
-  return `<div class="bg-white rounded-xl border border-slate-200 p-5"><p class="text-sm text-slate-500 mb-1">${label}</p><p class="text-2xl font-bold text-slate-800">${value}</p>${sub ? `<p class="text-xs mt-1 ${colors[color]?.split(' ')[1] || 'text-slate-500'}">${sub}</p>` : ''}</div>`;
+  return `<div class="bg-white rounded-xl border border-slate-200 p-5"><p class="text-sm text-slate-500 mb-1">${l}</p><p class="text-2xl font-bold text-slate-800">${value}</p>${s ? `<p class="text-xs mt-1 ${colors[color]?.split(' ')[1] || 'text-slate-500'}">${s}</p>` : ''}</div>`;
 }
 
 function badge(text, type = 'default') {
+  const display = typeof viBadge === 'function' ? viBadge(text, type) : text;
   const styles = {
     active: 'bg-green-100 text-green-700', pending: 'bg-amber-100 text-amber-700', critical: 'bg-red-100 text-red-700',
     warning: 'bg-amber-100 text-amber-700', info: 'bg-blue-100 text-blue-700', default: 'bg-slate-100 text-slate-600',
@@ -19,60 +23,22 @@ function badge(text, type = 'default') {
     live: 'bg-green-100 text-green-700', partial: 'bg-amber-100 text-amber-700', high: 'bg-red-100 text-red-700',
     medium: 'bg-amber-100 text-amber-700', new: 'bg-blue-100 text-blue-700', in_progress: 'bg-zzp-100 text-zzp-700'
   };
-  return `<span class="px-2 py-0.5 rounded-full text-xs font-medium ${styles[type] || styles.default}">${text}</span>`;
+  return `<span class="px-2 py-0.5 rounded-full text-xs font-medium ${styles[type] || styles.default}">${display}</span>`;
 }
 
 function pageHeader(category, title, desc, prdRef) {
+  const t = typeof viLabel === 'function' ? viLabel(title) : title;
   const catColors = { 'Khởi tạo': 'phase-badge-1', 'Vận hành': 'phase-badge-2', 'Phân tích': 'phase-badge-3', 'Tối ưu': 'phase-badge-4', 'Hệ thống': 'bg-slate-100 text-slate-600' };
-  return `<div class="mb-6"><span class="px-3 py-1 rounded-full text-xs font-semibold ${catColors[category] || catColors['Hệ thống']}">${category}</span><h2 class="text-xl font-bold mt-2">${title}</h2><p class="text-slate-500 text-sm mt-1">${desc}</p>${prdRef ? `<p class="text-xs text-slate-400 mt-1 border-l-2 border-zzp-300 pl-2">${prdRef}</p>` : ''}</div>`;
+  return `<div class="mb-6"><span class="px-3 py-1 rounded-full text-xs font-semibold ${catColors[category] || catColors['Hệ thống']}">${category}</span><h2 class="text-xl font-bold mt-2">${t}</h2><p class="text-slate-500 text-sm mt-1">${desc}</p>${prdRef ? `<p class="text-xs text-slate-400 mt-1 border-l-2 border-zzp-300 pl-2">${prdRef}</p>` : ''}</div>`;
 }
 
 function tableWrap(headers, rows) {
-  return `<div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b border-slate-100">${headers.map(h => `<th class="text-left py-3 px-3 text-slate-500 font-medium">${h}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>`;
+  const h = typeof viLabel === 'function' ? headers.map(x => viLabel(x)) : headers;
+  return `<div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b border-slate-100">${h.map(x => `<th class="text-left py-3 px-3 text-slate-500 font-medium">${x}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 
 /* ===== DASHBOARD ===== */
-PAGES.dashboard = () => {
-  const p = calcProfit();
-  const unread = ZZP_DATA.alerts.filter(a => !a.read).length;
-  return `
-    <div class="space-y-6">
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        ${statCard('GMV 30 ngày', fmt(ZZP_DATA.shop.gmv30d), '↑ 28% vs tháng trước', 'green')}
-        ${statCard('Lợi nhuận', fmt(p.profit), `Margin ${p.margin}%`, 'zzp')}
-        ${statCard('Đơn hàng', ZZP_DATA.shop.orders30d.toLocaleString(), '2847 đơn / 30 ngày', 'blue')}
-        ${statCard('Cảnh báo', unread, 'Cần xử lý ngay', unread > 3 ? 'red' : 'amber')}
-      </div>
-      <div class="grid lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-2">${card('GMV & Lợi nhuận 14 ngày', '<div class="chart-box"><canvas id="chart-main"></canvas></div>')}</div>
-        <div>${card('Shop Health Score', `
-          <div class="text-center py-4">
-            <div class="relative inline-flex items-center justify-center w-32 h-32">
-              <svg class="w-32 h-32 transform -rotate-90"><circle cx="64" cy="64" r="56" stroke="#e2e8f0" stroke-width="10" fill="none"/><circle cx="64" cy="64" r="56" stroke="#14b8a6" stroke-width="10" fill="none" stroke-dasharray="${calcHealthScore() * 3.52} 352" stroke-linecap="round"/></svg>
-              <span class="absolute text-3xl font-bold text-zzp-700">${calcHealthScore()}%</span>
-            </div>
-            <p class="text-sm text-slate-500 mt-2">${ZZP_DATA.checklist.filter(c=>c.done).length}/${ZZP_DATA.checklist.length} checklist hoàn thành</p>
-            <button onclick="navigate('onboarding')" class="mt-3 text-sm text-zzp-600 hover:underline">Xem checklist →</button>
-          </div>
-        `)}</div>
-      </div>
-      <div class="grid lg:grid-cols-2 gap-6">
-        ${card('Nguồn doanh thu', '<div class="chart-box-sm"><canvas id="chart-revenue-src"></canvas></div>')}
-        ${card('AI Insights ưu tiên', ZZP_DATA.aiInsights.slice(0,3).map(i => `
-          <div class="flex gap-3 py-3 border-b border-slate-50 last:border-0">
-            <span class="w-7 h-7 rounded-full bg-zzp-100 text-zzp-700 flex items-center justify-center text-sm font-bold shrink-0">${i.priority}</span>
-            <div class="flex-1 min-w-0"><p class="font-medium text-sm">${i.title}</p><p class="text-xs text-slate-500 mt-0.5">${i.desc}</p><p class="text-xs text-green-600 mt-1">${i.impact}</p></div>
-          </div>`).join('') + '<button onclick="navigate(\'growth-assistant\')" class="mt-3 text-sm text-zzp-600 hover:underline">Xem tất cả insights →</button>')}
-      </div>
-      <div class="grid lg:grid-cols-4 gap-4">
-        ${DASHBOARD_MODULES.map(x => `
-          <button onclick="navigate('${x.pg}')" class="bg-white rounded-xl border border-slate-200 p-5 text-left hover:border-zzp-300 hover:shadow-md transition-all group">
-            ${iconBox(x.icon, 20, x.color, '')}
-            <p class="font-semibold mt-3">${x.l}</p><p class="text-sm text-slate-500 group-hover:text-zzp-600">Xem module</p>
-          </button>`).join('')}
-      </div>
-    </div>`;
-};
+PAGES.dashboard = () => isNewSeller() ? renderNewSellerDashboard() : renderActiveSellerDashboard();
 
 /* ===== PHASE 1 ===== */
 PAGES.onboarding = () => {
@@ -80,39 +46,50 @@ PAGES.onboarding = () => {
   return `<div>${pageHeader('Khởi tạo','Onboarding & Setup Shop','Thiết lập gian hàng, kết nối TikTok Shop và đánh giá mức độ sẵn sàng vận hành')}
     <div class="grid lg:grid-cols-3 gap-6 mb-6">
       ${statCard('Shop Health', calcHealthScore() + '%', `${done}/${ZZP_DATA.checklist.length} bước`)}
-      ${statCard('OAuth', ZZP_DATA.shop.oauthStatus === 'connected' ? 'Đã kết nối' : 'Chưa kết nối', ZZP_DATA.shop.id)}
-      ${statCard('Đồng bộ cuối', ZZP_DATA.shop.lastSync, 'Real-time sync')}
+      ${statCard('Kết nối shop', ZZP_DATA.shop.oauthStatus === 'connected' ? 'Đã kết nối' : 'Chưa kết nối', ZZP_DATA.shop.name)}
+      ${statCard('Cập nhật gần nhất', ZZP_DATA.shop.lastSync, 'Đồng bộ tự động')}
     </div>
+    ${layoutPrdBadge('onboarding')}
+    ${renderOnboardingTimeline()}
     <div class="grid lg:grid-cols-2 gap-6">
-      ${card('Shop Setup Checklist', ZZP_DATA.checklist.map(c => `
-        <label class="flex items-start gap-3 py-3 border-b border-slate-50 cursor-pointer hover:bg-slate-50 px-2 rounded-lg">
-          <input type="checkbox" ${c.done?'checked':''} onchange="toggleChecklist('${c.id}')" class="mt-1 rounded border-slate-300 text-zzp-600 focus:ring-zzp-500">
-          <div><p class="font-medium text-sm ${c.done?'line-through text-slate-400':''}">${c.title}</p><p class="text-xs text-slate-500">${c.desc}</p></div>
-        </label>`).join(''))}
-      ${card('OAuth Connection', `
+      ${renderSetupBanner()}
+      ${card('Kết nối TikTok Shop', `
         <div class="text-center py-6">
           <div class="w-16 h-16 mx-auto rounded-2xl bg-green-100 flex items-center justify-center text-green-600 mb-4">${icon('circle-check', 32)}</div>
           <p class="font-semibold text-green-700">TikTok Shop đã kết nối</p>
           <p class="text-sm text-slate-500 mt-1">${ZZP_DATA.shop.name} · ${ZZP_DATA.shop.category}</p>
           <div class="mt-4 p-3 bg-slate-50 rounded-lg text-left text-sm space-y-2">
-            <div class="flex justify-between"><span class="text-slate-500">Shop ID</span><span>${ZZP_DATA.shop.id}</span></div>
-            <div class="flex justify-between"><span class="text-slate-500">Trạng thái</span>${badge('Connected','connected')}</div>
-            <div class="flex justify-between"><span class="text-slate-500">Seller Center</span><span class="text-green-600 flex items-center gap-1">${icon('check', 14)} Synced</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">Gian hàng</span><span>${ZZP_DATA.shop.name}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">Trạng thái</span>${badge('Đã kết nối','connected')}</div>
+            <div class="flex justify-between"><span class="text-slate-500">Seller Center</span><span class="text-green-600 flex items-center gap-1">${icon('check', 14)} Đồng bộ OK</span></div>
           </div>
-          <button onclick="showToast('Đã làm mới kết nối OAuth')" class="mt-4 px-4 py-2 bg-zzp-600 text-white rounded-lg text-sm hover:bg-zzp-700">Refresh Connection</button>
+          <button onclick="showToast('Đã làm mới kết nối TikTok Shop')" class="mt-4 px-4 py-2 bg-zzp-600 text-white rounded-lg text-sm hover:bg-zzp-700">Làm mới kết nối</button>
         </div>`)}
     </div></div>`;
 };
 
 PAGES['products-setup'] = () => {
+  const c5 = ZZP_DATA.checklist.find(c => c.id === 'c5');
+  const heroes = ZZP_DATA.products.filter(p => p.hero && p.listingScore >= 85);
   return `<div>${pageHeader('Khởi tạo','Product Launch','Tạo và tối ưu listing, kiểm tra chất lượng và tăng tỷ lệ duyệt')}
+    ${!c5?.done ? `
+    <div class="mb-6 p-5 rounded-2xl border-2 border-zzp-200 bg-gradient-to-br from-zzp-50 to-white">
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p class="text-sm font-semibold text-zzp-700 flex items-center gap-2">${icon('sparkles', 16)} Thiết lập sản phẩm trên ZZP</p>
+          <h3 class="text-lg font-bold mt-1">Tạo SKU chủ lực với AI</h3>
+          <p class="text-sm text-slate-600 mt-1">Wizard 5 bước: thông tin → AI nội dung → AI 6 ảnh → video & tuân thủ → đăng TikTok Shop</p>
+          <p class="text-xs text-slate-500 mt-2">${heroes.length}/5 SKU chủ lực đạt ≥85% · ${c5?.done ? 'Hoàn thành' : 'Chưa xong'}</p>
+        </div>
+        <button type="button" onclick="openProductCreateWizard()" class="px-5 py-3 bg-zzp-600 text-white rounded-xl text-sm font-semibold hover:bg-zzp-700 inline-flex items-center gap-2 shrink-0">${icon('plus', 16)} Thiết lập sản phẩm mới</button>
+      </div>
+    </div>` : ''}
     ${card('Listing Quality Checker', tableWrap(['Sản phẩm','Giá','Listing Score','Trạng thái','Hành động'],
-      ZZP_DATA.products.map(p => `<tr class="border-b border-slate-50 hover:bg-slate-50">
-        <td class="py-3 px-3 flex items-center gap-2">${productThumb(p, 16)}<button onclick="openDetail('product','${p.id}')" class="text-left hover:text-zzp-600 hover:underline">${p.name}</button>${p.hero?' <span class="text-xs text-amber-600 font-medium">Hero</span>':''}</td>
+      ZZP_DATA.products.map(p => `<tr ${rowClick('product', p.id)}><td class="py-3 px-3 flex items-center gap-2">${productThumb(p, 16)}<span class="font-medium">${p.name}</span>${p.hero?' <span class="text-xs text-amber-600 font-medium">Hero</span>':''}</td>
         <td class="px-3">${fmtCurrency(p.price)}</td>
         <td class="px-3"><div class="flex items-center gap-2"><div class="w-20 h-2 bg-slate-100 rounded-full"><div class="h-2 rounded-full ${p.listingScore>=85?'bg-green-500':p.listingScore>=70?'bg-amber-500':'bg-red-500'}" style="width:${p.listingScore}%"></div></div><span class="font-medium">${p.listingScore}%</span></div></td>
         <td class="px-3">${badge(p.status, p.status)}</td>
-        <td class="px-3"><button onclick="openListingCheck('${p.id}')" class="text-zzp-600 text-xs hover:underline">Kiểm tra</button></td>
+        <td class="px-3" onclick="event.stopPropagation()"><button onclick="openListingCheck('${p.id}')" class="text-zzp-600 text-xs hover:underline">Kiểm tra</button></td>
       </tr>`).join('')))}
     <div class="mt-6">${card('Listing Assist — Gợi ý tối ưu', `
       <div class="space-y-3">
@@ -140,11 +117,14 @@ PAGES.store = () => {
 PAGES.compliance = () => {
   return `<div>${pageHeader('Khởi tạo','Compliance & Policy Hub','Theo dõi chính sách TikTok Shop, đánh giá rủi ro bằng AI')}
     ${card('TikTok Policy Hub — AI Impact Analysis', ZZP_DATA.policies.map(p => `
-      <div class="p-4 rounded-xl border ${p.status==='action_required'?'border-red-200 bg-red-50':'border-slate-200'} mb-3">
-        <div class="flex items-start justify-between gap-3"><div><p class="font-medium"><button onclick="openDetail('policy','${p.id}')" class="text-left hover:text-zzp-600 hover:underline">${p.title}</button></p><p class="text-xs text-slate-500 mt-1">${p.date} · Ảnh hưởng: ${badge(p.impact,p.impact)}</p></div>${badge(p.status==='action_required'?'Cần xử lý':p.status==='compliant'?'Tuân thủ':'Theo dõi', p.status==='action_required'?'critical':p.status==='compliant'?'ok':'warning')}</div>
-        <div class="mt-3 p-3 bg-white rounded-lg border border-slate-100"><p class="text-xs font-semibold text-zzp-700 mb-1 flex items-center gap-1">${icon('sparkles', 12)} AI Assessment</p><p class="text-sm text-slate-600">${p.aiSummary}</p></div>
-        ${p.affected.length ? `<p class="text-xs mt-2">Sản phẩm ảnh hưởng: ${p.affected.map(id=>getProduct(id)?.name||id).join(', ')}</p>` : ''}
-        ${p.status==='action_required'?`<button onclick="navigate('products-setup')" class="mt-2 text-sm text-red-600 hover:underline">Cập nhật listing ngay →</button>`:''}
+      <div class="p-4 rounded-xl border ${p.status==='action_required'?'border-red-200 bg-red-50':'border-slate-200'} mb-3 cursor-pointer hover:shadow-md transition-all" onclick="openDetail('policy','${p.id}')">
+        <div class="flex items-start justify-between gap-3"><div><p class="font-medium">${p.title}</p><p class="text-xs text-slate-500 mt-1">${p.date} · Ảnh hưởng: ${badge(p.impact,p.impact)}</p></div>${badge(p.status==='action_required'?'Cần xử lý':p.status==='compliant'?'Tuân thủ':'Theo dõi', p.status==='action_required'?'critical':p.status==='compliant'?'ok':'warning')} ${icon('chevron-right',16,'text-slate-400 shrink-0')}</div>
+        <div class="mt-3 p-3 bg-white rounded-lg border border-slate-100" onclick="event.stopPropagation()"><p class="text-xs font-semibold text-zzp-700 mb-1 flex items-center gap-1">${icon('sparkles', 12)} AI Assessment</p><p class="text-sm text-slate-600">${p.aiSummary}</p></div>
+        ${p.affected.length ? `<p class="text-xs mt-2">Sản phẩm ảnh hưởng: ${p.affected.map(id=>`<button type="button" onclick="event.stopPropagation();openDetail('product','${id}')" class="text-zzp-600 hover:underline">${getProduct(id)?.name||id}</button>`).join(', ')}</p>` : ''}
+        <div class="mt-3 flex gap-2" onclick="event.stopPropagation()">
+          <button type="button" onclick="openDetail('policy','${p.id}')" class="text-sm text-zzp-600 hover:underline">Chi tiết →</button>
+          ${p.status==='action_required'?`<button type="button" onclick="runAutomationFlow('FLOW_COMPLIANCE')" class="text-sm text-red-600 hover:underline inline-flex items-center gap-1">${icon('play',12)} Giải quyết</button>`:''}
+        </div>
       </div>`).join(''))}
     ${card('Compliance Checker', `
       <div class="grid grid-cols-3 gap-4 text-center">
@@ -195,22 +175,21 @@ PAGES.channels = () => {
 
 /* ===== PHASE 2 ===== */
 PAGES.datahub = () => {
-  return `<div>${pageHeader('Vận hành','Data Hub & TikTok Shop Sync','Đồng bộ dữ liệu sản phẩm, đơn hàng, Affiliate và nội dung theo thời gian thực')}
+  return `<div>${pageHeader('Vận hành','Đồng bộ dữ liệu shop','Theo dõi trạng thái đồng bộ sản phẩm, đơn hàng, tiếp thị liên kết và nội dung')}
     <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
       ${statCard('Nguồn dữ liệu', ZZP_DATA.dataSync.length, 'Đang kết nối')}
-      ${statCard('Tổng records', fmt(ZZP_DATA.dataSync.reduce((s,d)=>s+d.records,0)), 'Real-time pipeline')}
-      ${statCard('Latency TB', '~6s', 'TikTok Shop: 2s')}
+      ${statCard('Bản ghi', fmt(ZZP_DATA.dataSync.reduce((s,d)=>s+d.records,0)), 'Tổng hợp')}
+      ${statCard('Độ trễ TB', '~6 giây', 'TikTok Shop: 2 giây')}
     </div>
-    ${card('Data Synchronization Status', tableWrap(['Nguồn','Trạng thái','Records','Latency','Sync cuối'],
-      ZZP_DATA.dataSync.map(d => `<tr class="border-b border-slate-50"><td class="py-3 px-3 font-medium">${d.source}</td><td class="px-3">${badge(d.status,d.status)}</td><td class="px-3">${d.records.toLocaleString()}</td><td class="px-3">${d.latency}</td><td class="px-3 text-xs">${d.lastSync}</td></tr>`).join('')))}
-    <button onclick="showToast('Đang đồng bộ toàn bộ dữ liệu...')" class="mt-4 px-4 py-2 bg-zzp-600 text-white rounded-lg text-sm">Force Sync All</button></div>`;
+    ${renderDataHubPipeline()}
+    <button onclick="showToast('Đang đồng bộ toàn bộ dữ liệu...')" class="mt-4 px-4 py-2 bg-zzp-600 text-white rounded-lg text-sm">Đồng bộ ngay</button></div>`;
 };
 
 PAGES.products = () => {
   return `<div>${pageHeader('Vận hành','Product Operations','Quản lý vòng đời sản phẩm và hiệu suất bán hàng')}
-    ${card('Product Management', tableWrap(['SKU','Sản phẩm','Giá','Tồn kho','Bán 30d','Margin','Trạng thái'],
-      ZZP_DATA.products.map(p => { const margin = ((p.price-p.cost)/p.price*100).toFixed(0);
-        return `<tr class="border-b border-slate-50 hover:bg-slate-50"><td class="py-3 px-3 text-xs">${p.sku}</td><td class="px-3"><div class="flex items-center gap-2">${productThumb(p, 16)}<button onclick="openDetail('product','${p.id}')" class="hover:text-zzp-600">${p.name}</button></div></td><td class="px-3">${fmtCurrency(p.price)}</td><td class="px-3 ${p.stock<100?'text-red-600 font-semibold':''}">${p.stock}</td><td class="px-3">${p.sold30d}</td><td class="px-3">${margin}%</td><td class="px-3">${badge(p.status,p.status)}</td></tr>`; }).join('')))}</div>`;
+    ${layoutPrdBadge('products')}
+    ${chartGrid([['GMV theo SKU', 'chart-sku-gmv', 'md']], 1)}
+    ${card('Product Status Monitor', renderProductLifecycleMonitor())}</div>`;
 };
 
 PAGES.orders = () => {
@@ -222,16 +201,15 @@ PAGES.orders = () => {
       ${statCard('Hoàn thành', ZZP_DATA.orders.filter(o=>o.status==='delivered').length)}
       ${statCard('Hoàn/Hủy', ZZP_DATA.orders.filter(o=>['return_requested','cancelled'].includes(o.status)).length, '', 'red')}
     </div>
-    ${card('Orders', tableWrap(['Mã đơn','Khách','Sản phẩm','Tổng','Nguồn','SLA','Trạng thái',''],
-      ZZP_DATA.orders.map(o => `<tr class="border-b border-slate-50"><td class="py-3 px-3 font-mono text-xs"><button onclick="openDetail('order','${o.id}')" class="text-zzp-600 hover:underline">${o.id}</button></td><td class="px-3">${o.customer}</td><td class="px-3 text-sm">${o.productName}</td><td class="px-3">${fmtCurrency(o.total)}</td><td class="px-3">${badge(o.source,o.source==='affiliate'?'active':'info')}</td><td class="px-3 ${o.sla!=='ok'?'text-red-600 font-semibold':''}">${o.sla}</td><td class="px-3">${badge(o.status,o.status==='delivered'?'ok':o.status==='pending'?'pending':'warning')}</td><td class="px-3">${o.status==='pending'?`<button onclick="processOrder('${o.id}')" class="text-xs text-zzp-600 hover:underline">Xử lý</button>`:''}</td></tr>`).join('')))}</div>`;
+    ${layoutPrdBadge('orders')}
+    ${card('Order Center — SLA Board', renderOrderSlaBoard())}</div>`;
 };
 
 PAGES.inventory = () => {
   return `<div>${pageHeader('Vận hành','Inventory Monitor & Stock Alert','Quản lý tồn kho, tốc độ bán và cảnh báo thiếu hàng')}
-    ${card('Inventory Status', tableWrap(['Sản phẩm','Tồn kho','Bán/ngày','Ngày còn lại','Cảnh báo'],
-      ZZP_DATA.products.map(p => { const daily = Math.round(p.sold30d/30); const days = daily ? Math.round(p.stock/daily) : 999;
-        return `<tr class="border-b border-slate-50"><td class="py-3 px-3"><div class="flex items-center gap-2">${productThumb(p,14)} ${p.name}</div></td><td class="px-3 ${p.stock<100?'text-red-600 font-bold':''}">${p.stock}</td><td class="px-3">${daily}</td><td class="px-3 ${days<7?'text-red-600 font-bold':''}">${days} ngày</td><td class="px-3">${days<7?badge('Thiếu hàng','critical'):badge('OK','ok')}</td></tr>`; }).join('')))}
-    <div class="mt-4 p-4 bg-red-50 border border-red-200 rounded-xl flex gap-3"><span class="shrink-0 mt-0.5">${iconBox('triangle-alert', 18, 'bg-red-100 text-red-600')}</span><div><p class="font-semibold text-red-800">Cảnh báo: Mặt nạ Collagen (P003)</p><p class="text-sm text-red-700 mt-1">Chỉ còn 45 sp — hết hàng dự kiến trong 2 ngày. <button onclick="runAutomationFlow('FLOW_STOCK')" class="underline font-medium inline-flex items-center gap-1">${icon('play', 12)} Chạy flow nhập hàng</button></p></div></div></div>`;
+    ${layoutPrdBadge('inventory')}
+    ${card('Stock Gauge Monitor', renderInventoryGaugeCards())}
+    <div class="mt-4 p-4 bg-red-50 border border-red-200 rounded-xl flex gap-3"><span class="shrink-0 mt-0.5">${iconBox('triangle-alert', 18, 'bg-red-100 text-red-600')}</span><div><p class="font-semibold text-red-800">Cảnh báo: Mặt nạ Collagen (P003)</p><p class="text-sm text-red-700 mt-1">Chỉ còn 45 sp — hết hàng dự kiến trong 2 ngày. <button onclick="runAutomationFlow('FLOW_STOCK')" class="underline font-medium inline-flex items-center gap-1">${icon('play', 12)} Chạy quy trình nhập hàng</button></p></div></div></div>`;
 };
 
 PAGES.returns = () => {
@@ -241,8 +219,8 @@ PAGES.returns = () => {
       ${statCard('Thất thoát tháng', fmt(876000), '3 cases')}
       ${statCard('Đang xử lý', ZZP_DATA.returns.filter(r=>r.status==='pending_review').length)}
     </div>
-    ${card('Returns & Cancellations', tableWrap(['Mã','Đơn hàng','Loại','Lý do','Số tiền','Trạng thái'],
-      ZZP_DATA.returns.map(r => `<tr class="border-b border-slate-50"><td class="py-3 px-3">${r.id}</td><td class="px-3">${r.orderId}</td><td class="px-3">${r.type==='return'?'Hoàn hàng':'Hủy đơn'}</td><td class="px-3 text-sm">${r.reason}</td><td class="px-3">${fmtCurrency(r.amount)}</td><td class="px-3">${badge(r.status,r.status==='refunded'?'ok':'pending')}</td></tr>`).join('')))}</div>`;
+    ${layoutPrdBadge('returns')}
+    ${card('Return & Cancellation Cases', renderReturnsCaseTimeline())}</div>`;
 };
 
 PAGES.affiliate = () => {
@@ -254,35 +232,45 @@ PAGES.affiliate = () => {
       ${statCard('ROI TB', '3.6x')}
       ${statCard('Commission/tháng', fmt(ZZP_DATA.costs.commission))}
     </div>
-    ${card('Affiliate Campaigns (SAM)', tableWrap(['Chiến dịch','Loại','Ngân sách','Chi tiêu','GMV','ROI','Trạng thái'],
-      ZZP_DATA.campaigns.filter(c=>c.type==='affiliate'||c.type==='promotion').map(c => `<tr class="border-b border-slate-50"><td class="py-3 px-3">${c.name}</td><td class="px-3">${c.type}</td><td class="px-3">${fmt(c.budget)}</td><td class="px-3">${fmt(c.spent)}</td><td class="px-3 font-semibold">${fmt(c.gmv)}</td><td class="px-3">${(c.gmv/c.spent).toFixed(1)}x</td><td class="px-3">${badge(c.status,'active')}</td></tr>`).join('')))}
-    <div class="mt-6">${card('Revenue by Affiliate Source', '<div class="chart-box-sm"><canvas id="chart-affiliate"></canvas></div>')}</div></div>`;
+    ${layoutPrdBadge('affiliate')}
+    ${renderAffiliateSamFunnel()}
+    ${chartGrid([
+      ['GMV theo KOC', 'chart-affiliate', 'md'],
+      ['Phân bổ tier KOC', 'chart-aff-tier', 'sm']
+    ])}
+    <div class="grid lg:grid-cols-2 gap-6 mt-6">
+      ${card('Chiến dịch Affiliate', `
+        <div class="space-y-3">${ZZP_DATA.campaigns.filter(c=>c.type==='affiliate'||c.type==='promotion').map(c => `
+          <button type="button" onclick="openDetail('campaign','${c.id}')" class="w-full text-left p-3 rounded-xl border border-slate-200 hover:border-rose-300 flex justify-between items-center gap-3">
+            <div><p class="font-medium text-sm">${c.name}</p><p class="text-xs text-slate-500">${fmt(c.spent)} / ${fmt(c.budget)}</p></div>
+            <div class="text-right"><p class="font-bold text-green-600">${(c.gmv/c.spent).toFixed(1)}x</p><p class="text-xs">${fmt(c.gmv)} GMV</p></div>
+          </button>`).join('')}</div>`)}
+    </div></div>`;
 };
 
 PAGES.koc = () => {
   return `<div>${pageHeader('Vận hành','KOC CRM & Lifecycle Tracking','Quản lý vòng đời KOC từ tuyển chọn, gửi mẫu đến tạo doanh thu')}
-    ${card('KOC Pipeline', tableWrap(['Creator','Tier','Followers','Lifecycle','GMV 30d','ROI','Score',''],
-      ZZP_DATA.kocs.map(k => `<tr class="border-b border-slate-50 hover:bg-slate-50"><td class="py-3 px-3 font-medium"><button onclick="openDetail('koc','${k.id}')" class="hover:text-zzp-600 hover:underline">${k.name}</button></td><td class="px-3">${k.tier}</td><td class="px-3">${fmt(k.followers)}</td><td class="px-3">${badge(k.lifecycle,k.lifecycle==='revenue'?'ok':'info')}</td><td class="px-3">${fmt(k.gmv30d)}</td><td class="px-3">${k.roi?k.roi+'x':'-'}</td><td class="px-3"><span class="font-bold ${k.score>=80?'text-green-600':k.score>=50?'text-amber-600':'text-red-600'}">${k.score}</span></td><td class="px-3"><button onclick="navigate('creator-analytics')" class="text-xs text-zzp-600 hover:underline">Scorecard</button></td></tr>`).join('')))}</div>`;
+    ${layoutPrdBadge('koc')}
+    ${card('KOC Lifecycle Pipeline', renderKocCrmPipeline())}
+    <p class="text-xs text-slate-500 mt-4 text-center">Phân tích chi tiết → <button type="button" onclick="navigate('creator-analytics')" class="text-zzp-600 hover:underline">KOC Scorecard</button></p></div>`;
 };
 
 PAGES.agency = () => {
   return `<div>${pageHeader('Vận hành','Agency Management & ROI','Theo dõi hiệu quả Agency và chi phí hợp tác')}
-    ${card('Agency Performance', tableWrap(['Agency','KOC','Phí/tháng','GMV 30d','ROI','Trạng thái'],
-      ZZP_DATA.agencies.map(a => `<tr class="border-b border-slate-50"><td class="py-3 px-3 font-medium">${a.name}</td><td class="px-3">${a.kocs}</td><td class="px-3">${fmt(a.fee)}</td><td class="px-3">${fmt(a.gmv30d)}</td><td class="px-3">${a.roi}x</td><td class="px-3">${badge(a.status,a.status)}</td></tr>`).join('')))}</div>`;
+    ${layoutPrdBadge('agency')}
+    ${renderAgencyPortfolioCards()}</div>`;
 };
 
 PAGES.samples = () => {
   return `<div>${pageHeader('Vận hành','Sample Tracking & Sample ROI','Quản lý gửi mẫu và đánh giá hiệu quả đầu tư mẫu')}
-    ${card('Sample Pipeline', tableWrap(['Mã','KOC','Sản phẩm','Ngày gửi','Chi phí','Doanh thu','ROI','Trạng thái'],
-      ZZP_DATA.samples.map(s => { const koc = ZZP_DATA.kocs.find(k=>k.id===s.koc); const prod = getProduct(s.product);
-        return `<tr class="border-b border-slate-50"><td class="py-3 px-3">${s.id}</td><td class="px-3">${koc?.name}</td><td class="px-3">${prod?.name}</td><td class="px-3">${s.sentDate}</td><td class="px-3">${fmtCurrency(s.cost)}</td><td class="px-3">${fmt(s.revenue)}</td><td class="px-3 font-semibold ${s.roi>10?'text-green-600':s.roi>0?'text-amber-600':'text-red-600'}">${s.roi?s.roi+'x':'-'}</td><td class="px-3">${badge(s.status,s.status==='converted'?'ok':s.status==='pending'?'pending':'critical')}</td></tr>`; }).join('')))}</div>`;
+    ${layoutPrdBadge('samples')}
+    ${renderSampleRoiPipeline()}</div>`;
 };
 
 PAGES.content = () => {
   return `<div>${pageHeader('Vận hành','Content Calendar & Task Manager','Quản lý kế hoạch nội dung và vòng đời video Affiliate')}
-    ${card('Content Pipeline', tableWrap(['Nội dung','KOC','Loại','Views','Đơn','GMV','CTR','Trạng thái'],
-      ZZP_DATA.content.map(v => { const koc = ZZP_DATA.kocs.find(k=>k.id===v.koc);
-        return `<tr class="border-b border-slate-50"><td class="py-3 px-3"><p class="font-medium text-sm">${v.title}</p><p class="text-xs text-slate-500">${v.published}</p></td><td class="px-3">${koc?.name}</td><td class="px-3">${v.type}</td><td class="px-3">${fmt(v.views)}</td><td class="px-3">${v.orders}</td><td class="px-3">${fmt(v.gmv)}</td><td class="px-3">${v.ctr?v.ctr+'%':'-'}</td><td class="px-3">${badge(v.status,v.status)}</td></tr>`; }).join('')))}</div>`;
+    ${layoutPrdBadge('content')}
+    ${card('Content Operations', renderContentCalendar())}</div>`;
 };
 
 PAGES.livestream = () => {
@@ -290,7 +278,7 @@ PAGES.livestream = () => {
     ${ZZP_DATA.liveSessions.map(l => { const koc = ZZP_DATA.kocs.find(k=>k.id===l.host);
       return card(`${l.title}`, `
         <div class="grid lg:grid-cols-2 gap-4">
-          <div><p class="text-sm text-slate-500">Host: ${koc?.name} · ${l.date} · ${l.duration} phút</p>
+          <div><p class="text-sm text-slate-500">Host: <button type="button" onclick="openDetail('koc','${l.host}')" class="text-zzp-600 hover:underline font-medium">${koc?.name}</button> · ${l.date} · ${l.duration} phút</p>
           <p class="mt-2">Live Checklist: <span class="font-semibold">${l.checklistDone}/${l.checklistTotal}</span></p>
           <div class="mt-2 h-2 bg-slate-100 rounded-full"><div class="h-2 bg-zzp-500 rounded-full" style="width:${l.checklistDone/l.checklistTotal*100}%"></div></div>
           <div class="mt-4 space-y-1 text-sm">${['Script & sản phẩm','Flash sale setup','Voucher live-only','Pin sản phẩm Hero','Test stream','Backup internet','Moderator','Post-live report'].map((item,i)=>`<label class="flex gap-2"><input type="checkbox" ${i<l.checklistDone?'checked':''} disabled class="rounded"> ${item}</label>`).join('')}</div></div>
@@ -306,14 +294,16 @@ PAGES.campaigns = () => {
 
 PAGES.vouchers = () => {
   return `<div>${pageHeader('Vận hành','Voucher Guardrail & Performance','Kiểm soát chi phí voucher và hiệu quả sử dụng')}
+    ${chartGrid([['% sử dụng voucher', 'chart-voucher-usage', 'sm'], ['Chi phí voucher', 'chart-voucher-cost', 'sm']])}
     ${card('Voucher Management', tableWrap(['Mã','Giảm giá','Đã dùng','Giới hạn','Chi phí','GMV','Guardrail',''],
-      ZZP_DATA.vouchers.map(v => `<tr class="border-b border-slate-50"><td class="py-3 px-3 font-mono font-medium">${v.code}</td><td class="px-3">${v.discount?(v.discount+'%'):fmtCurrency(v.maxDiscount)}</td><td class="px-3">${v.used}/${v.limit}</td><td class="px-3"><div class="w-16 h-2 bg-slate-100 rounded-full"><div class="h-2 rounded-full ${v.guardrail==='warning'?'bg-amber-500':'bg-green-500'}" style="width:${v.used/v.limit*100}%"></div></div></td><td class="px-3">${fmt(v.cost)}</td><td class="px-3">${fmt(v.gmv)}</td><td class="px-3">${badge(v.guardrail==='warning'?'Cảnh báo':'OK',v.guardrail==='warning'?'warning':'ok')}</td><td class="px-3">${v.guardrail==='warning'?`<button onclick="showToast('Đã giảm mức voucher ${v.code}')" class="text-xs text-amber-600 hover:underline">Điều chỉnh</button>`:''}</td></tr>`).join('')))}</div>`;
+      ZZP_DATA.vouchers.map(v => `<tr ${rowClick('voucher', v.id)}><td class="py-3 px-3 font-mono font-medium text-zzp-700">${v.code}</td><td class="px-3">${v.discount?(v.discount+'%'):fmtCurrency(v.maxDiscount)}</td><td class="px-3">${v.used}/${v.limit}</td><td class="px-3"><div class="w-16 h-2 bg-slate-100 rounded-full"><div class="h-2 rounded-full ${v.guardrail==='warning'?'bg-amber-500':'bg-green-500'}" style="width:${v.used/v.limit*100}%"></div></div></td><td class="px-3">${fmt(v.cost)}</td><td class="px-3">${fmt(v.gmv)}</td><td class="px-3">${badge(v.guardrail==='warning'?'Cảnh báo':'OK',v.guardrail==='warning'?'warning':'ok')}</td><td class="px-3" onclick="event.stopPropagation()">${v.guardrail==='warning'?`<button onclick="runAutomationFlow('FLOW_ADS')" class="text-xs text-amber-600 hover:underline">Giải quyết</button>`:''}</td></tr>`).join('')))}</div>`;
 };
 
 PAGES.ads = () => {
   return `<div>${pageHeader('Vận hành','Spark Ads & Campaign Setup','Kết nối dữ liệu quảng cáo với doanh thu và Affiliate')}
+    ${chartGrid([['ROAS theo chiến dịch', 'chart-ads-roas', 'sm'], ['Chi tiêu Ads', 'chart-ads-spend', 'sm']])}
     ${card('Ads Campaigns', tableWrap(['Chiến dịch','Loại','Budget','Spent','ROAS','Orders','Impressions','Trạng thái',''],
-      ZZP_DATA.ads.map(a => `<tr class="border-b border-slate-50"><td class="py-3 px-3 font-medium text-sm">${a.name}</td><td class="px-3">${a.type}</td><td class="px-3">${fmt(a.budget)}</td><td class="px-3">${fmt(a.spent)}</td><td class="px-3 font-bold ${a.roas>=2?'text-green-600':a.roas>0?'text-red-600':''}">${a.roas?a.roas+'x':'-'}</td><td class="px-3">${a.orders}</td><td class="px-3">${fmt(a.impressions)}</td><td class="px-3">${badge(a.status,a.status)}</td><td class="px-3">${a.status==='active'&&a.roas<2?`<button onclick="pauseAd('${a.id}')" class="text-xs text-red-600 hover:underline">Pause</button>`:''}</td></tr>`).join('')))}
+      ZZP_DATA.ads.map(a => `<tr ${rowClick('ad', a.id)}><td class="py-3 px-3 font-medium text-sm text-zzp-700">${a.name}</td><td class="px-3">${a.type}</td><td class="px-3">${fmt(a.budget)}</td><td class="px-3">${fmt(a.spent)}</td><td class="px-3 font-bold ${a.roas>=2?'text-green-600':a.roas>0?'text-red-600':''}">${a.roas?a.roas+'x':'-'}</td><td class="px-3">${a.orders}</td><td class="px-3">${fmt(a.impressions)}</td><td class="px-3">${badge(a.status,a.status)}</td><td class="px-3" onclick="event.stopPropagation()">${a.status==='active'&&a.roas<2?`<button onclick="runAutomationFlow('FLOW_ADS')" class="text-xs text-red-600 hover:underline">Giải quyết</button>`:`<button onclick="openDetail('ad','${a.id}')" class="text-xs text-zzp-600 hover:underline">Chi tiết</button>`}</td></tr>`).join('')))}
     <div class="mt-6">${card('Spark Ads Wizard — Gợi ý', `
       <div class="p-4 bg-green-50 rounded-xl border border-green-100"><p class="font-medium flex items-center gap-2">${icon('trending-up',16,'text-green-600')} Scale: Spark Ads Serum VC (ROAS 3.8x)</p><p class="text-sm text-slate-600 mt-1">Tăng budget 30% · Gắn video V001 · Target lookalike K001</p><button onclick="showToast('Đã tạo action: Tăng budget AD001')" class="mt-2 text-sm text-green-700 hover:underline">Thực hiện</button></div>
       <div class="p-4 bg-red-50 rounded-xl border border-red-100 mt-3"><p class="font-medium flex items-center gap-2">${icon('pause-circle',16,'text-red-600')} Pause: Product Ads Mặt nạ (ROAS 1.2x)</p><p class="text-sm text-slate-600 mt-1">Chuyển ngân sách sang Affiliate K002</p><button onclick="pauseAd('AD002')" class="mt-2 text-sm text-red-700 hover:underline">Pause ngay</button></div>`)}</div></div>`;
@@ -364,6 +354,7 @@ PAGES.profit = () => {
 PAGES.costs = () => {
   const c = ZZP_DATA.costs;
   return `<div>${pageHeader('Phân tích','Cost Intelligence','Theo dõi và phân tích toàn bộ cấu trúc chi phí')}
+    ${chartGrid([['Cấu trúc chi phí', 'chart-costs-detail', 'md'], ['% chi phí / GMV', 'chart-costs-pct', 'sm']])}
     <div class="grid grid-cols-4 gap-4 mb-6">
       ${statCard('COGS', fmt(c.cogs))}${statCard('Commission', fmt(c.commission))}${statCard('Ads', fmt(c.ads))}${statCard('Voucher', fmt(c.voucher))}
     </div>
@@ -374,6 +365,7 @@ PAGES.costs = () => {
 
 PAGES['product-analytics'] = () => {
   return `<div>${pageHeader('Phân tích','Product Intelligence & SKU Ranking','Đánh giá hiệu suất và khả năng tăng trưởng từng sản phẩm')}
+    ${chartGrid([['GMV theo SKU', 'chart-sku-gmv', 'md'], ['Margin top SKU', 'chart-product-margin', 'sm']])}
     ${card('SKU Ranking', tableWrap(['#','Sản phẩm','GMV 30d','Units','Margin','Velocity','Score','Action'],
       [...ZZP_DATA.products].sort((a,b)=>(b.sold30d*b.price)-(a.sold30d*a.price)).map((p,i) => {
         const gmv = p.sold30d * p.price; const margin = ((p.price-p.cost)/p.price*100).toFixed(0);
@@ -389,12 +381,14 @@ PAGES['affiliate-analytics'] = () => {
 
 PAGES['creator-analytics'] = () => {
   return `<div>${pageHeader('Phân tích','KOC Scorecard & Creator Ranking','Xếp hạng KOC dựa trên GMV, ROI và CVR')}
-    ${card('Creator Ranking', tableWrap(['#','Creator','Tier','GMV','ROI','CVR','Videos','Score','Tier Rec.'],
-      [...ZZP_DATA.kocs].sort((a,b)=>b.score-a.score).map((k,i) => `<tr class="border-b border-slate-50"><td class="py-3 px-3 font-bold">${i+1}</td><td class="px-3 font-medium">${k.name}</td><td class="px-3">${k.tier}</td><td class="px-3">${fmt(k.gmv30d)}</td><td class="px-3">${k.roi?k.roi+'x':'-'}</td><td class="px-3">${k.cvr?k.cvr+'%':'-'}</td><td class="px-3">${k.videos}</td><td class="px-3"><span class="text-lg font-bold ${k.score>=80?'text-green-600':'text-amber-600'}">${k.score}</span></td><td class="px-3">${k.score>=90?'Macro+':k.score>=70?'Giữ Mid':'Review'}</td></tr>`).join('')))}</div>`;
+    ${layoutPrdBadge('creator-analytics')}
+    ${card('Creator Scorecards', renderCreatorScorecardGrid())}
+    <p class="text-xs text-slate-500 mt-4 text-center">Quản lý pipeline → <button type="button" onclick="navigate('koc')" class="text-zzp-600 hover:underline">KOC CRM</button></p></div>`;
 };
 
 PAGES['content-analytics'] = () => {
   return `<div>${pageHeader('Phân tích','Content Intelligence & Pattern Analysis','Xác định nội dung bán hàng hiệu quả và mô hình thành công')}
+    ${chartGrid([['CVR theo video', 'chart-content-cvr', 'sm'], ['Views theo video', 'chart-content-views', 'sm']])}
     ${card('Video Performance', tableWrap(['Video','KOC','Views','Orders','GMV','CTR','CVR','Pattern'],
       ZZP_DATA.content.filter(v=>v.status==='published').map(v => { const koc = ZZP_DATA.kocs.find(k=>k.id===v.koc); const cvr = v.views ? (v.orders/v.views*100).toFixed(2) : 0;
         return `<tr class="border-b border-slate-50"><td class="py-3 px-3 text-sm font-medium">${v.title}</td><td class="px-3">${koc?.name}</td><td class="px-3">${fmt(v.views)}</td><td class="px-3">${v.orders}</td><td class="px-3">${fmt(v.gmv)}</td><td class="px-3">${v.ctr}%</td><td class="px-3">${cvr}%</td><td class="px-3">${v.type==='livestream'?'Live Sale':v.title.includes('Routine')?'Routine Format':'Review'}</td></tr>`; }).join('')))}
@@ -408,6 +402,7 @@ PAGES['content-analytics'] = () => {
 
 PAGES['live-analytics'] = () => {
   return `<div>${pageHeader('Phân tích','Livestream Analytics & Session Performance','Phân tích hiệu quả từng phiên livestream')}
+    ${chartGrid([['GMV live session', 'chart-live-gmv', 'sm'], ['Đơn live', 'chart-live-orders', 'sm']])}
     ${card('Live Session Performance', tableWrap(['Session','Host','Views','Duration','Orders','GMV','GMV/giờ','Conversion'],
       ZZP_DATA.content.filter(v=>v.type==='livestream').map(v => { const koc = ZZP_DATA.kocs.find(k=>k.id===v.koc);
         return `<tr class="border-b border-slate-50"><td class="py-3 px-3">${v.title}</td><td class="px-3">${koc?.name}</td><td class="px-3">${fmt(v.views)}</td><td class="px-3">120 phút</td><td class="px-3">${v.orders}</td><td class="px-3 font-semibold">${fmt(v.gmv)}</td><td class="px-3">${fmt(v.gmv/2)}</td><td class="px-3">${v.ctr}%</td></tr>`; }).join('')))}</div>`;
@@ -423,29 +418,34 @@ PAGES['customer-analytics'] = () => {
 PAGES.team = () => {
   return `<div>${pageHeader('Phân tích','Team Management & RBAC','Quản lý nhân sự, phân quyền và quy trình làm việc')}
     ${card('Team Members', tableWrap(['Thành viên','Vai trò','Phòng ban','Trạng thái','Quyền'],
-      ZZP_DATA.team.map(u => `<tr class="border-b border-slate-50"><td class="py-3 px-3 font-medium">${u.name}</td><td class="px-3">${u.role}</td><td class="px-3">${u.dept}</td><td class="px-3">${badge(u.status,'active')}</td><td class="px-3 text-xs">${u.role==='Owner'?'Full Access':u.role.includes('Manager')?'Dept Admin':'View + Edit'}</td></tr>`).join('')))}
-    ${card('Workflow Center', `
+      ZZP_DATA.team.map(u => `<tr class="border-b border-slate-50"><td class="py-3 px-3 font-medium">${u.name}</td><td class="px-3">${u.role}</td><td class="px-3">${u.dept}</td><td class="px-3">${badge(u.status,'active')}</td><td class="px-3 text-xs">${u.role==='Chủ shop'?'Toàn quyền':u.role.includes('Quản lý')?'Quản trị phòng ban':'Xem + Sửa'}</td></tr>`).join('')))}
+    ${card('Trung tâm quy trình', `
       <div class="space-y-3">
-        <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg"><span class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-sm">1</span><div><p class="text-sm font-medium">Đơn hàng > 500K → Manager approve</p><p class="text-xs text-slate-500">Auto-assign Trần Văn Hùng</p></div></div>
-        <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg"><span class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-sm">2</span><div><p class="text-sm font-medium">Sample request → Affiliate Manager approve</p><p class="text-xs text-slate-500">Auto nếu KOC score > 80</p></div></div>
-        <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg"><span class="w-8 h-8 rounded-full bg-red-100 text-red-700 flex items-center justify-center text-sm">3</span><div><p class="text-sm font-medium">Pause Ads → Owner approve nếu budget > 10M</p><p class="text-xs text-slate-500">Pending: AQ001</p></div></div>
+        <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg"><span class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-sm">1</span><div><p class="text-sm font-medium">Đơn hàng > 500K → quản lý duyệt</p><p class="text-xs text-slate-500">Tự giao Trần Văn Hùng</p></div></div>
+        <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg"><span class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-sm">2</span><div><p class="text-sm font-medium">Yêu cầu gửi mẫu → quản lý tiếp thị liên kết duyệt</p><p class="text-xs text-slate-500">Tự động nếu điểm KOC > 80</p></div></div>
+        <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg"><span class="w-8 h-8 rounded-full bg-red-100 text-red-700 flex items-center justify-center text-sm">3</span><div><p class="text-sm font-medium">Tạm dừng quảng cáo → chủ shop duyệt nếu ngân sách > 10M</p><p class="text-xs text-slate-500">Chờ duyệt: AQ001</p></div></div>
       </div>`)}</div>`;
 };
 
 /* ===== PHASE 4 ===== */
 PAGES['growth-assistant'] = () => {
-  return `<div>${pageHeader('Tối ưu','Growth Assistant — AI Insight Engine','Trợ lý AI giải thích dữ liệu và đề xuất hành động ưu tiên')}
-      ${ZZP_DATA.aiInsights.map(i => card(`#${i.priority} · ${i.title} <span class="text-xs font-normal text-slate-400">Confidence ${i.confidence}%</span>`, `
+  return `<div>${pageHeader('Tối ưu','Trợ lý AI tăng trưởng','Phân tích dữ liệu và đề xuất hành động ưu tiên cho shop')}
+    ${chartGrid([['Độ tin cậy AI', 'chart-insight-confidence', 'sm'], ['Mức ưu tiên insight', 'chart-insight-priority', 'sm']])}
+    ${ZZP_DATA.aiInsights.map(i => card(`<button type="button" onclick="openDetail('insight','${i.id}')" class="hover:text-zzp-600 text-left">#${i.priority} · ${i.title}</button> <span class="text-xs font-normal text-slate-400">Độ tin cậy ${i.confidence}% · bấm để xem chi tiết</span>`, `
       <p class="text-sm text-slate-600 mb-4">${i.desc}</p>
-      <p class="text-sm font-semibold text-green-600 mb-3">Impact dự kiến: ${i.impact}</p>
+      <p class="text-sm font-semibold text-green-600 mb-3">Tác động dự kiến: ${i.impact}</p>
       <p class="text-xs font-semibold text-slate-500 mb-2">Hành động đề xuất:</p>
       <div class="space-y-2">${i.actions.map(a => `<button onclick="createAction('${a.replace(/'/g,"\\'")}')" class="block w-full text-left px-3 py-2 bg-zzp-50 hover:bg-zzp-100 rounded-lg text-sm text-zzp-800 transition-colors">→ ${a}</button>`).join('')}</div>
-      <button onclick="runAutomationFlow('${i.priority===3?'FLOW_STOCK':i.priority===2?'FLOW_ADS':i.priority===1?'FLOW_AI_ACTION':'FLOW_OPTIMIZE'}')" class="mt-4 w-full py-2 border border-zzp-300 text-zzp-700 rounded-lg text-sm hover:bg-zzp-50 inline-flex items-center justify-center gap-2">${icon('play',14)} Chạy flow tự động</button>
+      <div class="mt-4 flex gap-2">
+        <button type="button" onclick="openDetail('insight','${i.id}')" class="flex-1 py-2 border border-slate-200 rounded-lg text-sm hover:bg-slate-50">Chi tiết</button>
+        <button onclick="runAutomationFlow('${i.priority===3?'FLOW_STOCK':i.priority===2?'FLOW_ADS':i.priority===1?'FLOW_AI_ACTION':'FLOW_OPTIMIZE'}')" class="flex-1 py-2 bg-zzp-600 text-white rounded-lg text-sm hover:bg-zzp-700 inline-flex items-center justify-center gap-2">${icon('play',14)} Giải quyết ngay</button>
+      </div>
     `)).join('')}</div>`;
 };
 
 PAGES.alerts = () => {
   return `<div>${pageHeader('Tối ưu','Smart Alerts','Chủ động phát hiện rủi ro và gửi cảnh báo theo thời gian thực')}
+    ${chartGrid([['Phân bổ severity', 'chart-alert-severity', 'sm'], ['Loại cảnh báo', 'chart-alert-type', 'sm']])}
     <div class="grid grid-cols-4 gap-4 mb-6">
       ${statCard('Critical', ZZP_DATA.alerts.filter(a=>a.severity==='critical'&&!a.read).length, '', 'red')}
       ${statCard('Warning', ZZP_DATA.alerts.filter(a=>a.severity==='warning'&&!a.read).length, '', 'amber')}
@@ -453,20 +453,30 @@ PAGES.alerts = () => {
       ${statCard('Đã đọc', ZZP_DATA.alerts.filter(a=>a.read).length)}
     </div>
     ${card('Active Alerts', ZZP_DATA.alerts.map(a => `
-      <div class="p-4 rounded-xl border mb-3 ${a.read?'border-slate-100 opacity-60':a.severity==='critical'?'border-red-200 bg-red-50':'border-amber-200 bg-amber-50'}">
-        <div class="flex items-start justify-between"><div><div class="flex items-center gap-2">${badge(a.type,a.severity)} ${!a.read?badge('Mới','new'):''}<p class="font-medium">${a.title}</p></div><p class="text-sm text-slate-600 mt-1">${a.desc}</p></div></div>
-        <div class="flex gap-2 mt-3"><button onclick="handleAlert('${a.id}')" class="px-3 py-1.5 bg-zzp-600 text-white rounded-lg text-xs">${a.action}</button><button onclick="markAlertRead('${a.id}')" class="px-3 py-1.5 border border-slate-200 rounded-lg text-xs">Đánh dấu đã đọc</button></div>
+      <div class="p-4 rounded-xl border mb-3 cursor-pointer hover:shadow-md transition-all ${a.read?'border-slate-100 opacity-60':'border-slate-200 bg-white'}" onclick="openDetail('alert','${a.id}')">
+        <div class="flex items-start justify-between gap-3">
+          <div class="flex-1"><div class="flex items-center gap-2 flex-wrap">${badge(a.type,a.severity)} ${!a.read?badge('Mới','new'):''}</div>
+          <p class="font-medium mt-1">${a.title}</p><p class="text-sm text-slate-600 mt-1">${a.desc}</p></div>
+          ${icon('chevron-right', 18, 'text-slate-400 shrink-0')}
+        </div>
+        <div class="flex gap-2 mt-3" onclick="event.stopPropagation()">
+          <button type="button" onclick="openDetail('alert','${a.id}')" class="px-3 py-1.5 border border-zzp-200 text-zzp-700 rounded-lg text-xs">Chi tiết</button>
+          <button type="button" onclick="runAutomationFlow('${alertToFlow(a.id) || 'FLOW_OPTIMIZE'}')" class="px-3 py-1.5 bg-zzp-600 text-white rounded-lg text-xs inline-flex items-center gap-1">${icon('play',12)} Giải quyết</button>
+        </div>
       </div>`).join(''))}</div>`;
 };
 
 PAGES.opportunities = () => {
-  return `<div>${pageHeader('Tối ưu','Opportunity Engine','Phát hiện cơ hội tăng trưởng từ sản phẩm, KOC, nội dung và chiến dịch')}
+  return `<div>${pageHeader('Tối ưu','Cơ hội tăng trưởng','Phát hiện cơ hội từ sản phẩm, KOC, nội dung và chiến dịch')}
     <div class="grid lg:grid-cols-2 gap-4">${ZZP_DATA.opportunities.map(o => `
-      <div class="bg-white rounded-xl border border-slate-200 p-5 hover:border-zzp-300 transition-colors">
+      <div class="bg-white rounded-xl border border-slate-200 p-5 hover:border-zzp-300 hover:shadow-md transition-all cursor-pointer" onclick="navigate('growth-assistant')">
         <div class="flex justify-between items-start"><span class="text-xs px-2 py-0.5 rounded-full bg-zzp-100 text-zzp-700">${o.type}</span>${badge(o.status,o.status)}</div>
         <p class="font-semibold mt-3">${o.title}</p><p class="text-sm text-slate-500 mt-1">${o.desc}</p>
-        <p class="text-sm font-semibold text-green-600 mt-3">Potential: ${o.potential}</p>
-        <button onclick="navigate('growth-assistant')" class="mt-3 text-sm text-zzp-600 hover:underline">Xem AI recommendation →</button>
+        <p class="text-sm font-semibold text-green-600 mt-3">Tiềm năng: ${o.potential}</p>
+        <div class="mt-3 flex gap-2" onclick="event.stopPropagation()">
+          <button type="button" onclick="navigate('growth-assistant')" class="text-sm text-zzp-600 hover:underline">Xem AI recommendation →</button>
+          <button type="button" onclick="runAutomationFlow('FLOW_AI_ACTION')" class="text-sm text-white bg-zzp-600 px-3 py-1 rounded-lg">${icon('play',12)} Giải quyết</button>
+        </div>
       </div>`).join('')}</div></div>`;
 };
 
@@ -475,12 +485,13 @@ PAGES.forecast = () => {
     ${card('GMV Forecast — 7 ngày tới', '<div class="chart-box"><canvas id="chart-forecast"></canvas></div>')}
     <div class="mt-6">${card('Inventory Forecast', tableWrap(['Sản phẩm','Tồn kho','Ngày còn','Dự báo','Khuyến nghị'],
       ZZP_DATA.forecasts.inventory.map(f => { const p = getProduct(f.product);
-        return `<tr class="border-b border-slate-50"><td class="py-3 px-3">${p?.name}</td><td class="px-3">${p?.stock}</td><td class="px-3 ${f.daysLeft<7?'text-red-600 font-bold':''}">${f.daysLeft} ngày</td><td class="px-3">${f.daysLeft<7?'Stockout risk':'Stable'}</td><td class="px-3">${f.recommendation}</td></tr>`; }).join('')))}</div></div>`;
+        return `<tr ${rowClick('product', f.product)}><td class="py-3 px-3 font-medium">${p?.name}</td><td class="px-3">${p?.stock}</td><td class="px-3 ${f.daysLeft<7?'text-red-600 font-bold':''}">${f.daysLeft} ngày</td><td class="px-3">${f.daysLeft<7?'Stockout risk':'Stable'}</td><td class="px-3">${f.recommendation}</td></tr>`; }).join('')))}</div></div>`;
 };
 
 PAGES.benchmark = () => {
   const b = ZZP_DATA.benchmarks;
   return `<div>${pageHeader('Tối ưu','Market Intelligence & Benchmark','So sánh hiệu suất với thị trường và đối thủ')}
+    ${chartGrid([['Shop vs thị trường', 'chart-benchmark-market', 'md']], 1)}
     ${card('Industry Benchmark Comparison', tableWrap(['Chỉ số','Shop của bạn','Thị trường','Đánh giá'],
       [['GMV Growth', b.gmvGrowth.shop+'%', b.gmvGrowth.market+'%'],['Profit Margin', b.profitMargin.shop+'%', b.profitMargin.market+'%'],['Return Rate', b.returnRate.shop+'%', b.returnRate.market+'%'],['Affiliate Share', b.affiliateShare.shop+'%', b.affiliateShare.market+'%'],['Live Conversion', b.liveConversion.shop+'%', b.liveConversion.market+'%']].map(([k,s,m]) => {
         const better = parseFloat(s) <= parseFloat(m) && k.includes('Return') || parseFloat(s) >= parseFloat(m);
@@ -488,16 +499,17 @@ PAGES.benchmark = () => {
 };
 
 PAGES.actions = () => {
-  return `<div>${pageHeader('Tối ưu','Decision Center & Action Queue','Chuyển insight thành kế hoạch hành động cụ thể')}
-    ${card('Action Queue', tableWrap(['Hành động','Nguồn','Assignee','Priority','Trạng thái',''],
-      ZZP_DATA.actionQueue.map(a => `<tr class="border-b border-slate-50"><td class="py-3 px-3 font-medium">${a.title}</td><td class="px-3 text-xs">${a.source}</td><td class="px-3">${a.assignee}</td><td class="px-3">${badge(a.priority,a.priority==='critical'?'critical':a.priority==='high'?'warning':'info')}</td><td class="px-3">${badge(a.status,a.status)}</td><td class="px-3">${a.status==='pending'?`<button onclick="approveAction('${a.id}')" class="text-xs text-zzp-600 hover:underline">Approve</button>`:''}</td></tr>`).join('')))}</div>`;
+  return `<div>${pageHeader('Tối ưu','Trung tâm quyết định','Chuyển gợi ý thành kế hoạch hành động cụ thể')}
+    ${layoutPrdBadge('actions')}
+    ${card('Priority Action Board', renderActionPriorityBoard())}</div>`;
 };
 
 PAGES.automation = () => {
-  return `<div>${pageHeader('Tối ưu','Automation Engine & Rule Engine','Tự động hóa báo cáo, cảnh báo và quy trình vận hành')}
-    ${card('Automation Rules', ZZP_DATA.automationRules.map(r => `
+  return `<div>${pageHeader('Tối ưu','Quy tắc tự động','Tự động hóa báo cáo, cảnh báo và quy trình vận hành')}
+    ${chartGrid([['Lần chạy quy tắc', 'chart-rule-runs', 'sm'], ['Quy tắc bật/tắt', 'chart-rule-active', 'sm']])}
+    ${card('Quy tắc tự động', ZZP_DATA.automationRules.map(r => `
       <div class="flex items-center justify-between py-4 border-b border-slate-50">
-        <div><p class="font-medium">${r.name}</p><p class="text-xs text-slate-500 mt-1">Trigger: ${r.trigger} → ${r.action}</p><p class="text-xs text-slate-400">Đã chạy ${r.runs} lần</p></div>
+        <div><p class="font-medium">${r.name}</p><p class="text-xs text-slate-500 mt-1">Khi ${humanTrigger(r.trigger)} → ${r.action}</p><p class="text-xs text-slate-400">Đã chạy ${r.runs} lần</p></div>
         <label class="relative inline-flex items-center cursor-pointer"><input type="checkbox" ${r.active?'checked':''} onchange="toggleRule('${r.id}')" class="sr-only peer"><div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-zzp-600"></div></label>
       </div>`).join(''))}</div>`;
 };
@@ -516,7 +528,7 @@ PAGES.optimization = () => {
           <div class="p-3 border rounded-lg"><p class="font-medium text-sm">@skintips_daily — Match 87%</p><p class="text-xs text-slate-600">ROI 3.5x · Recommend: Tăng tier Mid→Macro</p></div>
           <div class="p-3 border rounded-lg"><p class="font-medium text-sm">@newcreator_test — Match 32%</p><p class="text-xs text-slate-600">Chưa tạo content · Recommend: Wait or cut</p></div>
         </div>`)}
-      ${card('Content Replication Engine', `
+      ${card('Nhân rộng nội dung thành công', `
         <p class="text-sm text-slate-600 mb-3">Phân tích video thành công và đề xuất nhân rộng:</p>
         <div class="p-3 bg-zzp-50 rounded-lg"><p class="font-medium">Pattern: "Routine 3 bước" (V001)</p><p class="text-xs mt-1">→ Tạo 3 video tương tự với K002, K005, K001</p><p class="text-xs text-green-600 mt-1">Dự kiến +18M GMV</p></div>`)}
       ${card('Campaign & Budget Optimizer', `
@@ -532,7 +544,7 @@ PAGES.optimization = () => {
           <p>• NEW50K: Giảm xuống 30K (CVR thấp)</p>
           <p>• Live-only voucher 15% cho Mega Live 6/6</p>
         </div>`)}
-      ${card('Customer Retention Engine', `
+      ${card('Giữ chân khách hàng', `
         <p class="text-sm text-slate-600">Win-back campaign cho 456 KH At Risk:</p>
         <div class="mt-3 p-3 bg-blue-50 rounded-lg text-sm"><p class="font-medium">Gửi voucher FREESHIP + Mini Kit 99K</p><p class="text-xs text-slate-500 mt-1">Dự kiến recover 12% · +8.5M GMV</p></div>`)}
     </div></div>`;
@@ -540,65 +552,67 @@ PAGES.optimization = () => {
 
 /* ===== SYSTEM ===== */
 PAGES.workflows = () => {
-  return `<div>${pageHeader('Tối ưu', 'Workflow Center', 'Trung tâm flow tự động liên kết modules — chạy demo từng flow', 'Workflow Engine · Approval Flow · Task Assignment · Automation')}
+  return `<div>${pageHeader('Tối ưu', 'Trung tâm quy trình', 'Các quy trình tự động giúp xử lý tình huống vận hành hàng ngày')}
     <div class="grid lg:grid-cols-3 gap-4 mb-6">
-      ${statCard('Tổng flows', AUTOMATION_FLOWS.length)}${statCard('Rules active', ZZP_DATA.automationRules.filter(r=>r.active).length)}${statCard('Đã chạy', ZZP_DATA.automationRules.reduce((s,r)=>s+r.runs,0) + ' lần')}
+      ${statCard('Quy trình', AUTOMATION_FLOWS.length)}${statCard('Quy tắc đang bật', ZZP_DATA.automationRules.filter(r=>r.active).length)}${statCard('Đã chạy', ZZP_DATA.automationRules.reduce((s,r)=>s+r.runs,0) + ' lần')}
     </div>
     <div class="space-y-4">${AUTOMATION_FLOWS.map(f => `
-      <div class="bg-white rounded-xl border border-slate-200 p-5">
+      <div class="bg-white rounded-xl border border-slate-200 p-5 hover:border-zzp-300 hover:shadow-sm transition-all cursor-pointer" onclick="openDetail('flow','${f.id}')">
         <div class="flex items-start justify-between gap-4">
           <div class="flex gap-3"><span class="flex shrink-0">${iconBox(FLOW_ICONS[f.id] || 'workflow', 22, 'bg-zzp-50 text-zzp-600')}</span>
             <div><p class="font-bold">${f.name}</p><p class="text-sm text-slate-500 mt-1">${f.desc}</p>
-              <p class="text-xs text-amber-600 mt-2 flex items-center gap-1">${icon('zap',12)} Trigger: ${f.trigger}</p>
-              <div class="flex flex-wrap gap-1 mt-2">${f.modules.map(m => `<button onclick="navigate('${m}')" class="text-[10px] px-2 py-0.5 bg-zzp-50 text-zzp-700 rounded-full hover:bg-zzp-100">${m}</button>`).join('')}</div>
+              <p class="text-xs text-amber-600 mt-2 flex items-center gap-1">${icon('zap',12)} ${humanTrigger(f.trigger)}</p>
+              <div class="flex flex-wrap gap-1 mt-2" onclick="event.stopPropagation()">${f.modules.map(m => `<button type="button" onclick="navigate('${m}')" class="text-[10px] px-2 py-0.5 bg-zzp-50 text-zzp-700 rounded-full hover:bg-zzp-100">${viPage(m)}</button>`).join('')}</div>
             </div>
           </div>
-          <button onclick="runAutomationFlow('${f.id}')" class="shrink-0 px-5 py-2.5 bg-zzp-600 text-white rounded-xl text-sm font-medium hover:bg-zzp-700 inline-flex items-center gap-2">${icon('play',14)} Chạy flow</button>
+          <div class="flex flex-col gap-2 shrink-0" onclick="event.stopPropagation()">
+            <button type="button" onclick="openDetail('flow','${f.id}')" class="px-3 py-2 border border-slate-200 rounded-lg text-xs">Chi tiết</button>
+            <button type="button" onclick="runAutomationFlow('${f.id}')" class="px-4 py-2 bg-zzp-600 text-white rounded-lg text-sm hover:bg-zzp-700 inline-flex items-center gap-1">${icon('play',14)} Chạy</button>
+          </div>
         </div>
-        <div class="mt-4 grid lg:grid-cols-${Math.min(f.steps.length, 6)} gap-2">
-          ${f.steps.map((s, i) => `<div class="p-2 bg-slate-50 rounded-lg text-center"><p class="text-[10px] text-zzp-600 font-bold">${i+1}</p><p class="text-xs mt-1 leading-tight">${s.label}</p><p class="text-[10px] text-slate-400">${s.module}</p></div>`).join('')}
+        <div class="mt-4 grid lg:grid-cols-${Math.min(f.steps.length, 6)} gap-2" onclick="event.stopPropagation()">
+          ${f.steps.map((s, i) => `<button type="button" onclick="navigate('${s.module}')" class="p-2 bg-slate-50 rounded-lg text-center hover:bg-zzp-50 hover:border-zzp-200 border border-transparent"><p class="text-[10px] text-zzp-600 font-bold">${i+1}</p><p class="text-xs mt-1 leading-tight">${s.label}</p><p class="text-[10px] text-slate-400">${viPage(s.module)}</p></button>`).join('')}
         </div>
       </div>`).join('')}
     </div></div>`;
 };
 
 PAGES.notifications = () => {
-  return `<div><h2 class="text-xl font-bold mb-4">Notification Center</h2>
-    ${card('In-App Alerts', ZZP_DATA.alerts.map(a => `<div class="py-3 border-b border-slate-50 flex gap-3">${alertDot(a.severity)}<div><p class="text-sm font-medium">${a.title}</p><p class="text-xs text-slate-500">${a.desc}</p></div></div>`).join(''))}
-    ${card('Notification Channels', `
-      <div class="space-y-3">${['In-App Alert','Email Alert','Zalo Alert','Webhook'].map(ch => `<label class="flex items-center justify-between p-3 bg-slate-50 rounded-lg"><span class="text-sm">${ch}</span><input type="checkbox" checked class="rounded text-zzp-600"></label>`).join('')}</div>`)}</div>`;
+  return `<div>${pageHeader('Hệ thống','Notification Center','Quản lý thông báo đa kênh cho shop')}
+    ${layoutPrdBadge('notifications')}
+    ${renderNotificationInbox()}</div>`;
 };
 
 PAGES.audit = () => {
-  return `<div><h2 class="text-xl font-bold mb-4">Audit & Governance</h2>
-    ${card('Activity Log', tableWrap(['Thời gian','User','Hành động','Module'],
+  return `<div>${pageHeader('Hệ thống','Audit & Governance','Theo dõi mọi thay đổi và hành động trên nền tảng')}
+    ${card('Activity Log', tableWrap(['Thời gian','Người dùng','Hành động','Mô-đun'],
       ZZP_DATA.auditLog.map(l => `<tr class="border-b border-slate-50"><td class="py-3 px-3 text-xs">${l.time}</td><td class="px-3">${l.user}</td><td class="px-3">${l.action}</td><td class="px-3">${badge(l.module,'info')}</td></tr>`).join('')))}</div>`;
 };
 
 PAGES.settings = () => {
-  return `<div><h2 class="text-xl font-bold mb-4">Settings & Access Management</h2>
+  return `<div>${pageHeader('Hệ thống','Settings & Access Control','Cấu hình shop, tích hợp và phân quyền truy cập')}
     <div class="grid lg:grid-cols-2 gap-6">
       ${card('Shop Settings', `
         <div class="space-y-3 text-sm">
-          <div class="flex justify-between py-2 border-b"><span class="text-slate-500">Shop Name</span><span>${ZZP_DATA.shop.name}</span></div>
-          <div class="flex justify-between py-2 border-b"><span class="text-slate-500">Category</span><span>${ZZP_DATA.shop.category}</span></div>
-          <div class="flex justify-between py-2 border-b"><span class="text-slate-500">Timezone</span><span>Asia/Ho_Chi_Minh</span></div>
-          <div class="flex justify-between py-2"><span class="text-slate-500">Currency</span><span>VND</span></div>
+          <div class="flex justify-between py-2 border-b"><span class="text-slate-500">Tên shop</span><span>${ZZP_DATA.shop.name}</span></div>
+          <div class="flex justify-between py-2 border-b"><span class="text-slate-500">Ngành hàng</span><span>${ZZP_DATA.shop.category}</span></div>
+          <div class="flex justify-between py-2 border-b"><span class="text-slate-500">Múi giờ</span><span>Asia/Ho_Chi_Minh</span></div>
+          <div class="flex justify-between py-2"><span class="text-slate-500">Tiền tệ</span><span>VND</span></div>
         </div>`)}
       ${card('Integrations', ZZP_DATA.dataSync.slice(0,4).map(d => `<div class="flex justify-between py-2 border-b border-slate-50 text-sm"><span>${d.source}</span>${badge(d.status,d.status)}</div>`).join(''))}
       ${card('RBAC Roles', `
         <div class="space-y-2 text-sm">
-          <div class="p-2 bg-slate-50 rounded"><strong>Owner</strong> — Full access</div>
-          <div class="p-2 bg-slate-50 rounded"><strong>Manager</strong> — Dept admin + approve</div>
-          <div class="p-2 bg-slate-50 rounded"><strong>Operator</strong> — View + Edit assigned modules</div>
-          <div class="p-2 bg-slate-50 rounded"><strong>Analyst</strong> — View analytics only</div>
+          <div class="p-2 bg-slate-50 rounded"><strong>Chủ shop</strong> — Toàn quyền</div>
+          <div class="p-2 bg-slate-50 rounded"><strong>Quản lý</strong> — Quản trị phòng ban + duyệt</div>
+          <div class="p-2 bg-slate-50 rounded"><strong>Vận hành</strong> — Xem + sửa mô-đun được giao</div>
+          <div class="p-2 bg-slate-50 rounded"><strong>Phân tích</strong> — Chỉ xem báo cáo</div>
         </div>`)}
       ${card('Data Governance', `
         <div class="space-y-3">
-          <div class="flex justify-between text-sm"><span>Data Quality Score</span><span class="font-semibold text-green-600">96%</span></div>
-          <div class="flex justify-between text-sm"><span>Last Reconciliation</span><span>2026-06-05 06:00</span></div>
-          <div class="flex justify-between text-sm"><span>Mapping Coverage</span><span>85%</span></div>
-          <button onclick="showToast('Đang xuất báo cáo...')" class="w-full mt-2 px-4 py-2 border border-slate-200 rounded-lg text-sm hover:bg-slate-50">Export Financial Report</button>
+          <div class="flex justify-between text-sm"><span>Điểm chất lượng dữ liệu</span><span class="font-semibold text-green-600">96%</span></div>
+          <div class="flex justify-between text-sm"><span>Đối soát gần nhất</span><span>2026-06-05 06:00</span></div>
+          <div class="flex justify-between text-sm"><span>Độ phủ ánh xạ</span><span>85%</span></div>
+          <button onclick="showToast('Đang xuất báo cáo...')" class="w-full mt-2 px-4 py-2 border border-slate-200 rounded-lg text-sm hover:bg-slate-50">Xuất báo cáo tài chính</button>
         </div>`)}
     </div></div>`;
 };

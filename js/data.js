@@ -18,12 +18,12 @@ const ZZP_DATA = {
     { id: 'c2', phase: 1, title: 'Xác minh danh tính & giấy phép KD', desc: 'Upload GPKD, CMND/CCCD', done: true, module: 'onboarding' },
     { id: 'c3', phase: 1, title: 'Thiết lập phương thức thanh toán', desc: 'Liên kết tài khoản ngân hàng', done: true, module: 'onboarding' },
     { id: 'c4', phase: 1, title: 'Cấu hình vận chuyển & kho', desc: 'GHN, GHTK, J&T Express', done: true, module: 'onboarding' },
-    { id: 'c5', phase: 1, title: 'Đăng 5+ sản phẩm Hero SKU', desc: 'Listing đạt chất lượng ≥85%', done: false, module: 'products' },
-    { id: 'c6', phase: 1, title: 'Trang trí cửa hàng & Brand Kit', desc: 'Banner, logo, màu thương hiệu', done: false, module: 'store' },
-    { id: 'c7', phase: 1, title: 'Kích hoạt Affiliate Program', desc: 'Commission 10-15% cho KOC', done: true, module: 'affiliate' },
-    { id: 'c8', phase: 1, title: 'Hoàn thành Compliance Check', desc: 'Không vi phạm chính sách', done: false, module: 'compliance' },
-    { id: 'c9', phase: 1, title: 'Đọc Onboarding Playbook', desc: '5 module đào tạo cơ bản', done: false, module: 'education' },
-    { id: 'c10', phase: 1, title: 'Đồng bộ SKU đa kênh', desc: 'Shopee, Lazada mapping', done: false, module: 'channels' }
+    { id: 'c5', phase: 1, title: 'Đăng 5+ sản phẩm SKU chủ lực', desc: 'Tin đăng đạt chất lượng ≥85%', done: false, module: 'products' },
+    { id: 'c6', phase: 1, title: 'Trang trí cửa hàng & bộ nhận diện', desc: 'Banner, logo, màu thương hiệu', done: false, module: 'store' },
+    { id: 'c7', phase: 1, title: 'Kích hoạt chương trình tiếp thị liên kết', desc: 'Hoa hồng 10-15% cho KOC', done: true, module: 'affiliate' },
+    { id: 'c8', phase: 1, title: 'Hoàn thành kiểm tra tuân thủ', desc: 'Không vi phạm chính sách', done: false, module: 'compliance' },
+    { id: 'c9', phase: 1, title: 'Đọc sổ tay hướng dẫn seller', desc: '5 mô-đun đào tạo cơ bản', done: false, module: 'education' },
+    { id: 'c10', phase: 1, title: 'Đồng bộ SKU đa kênh', desc: 'Ánh xạ Shopee, Lazada', done: false, module: 'channels' }
   ],
 
   products: [
@@ -117,7 +117,7 @@ const ZZP_DATA = {
     { id: 'E002', title: 'Tối ưu Listing sản phẩm', duration: '20 phút', progress: 100, type: 'video' },
     { id: 'E003', title: 'Chiến lược Affiliate cho ngành Beauty', duration: '25 phút', progress: 60, type: 'playbook' },
     { id: 'E004', title: 'Livestream bán hàng hiệu quả', duration: '30 phút', progress: 0, type: 'playbook' },
-    { id: 'E005', title: 'Quản lý P&L trên TikTok Shop', duration: '20 phút', progress: 0, type: 'sop' }
+    { id: 'E005', title: 'Quản lý lãi lỗ trên TikTok Shop', duration: '20 phút', progress: 0, type: 'sop' }
   ],
 
   channels: [
@@ -156,17 +156,17 @@ const ZZP_DATA = {
 
   customers: [
     { segment: 'VIP (>3 đơn)', count: 342, ltv: 1250000, repeatRate: 68 },
-    { segment: 'Returning (2 đơn)', count: 890, ltv: 580000, repeatRate: 42 },
-    { segment: 'New (1 đơn)', count: 1615, ltv: 185000, repeatRate: 12 },
-    { segment: 'At Risk (90d inactive)', count: 456, ltv: 320000, repeatRate: 5 }
+    { segment: 'Quay lại (2 đơn)', count: 890, ltv: 580000, repeatRate: 42 },
+    { segment: 'Mới (1 đơn)', count: 1615, ltv: 185000, repeatRate: 12 },
+    { segment: 'Nguy cơ rời bỏ (90 ngày không mua)', count: 456, ltv: 320000, repeatRate: 5 }
   ],
 
   team: [
-    { id: 'U001', name: 'Nguyễn Minh Anh', role: 'Owner', dept: 'Management', status: 'active' },
-    { id: 'U002', name: 'Trần Văn Hùng', role: 'Operations Manager', dept: 'Operations', status: 'active' },
-    { id: 'U003', name: 'Lê Thị Hoa', role: 'Affiliate Manager', dept: 'Marketing', status: 'active' },
-    { id: 'U004', name: 'Phạm Đức An', role: 'Content Lead', dept: 'Content', status: 'active' },
-    { id: 'U005', name: 'Võ Minh Tâm', role: 'Analyst', dept: 'Data', status: 'active' }
+    { id: 'U001', name: 'Nguyễn Minh Anh', role: 'Chủ shop', dept: 'Quản lý', status: 'active' },
+    { id: 'U002', name: 'Trần Văn Hùng', role: 'Quản lý vận hành', dept: 'Vận hành', status: 'active' },
+    { id: 'U003', name: 'Lê Thị Hoa', role: 'Quản lý tiếp thị liên kết', dept: 'Marketing', status: 'active' },
+    { id: 'U004', name: 'Phạm Đức An', role: 'Trưởng nhóm nội dung', dept: 'Nội dung', status: 'active' },
+    { id: 'U005', name: 'Võ Minh Tâm', role: 'Chuyên viên phân tích', dept: 'Dữ liệu', status: 'active' }
   ],
 
   alerts: [
@@ -236,8 +236,8 @@ const ZZP_DATA = {
     primaryColor: '#14b8a6',
     secondaryColor: '#fe2c55',
     logo: 'BeautyViet',
-    banner: 'Summer Glow Collection 2026',
-    templates: ['Flash Sale Banner', 'New Arrival', 'Live Countdown', 'Affiliate Promo']
+    banner: 'Bộ sưu tập Summer Glow 2026',
+    templates: ['Banner flash sale', 'Hàng mới', 'Đếm ngược live', 'Khuyến mãi tiếp thị liên kết']
   },
 
   dataSync: [
@@ -255,61 +255,58 @@ const ZZP_DATA = {
 
 const NAV = [
   { section: 'Tổng quan', items: [
-    { id: 'dashboard', label: 'Dashboard', icon: 'layout-dashboard', phase: 0 }
+    { id: 'dashboard', label: 'Tổng quan', icon: 'layout-dashboard', phase: 0 }
   ]},
   { section: 'Khởi tạo', phase: 1, items: [
-    { id: 'onboarding', label: 'Onboarding & Setup', icon: 'plug-zap' },
-    { id: 'products-setup', label: 'Product Launch', icon: 'package-plus' },
-    { id: 'store', label: 'Store Optimization', icon: 'store' },
-    { id: 'compliance', label: 'Compliance & Policy', icon: 'shield-check' },
-    { id: 'education', label: 'Education Hub', icon: 'graduation-cap' },
-    { id: 'portfolio', label: 'Product Strategy', icon: 'crosshair' },
-    { id: 'channels', label: 'Multi-channel', icon: 'share-2' }
+    { id: 'onboarding', label: 'Thiết lập shop', icon: 'plug-zap' },
+    { id: 'products-setup', label: 'Ra mắt sản phẩm', icon: 'package-plus' },
+    { id: 'store', label: 'Tối ưu cửa hàng', icon: 'store' },
+    { id: 'compliance', label: 'Tuân thủ & chính sách', icon: 'shield-check' },
+    { id: 'education', label: 'Đào tạo seller', icon: 'graduation-cap' },
+    { id: 'portfolio', label: 'Chiến lược sản phẩm', icon: 'crosshair' },
+    { id: 'channels', label: 'Đa kênh', icon: 'share-2' }
   ]},
   { section: 'Vận hành', phase: 2, items: [
-    { id: 'datahub', label: 'Data Hub & Sync', icon: 'database' },
-    { id: 'products', label: 'Product Operations', icon: 'boxes' },
-    { id: 'orders', label: 'Order Center', icon: 'shopping-bag' },
-    { id: 'inventory', label: 'Inventory', icon: 'warehouse' },
-    { id: 'returns', label: 'Returns & Cancel', icon: 'rotate-ccw' },
-    { id: 'affiliate', label: 'Affiliate Center', icon: 'handshake' },
-    { id: 'koc', label: 'KOC CRM', icon: 'star' },
-    { id: 'agency', label: 'Agency Management', icon: 'building-2' },
-    { id: 'samples', label: 'Sample Tracking', icon: 'gift' },
-    { id: 'content', label: 'Content Calendar', icon: 'clapperboard' },
-    { id: 'livestream', label: 'Livestream Ops', icon: 'radio' },
-    { id: 'campaigns', label: 'Campaign Center', icon: 'megaphone' },
-    { id: 'vouchers', label: 'Voucher Management', icon: 'ticket' },
-    { id: 'ads', label: 'Spark Ads', icon: 'mouse-pointer-click' }
+    { id: 'products', label: 'Vận hành sản phẩm', icon: 'boxes' },
+    { id: 'orders', label: 'Trung tâm đơn hàng', icon: 'shopping-bag' },
+    { id: 'inventory', label: 'Quản lý tồn kho', icon: 'warehouse' },
+    { id: 'returns', label: 'Hoàn & hủy đơn', icon: 'rotate-ccw' },
+    { id: 'affiliate', label: 'Tiếp thị liên kết', icon: 'handshake' },
+    { id: 'koc', label: 'Quản lý KOC', icon: 'star' },
+    { id: 'agency', label: 'Quản lý agency', icon: 'building-2' },
+    { id: 'samples', label: 'Theo dõi gửi mẫu', icon: 'gift' },
+    { id: 'content', label: 'Lịch nội dung', icon: 'clapperboard' },
+    { id: 'livestream', label: 'Vận hành livestream', icon: 'radio' },
+    { id: 'campaigns', label: 'Trung tâm chiến dịch', icon: 'megaphone' },
+    { id: 'vouchers', label: 'Quản lý voucher', icon: 'ticket' },
+    { id: 'ads', label: 'Quảng cáo Spark', icon: 'mouse-pointer-click' }
   ]},
   { section: 'Phân tích', phase: 3, items: [
-    { id: 'executive', label: 'Executive Dashboard', icon: 'line-chart' },
-    { id: 'revenue', label: 'Revenue Intelligence', icon: 'circle-dollar-sign' },
-    { id: 'profit', label: 'P&L Dashboard', icon: 'trending-up' },
-    { id: 'costs', label: 'Cost Intelligence', icon: 'wallet' },
-    { id: 'product-analytics', label: 'Product Intelligence', icon: 'bar-chart-2' },
-    { id: 'affiliate-analytics', label: 'Affiliate Analytics', icon: 'pie-chart' },
-    { id: 'creator-analytics', label: 'Creator Scorecard', icon: 'award' },
-    { id: 'content-analytics', label: 'Content Intelligence', icon: 'film' },
-    { id: 'live-analytics', label: 'Livestream Analytics', icon: 'activity' },
-    { id: 'customer-analytics', label: 'Customer Intelligence', icon: 'users' },
-    { id: 'team', label: 'Team & RBAC', icon: 'user-cog' }
+    { id: 'executive', label: 'Bảng điều hành', icon: 'line-chart' },
+    { id: 'revenue', label: 'Phân tích doanh thu', icon: 'circle-dollar-sign' },
+    { id: 'profit', label: 'Lãi lỗ & biên LN', icon: 'trending-up' },
+    { id: 'costs', label: 'Phân tích chi phí', icon: 'wallet' },
+    { id: 'product-analytics', label: 'Phân tích sản phẩm', icon: 'bar-chart-2' },
+    { id: 'affiliate-analytics', label: 'Phân tích tiếp thị LH', icon: 'pie-chart' },
+    { id: 'creator-analytics', label: 'Bảng điểm KOC', icon: 'award' },
+    { id: 'content-analytics', label: 'Phân tích nội dung', icon: 'film' },
+    { id: 'live-analytics', label: 'Phân tích livestream', icon: 'activity' },
+    { id: 'customer-analytics', label: 'Phân tích khách hàng', icon: 'users' },
+    { id: 'team', label: 'Quản lý nhóm', icon: 'user-cog' }
   ]},
   { section: 'Tối ưu', phase: 4, items: [
-    { id: 'growth-assistant', label: 'Growth Assistant AI', icon: 'bot' },
-    { id: 'alerts', label: 'Smart Alerts', icon: 'bell-ring' },
-    { id: 'opportunities', label: 'Opportunity Engine', icon: 'lightbulb' },
-    { id: 'forecast', label: 'Forecasting', icon: 'chart-line' },
-    { id: 'benchmark', label: 'Market Benchmark', icon: 'gauge' },
-    { id: 'actions', label: 'Decision Center', icon: 'list-checks' },
-    { id: 'automation', label: 'Automation Engine', icon: 'cog' },
-    { id: 'workflows', label: 'Workflow Center', icon: 'workflow' },
-    { id: 'optimization', label: 'Growth Optimizers', icon: 'rocket' }
+    { id: 'growth-assistant', label: 'Trợ lý AI tăng trưởng', icon: 'bot' },
+    { id: 'alerts', label: 'Cảnh báo thông minh', icon: 'bell-ring' },
+    { id: 'opportunities', label: 'Cơ hội tăng trưởng', icon: 'lightbulb' },
+    { id: 'forecast', label: 'Dự báo', icon: 'chart-line' },
+    { id: 'benchmark', label: 'So sánh thị trường', icon: 'gauge' },
+    { id: 'actions', label: 'Trung tâm quyết định', icon: 'list-checks' },
+    { id: 'workflows', label: 'Trung tâm quy trình', icon: 'workflow' },
+    { id: 'optimization', label: 'Tối ưu tăng trưởng', icon: 'rocket' }
   ]},
   { section: 'Hệ thống', items: [
-    { id: 'notifications', label: 'Notification Center', icon: 'bell' },
-    { id: 'audit', label: 'Audit & Governance', icon: 'scroll-text' },
-    { id: 'settings', label: 'Settings & Access', icon: 'settings' }
+    { id: 'notifications', label: 'Trung tâm thông báo', icon: 'bell' },
+    { id: 'settings', label: 'Cài đặt & phân quyền', icon: 'settings' }
   ]}
 ];
 

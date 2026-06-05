@@ -234,36 +234,38 @@ function getGuideProgress(pageId) {
   return { done, total: g.steps.length, pct: Math.round(done / g.steps.length * 100) };
 }
 
-function renderGuidePanel(pageId) {
+function renderGuideSidebar(pageId) {
   const g = MODULE_GUIDES[pageId];
-  if (!g) return '<p class="text-slate-500">Chưa có hướng dẫn cho module này.</p>';
+  if (!g) return '';
   const prog = getGuideProgress(pageId);
   return `
-    <div class="space-y-6">
-      <div class="flex items-center justify-between p-4 bg-zzp-50 rounded-xl border border-zzp-100">
-        <div><p class="font-semibold text-zzp-800">Hướng dẫn từng bước — 1:1 PRD</p><p class="text-xs text-zzp-600 mt-1">${g.prd}</p></div>
-        <div class="text-right"><p class="text-2xl font-bold text-zzp-700">${prog.pct}%</p><p class="text-xs text-slate-500">${prog.done}/${prog.total} bước</p></div>
+    <div class="space-y-3">
+      <div class="p-3 rounded-xl bg-zzp-50 border border-zzp-100">
+        <div class="flex items-center justify-between gap-2">
+          <p class="text-xs text-slate-600">Tiến độ</p>
+          <p class="text-lg font-bold text-zzp-700">${prog.pct}%</p>
+        </div>
+        <div class="h-1.5 bg-white rounded-full mt-2"><div class="h-1.5 bg-zzp-500 rounded-full" style="width:${prog.pct}%"></div></div>
+        <p class="text-[10px] text-slate-500 mt-1">${prog.done}/${prog.total} bước xong</p>
       </div>
-      <div class="space-y-3">
+      <div class="space-y-2">
         ${g.steps.map((s, i) => {
           const done = s.done();
-          return `<div class="flex gap-4 p-4 rounded-xl border ${done ? 'border-green-200 bg-green-50/50' : 'border-slate-200 bg-white'}">
-            <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 font-bold ${done ? 'bg-green-500 text-white' : 'bg-slate-100 text-slate-600'}">${done ? '✓' : i + 1}</div>
-            <div class="flex-1 min-w-0">
-              <p class="font-medium ${done ? 'text-green-800' : ''}">${s.title}</p>
-              <p class="text-sm text-slate-500 mt-1">${s.desc}</p>
-              <div class="flex flex-wrap gap-2 mt-3">
-                ${s.link ? `<button onclick="navigate('${s.link}')" class="text-xs px-3 py-1.5 bg-zzp-600 text-white rounded-lg">Đi tới module →</button>` : ''}
-                ${s.action === 'runFlowStock' ? `<button onclick="runAutomationFlow('FLOW_STOCK')" class="text-xs px-3 py-1.5 border border-zzp-300 text-zzp-700 rounded-lg">▶ Chạy flow tự động</button>` : ''}
-                ${s.action === 'runFlowAds' ? `<button onclick="runAutomationFlow('FLOW_ADS')" class="text-xs px-3 py-1.5 border border-zzp-300 text-zzp-700 rounded-lg">▶ Chạy flow tự động</button>` : ''}
-                ${s.action === 'runFlowOptimize' ? `<button onclick="runAutomationFlow('FLOW_OPTIMIZE')" class="text-xs px-3 py-1.5 border border-zzp-300 text-zzp-700 rounded-lg">▶ Chạy flow tự động</button>` : ''}
-                ${s.action === 'viewKocDetail' ? `<button onclick="openDetail('koc','K003')" class="text-xs px-3 py-1.5 border rounded-lg">Xem KOC mẫu →</button>` : ''}
-                ${s.action === 'checkListing' ? `<button onclick="openListingCheck('P006')" class="text-xs px-3 py-1.5 border rounded-lg">Kiểm tra listing →</button>` : ''}
-                ${s.action === 'completeCompliance' ? `<button onclick="runAutomationFlow('FLOW_COMPLIANCE')" class="text-xs px-3 py-1.5 border border-red-300 text-red-700 rounded-lg">▶ Flow compliance</button>` : ''}
+          return `<div class="rounded-lg border p-2.5 ${done ? 'border-green-200 bg-green-50/60' : 'border-slate-200 bg-slate-50/50'}">
+            <div class="flex gap-2 items-start">
+              <span class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${done ? 'bg-green-500 text-white' : 'bg-white border border-slate-200 text-slate-600'}">${done ? '✓' : i + 1}</span>
+              <div class="min-w-0 flex-1">
+                <p class="text-xs font-medium leading-snug ${done ? 'text-green-800' : 'text-slate-800'}">${s.title}</p>
+                <p class="text-[10px] text-slate-500 mt-0.5 line-clamp-2">${s.desc}</p>
+                ${!done && s.link ? `<button type="button" onclick="navigate('${s.link}')" class="text-[10px] text-zzp-600 hover:underline mt-1">Làm ngay →</button>` : ''}
               </div>
             </div>
           </div>`;
         }).join('')}
       </div>
     </div>`;
+}
+
+function renderGuidePanel(pageId) {
+  return renderGuideSidebar(pageId);
 }

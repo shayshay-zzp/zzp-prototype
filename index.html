@@ -26,6 +26,8 @@
     .phase-badge-4 { background: #fce7f3; color: #be185d; }
     .chart-box { position: relative; height: 260px; }
     .chart-box-sm { position: relative; height: 200px; }
+    .chart-box-xs { position: relative; height: 160px; }
+    .chart-box-lg { position: relative; height: 320px; }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
     @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
@@ -33,6 +35,9 @@
     .lucide-icon { display: inline-block; vertical-align: middle; stroke: currentColor; fill: none; }
     .sidebar-link .lucide-icon { opacity: .72; }
     .sidebar-link.active .lucide-icon { opacity: 1; }
+    #automation-fab-popover { animation: fabPop .2s ease; }
+    @keyframes fabPop { from { opacity: 0; transform: translateY(8px) scale(.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    #automation-fab-btn { box-shadow: 0 4px 14px rgba(13,148,136,.35); }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased">
@@ -46,12 +51,12 @@
           </div>
           <div>
             <h1 class="font-bold text-lg leading-tight">ZZP Platform</h1>
-            <p class="text-xs text-slate-500">TikTok Shop Operations</p>
+            <p class="text-xs text-slate-500">Vận hành TikTok Shop</p>
           </div>
         </div>
       </div>
       <nav id="nav-menu" class="flex-1 overflow-y-auto py-2 px-2 space-y-1"></nav>
-      <div class="p-3 border-t border-slate-100 text-xs text-slate-400 text-center">Demo v2.0 · Mock Data</div>
+      <div class="p-3 border-t border-slate-100 text-xs text-slate-400 text-center">Bản demo v2.0 · Dữ liệu mẫu</div>
     </aside>
 
     <!-- Main -->
@@ -69,7 +74,7 @@
         <div class="flex items-center gap-3">
           <div id="health-badge" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-zzp-50 text-zzp-700 text-sm font-medium">
             <span class="w-2 h-2 rounded-full bg-zzp-500 animate-pulse"></span>
-            Shop Health: <span id="health-score">78</span>%
+            Sức khỏe shop: <span id="health-score">78</span>%
           </div>
           <button id="notif-btn" class="relative p-2 rounded-lg hover:bg-slate-100 text-slate-600">
             <i data-lucide="bell" class="w-5 h-5"></i>
@@ -87,6 +92,15 @@
 
       <main id="main-content" class="flex-1 overflow-y-auto p-6"></main>
     </div>
+
+    <!-- Hướng dẫn module — sidebar phải -->
+    <aside id="guide-rail" class="hidden lg:flex w-72 flex-col shrink-0 bg-white border-l border-slate-200">
+      <div class="px-4 py-3 border-b border-slate-100 shrink-0">
+        <p class="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Hướng dẫn module</p>
+        <p id="guide-rail-title" class="text-sm font-semibold text-slate-800 mt-0.5 truncate">Chọn mục menu</p>
+      </div>
+      <div id="guide-rail-content" class="flex-1 overflow-y-auto p-3"></div>
+    </aside>
   </div>
 
   <!-- Notification Panel -->
@@ -108,12 +122,24 @@
   <!-- Toast -->
   <div id="toast-container" class="fixed top-4 right-4 z-[60] space-y-2"></div>
 
+  <!-- Hint tự động hóa — float, không chiếm layout -->
+  <div id="automation-fab-root" class="fixed bottom-6 right-6 z-40 hidden flex flex-col items-end gap-2"></div>
+
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
   <script src="js/data.js"></script>
+  <script src="js/vi.js"></script>
   <script src="js/icons.js"></script>
+  <script src="js/module-ui.js"></script>
+  <script src="js/setup-flow.js"></script>
   <script src="js/guides.js"></script>
   <script src="js/flows.js"></script>
+  <script src="js/module-flows.js"></script>
+  <script src="js/flow-panels.js"></script>
+  <script src="js/workflow-steps.js"></script>
   <script src="js/details.js"></script>
+  <script src="js/module-layouts.js"></script>
+  <script src="js/data-layers.js"></script>
+  <script src="js/chart-helpers.js"></script>
   <script src="js/render.js"></script>
   <script src="js/app.js"></script>
 </body>
