@@ -5,7 +5,7 @@ function renderKocScoreTable() {
     ZZP_DATA.kocs.map(k => `<tr ${rowClick('koc', k.id)} class="border-b border-slate-50">
       <td class="py-3 px-3 font-medium text-zzp-700">${k.name}</td>
       <td class="px-3">${k.tier}</td>
-      <td class="px-3 font-bold ${k.score >= 80 ? 'text-green-600' : 'text-amber-600'}">${k.score}</td>
+      <td class="px-3 font-bold">${k.score}</td>
       <td class="px-3">${k.gmv30d ? fmt(k.gmv30d) : '—'}</td>
       <td class="px-3">${k.roi ? k.roi + 'x' : '—'}</td>
       <td class="px-3">${badge(k.lifecycle, k.lifecycle === 'revenue' ? 'ok' : 'info')}</td>
@@ -25,7 +25,7 @@ function renderSamplesTable() {
         <td class="px-3 text-xs">${s.sentDate}</td>
         <td class="px-3">${badge(s.status, s.status === 'converted' ? 'ok' : s.status === 'no_content' ? 'critical' : 'pending')}</td>
         <td class="px-3">${fmtCurrency(s.cost)}</td>
-        <td class="px-3 font-semibold ${s.roi > 10 ? 'text-green-600' : ''}">${s.roi ? s.roi + 'x' : '—'}</td>
+        <td class="px-3 font-semibold">${s.roi ? s.roi + 'x' : '—'}</td>
       </tr>`;
     }).join(''));
 }
@@ -59,7 +59,7 @@ function renderInventoryForecastTable() {
       const days = Math.round(p.stock / daily);
       return `<tr ${rowClick('product', p.id)} class="border-b border-slate-50">
         <td class="py-3 px-3 font-medium">${p.name.slice(0, 24)}</td>
-        <td class="px-3 ${days < 7 ? 'text-red-600 font-bold' : ''}">${p.stock}</td>
+        <td class="px-3 ${days < 7 ? 'font-bold' : ''}">${p.stock}</td>
         <td class="px-3">${daily}</td>
         <td class="px-3">${days} ngày</td>
         <td class="px-3">${days < 7 ? 'PO ' + Math.max(500, daily * 14) + ' sp' : '—'}</td>

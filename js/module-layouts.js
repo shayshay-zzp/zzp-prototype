@@ -57,10 +57,10 @@ function renderContentCalendar() {
   const slots = ZZP_DATA.content.slice(0, 7);
   return `
     ${chartGrid([['GMV theo nội dung', 'chart-content-gmv', 'sm'], ['CTR theo video', 'chart-content-ctr', 'sm']])}
-    <div class="rounded-xl border border-violet-200 overflow-hidden mb-6">
-      <div class="px-4 py-3 bg-violet-50 border-b border-violet-100 flex items-center gap-2">
-        ${icon('calendar-days', 18, 'text-violet-600')}
-        <span class="font-semibold text-sm text-violet-900">Content Calendar — Tuần này</span>
+    <div class="rounded-xl border border-slate-200 overflow-hidden mb-6">
+      <div class="px-4 py-2.5 bg-slate-50 border-b border-slate-200 flex items-center gap-2">
+        ${icon('calendar-days', 16, 'text-slate-600')}
+        <span class="font-semibold text-sm text-slate-800">Lịch nội dung — Tuần này</span>
       </div>
       <div class="grid grid-cols-7 divide-x divide-slate-100 bg-white">
         ${days.map((d, i) => {
@@ -69,7 +69,7 @@ function renderContentCalendar() {
           <div class="min-h-[120px] p-2">
             <p class="text-[10px] font-bold text-slate-400 text-center mb-2">${d}</p>
             ${item ? `
-              <button type="button" onclick="openDetail('content','${item.id}')" class="w-full p-2 rounded-lg text-left text-[10px] border ${item.type === 'livestream' ? 'border-pink-200 bg-pink-50' : 'border-violet-100 bg-violet-50/50'} hover:shadow-sm">
+              <button type="button" onclick="openDetail('content','${item.id}')" class="w-full p-2 rounded-lg text-left text-[10px] border border-slate-200 bg-slate-50 hover:border-slate-300 hover:bg-white">
                 <span class="font-semibold block truncate">${item.type === 'livestream' ? 'Live' : 'Video'}</span>
                 <span class="text-slate-600 line-clamp-2 leading-tight mt-0.5">${item.title.slice(0, 28)}…</span>
               </button>` : `<div class="h-16 border border-dashed border-slate-100 rounded-lg flex items-center justify-center text-slate-300 text-lg">+</div>`}
@@ -81,15 +81,15 @@ function renderContentCalendar() {
       ${ZZP_DATA.content.map(v => {
         const koc = ZZP_DATA.kocs.find(k => k.id === v.koc);
         return `
-        <button type="button" onclick="openDetail('content','${v.id}')" class="w-full flex flex-wrap items-center gap-4 p-4 rounded-xl border border-slate-200 bg-white hover:border-violet-300 text-left transition-all">
-          <span class="w-12 h-12 rounded-xl ${v.type === 'livestream' ? 'bg-pink-100 text-pink-600' : 'bg-violet-100 text-violet-600'} flex items-center justify-center shrink-0">${icon(v.type === 'livestream' ? 'radio' : 'video', 20)}</span>
+        <button type="button" onclick="openDetail('content','${v.id}')" class="w-full flex flex-wrap items-center gap-4 p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 text-left transition-all">
+          <span class="w-12 h-12 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">${icon(v.type === 'livestream' ? 'radio' : 'video', 20)}</span>
           <div class="flex-1 min-w-0">
             <p class="font-medium text-sm">${v.title}</p>
             <p class="text-xs text-slate-500">${koc?.name} · ${v.published}</p>
           </div>
           <div class="flex gap-4 text-xs text-center">
             <div><p class="font-bold">${fmt(v.views)}</p><p class="text-slate-400">Lượt xem</p></div>
-            <div><p class="font-bold text-green-600">${fmt(v.gmv)}</p><p class="text-slate-400">GMV</p></div>
+            <div><p class="font-bold">${fmt(v.gmv)}</p><p class="text-slate-400">GMV</p></div>
             <div><p class="font-bold">${v.ctr}%</p><p class="text-slate-400">CTR</p></div>
           </div>
           ${badge(v.status, v.status)}
@@ -121,11 +121,11 @@ function calcSamplePipelineStats() {
 
 function renderSamplePipelineFlow(stats) {
   const nodes = [
-    { label: 'Gửi mẫu', count: stats.total, pct: 100, color: 'bg-teal-600' },
-    { label: 'Chờ nội dung', count: stats.pending.length, pct: stats.total ? Math.round(stats.pending.length / stats.total * 100) : 0, color: 'bg-amber-500' },
-    { label: 'Chuyển đổi', count: stats.converted.length, pct: stats.convPct, color: 'bg-green-600' },
-    { label: 'ROI ≥ 2x', count: stats.roiOk.length, pct: stats.total ? Math.round(stats.roiOk.length / stats.total * 100) : 0, color: 'bg-emerald-600' },
-    { label: 'Mở rộng ≥10x', count: stats.roiScale.length, pct: stats.total ? Math.round(stats.roiScale.length / stats.total * 100) : 0, color: 'bg-zzp-600' }
+    { label: 'Gửi mẫu', count: stats.total, pct: 100 },
+    { label: 'Chờ nội dung', count: stats.pending.length, pct: stats.total ? Math.round(stats.pending.length / stats.total * 100) : 0 },
+    { label: 'Chuyển đổi', count: stats.converted.length, pct: stats.convPct },
+    { label: 'ROI ≥ 2x', count: stats.roiOk.length, pct: stats.total ? Math.round(stats.roiOk.length / stats.total * 100) : 0 },
+    { label: 'Mở rộng ≥10x', count: stats.roiScale.length, pct: stats.total ? Math.round(stats.roiScale.length / stats.total * 100) : 0 }
   ];
   return `
     <div class="mb-6 overflow-x-auto pb-2">
@@ -133,12 +133,12 @@ function renderSamplePipelineFlow(stats) {
         ${nodes.map((n, i) => `
           ${i ? `
           <div class="flex flex-col items-center justify-center px-1 shrink-0 w-12">
-            <div class="h-0.5 w-full bg-teal-200"></div>
+            <div class="h-0.5 w-full bg-slate-200"></div>
             <span class="text-[9px] text-slate-400 mt-1 whitespace-nowrap">${i === 1 ? 'theo dõi' : i === 2 ? `${stats.convPct}%` : 'ROI'}</span>
           </div>` : ''}
           <div class="flex-1 min-w-[100px]">
-            <div class="h-full rounded-xl border-2 border-teal-100 bg-white p-3 text-center shadow-sm">
-              <div class="w-8 h-8 rounded-full ${n.color} text-white text-sm font-bold flex items-center justify-center mx-auto">${n.count}</div>
+            <div class="h-full rounded-xl border border-slate-200 bg-white p-3 text-center">
+              <div class="w-8 h-8 rounded-full bg-slate-800 text-white text-sm font-bold flex items-center justify-center mx-auto">${n.count}</div>
               <p class="text-xs font-semibold text-slate-800 mt-2 leading-tight">${n.label}</p>
               <p class="text-[10px] text-slate-400">${n.pct}% tổng gửi</p>
             </div>
@@ -153,13 +153,13 @@ function renderSampleCard(s) {
   const days = daysSinceSample(s.sentDate);
   const deadlineLeft = Math.max(0, 14 - days);
   const statusUi = {
-    pending: { border: 'border-amber-200 bg-amber-50/40', badge: ['Chờ nội dung', 'pending'], extra: deadlineLeft > 0 ? `Còn ${deadlineLeft} ngày trong cửa sổ 14 ngày` : 'Sắp hết hạn nội dung' },
-    converted: { border: 'border-green-200 bg-green-50/40', badge: ['Chuyển đổi', 'ok'], extra: s.roi >= 10 ? 'Mở rộng · ROI xuất sắc' : s.roi >= 2 ? 'Duy trì hợp tác' : 'Xem lại ROI' },
-    no_content: { border: 'border-red-200 bg-red-50/40', badge: ['Chưa có nội dung', 'critical'], extra: `Quá ${days} ngày · đề xuất cắt` }
+    pending: { border: 'border-slate-200', badge: ['Chờ nội dung', 'pending'], extra: deadlineLeft > 0 ? `Còn ${deadlineLeft} ngày trong cửa sổ 14 ngày` : 'Sắp hết hạn nội dung' },
+    converted: { border: 'border-slate-200', badge: ['Chuyển đổi', 'ok'], extra: s.roi >= 10 ? 'Mở rộng · ROI xuất sắc' : s.roi >= 2 ? 'Duy trì hợp tác' : 'Xem lại ROI' },
+    no_content: { border: 'border-slate-200', badge: ['Chưa có nội dung', 'critical'], extra: `Quá ${days} ngày · đề xuất cắt` }
   };
   const ui = statusUi[s.status] || statusUi.pending;
   return `
-    <button type="button" onclick="openDetail('sample','${s.id}')" class="w-full text-left p-3 rounded-xl border-2 ${ui.border} hover:shadow-md transition-all">
+    <button type="button" onclick="openDetail('sample','${s.id}')" class="w-full text-left p-3 rounded-xl border ${ui.border} bg-white hover:border-slate-300 transition-all">
       <div class="flex justify-between items-start gap-2">
         <div class="min-w-0">
           <p class="font-mono text-[10px] text-slate-400">${s.id}</p>
@@ -169,11 +169,11 @@ function renderSampleCard(s) {
         ${badge(ui.badge[0], ui.badge[1])}
       </div>
       <p class="text-[10px] text-slate-500 mt-2">Gửi ${s.sentDate} · ${days} ngày trước</p>
-      <p class="text-[10px] ${s.status === 'no_content' ? 'text-red-600' : 'text-slate-600'} mt-0.5">${ui.extra}</p>
+      <p class="text-[10px] text-slate-600 mt-0.5">${ui.extra}</p>
       <div class="grid grid-cols-3 gap-1.5 mt-3 text-center text-[10px]">
-        <div class="p-1.5 bg-white/80 rounded-lg"><p class="font-bold">${fmtCurrency(s.cost)}</p><p class="text-slate-400">Chi phí mẫu</p></div>
-        <div class="p-1.5 bg-white/80 rounded-lg"><p class="font-bold ${s.revenue ? 'text-green-600' : 'text-slate-400'}">${s.revenue ? fmt(s.revenue) : '—'}</p><p class="text-slate-400">Doanh thu</p></div>
-        <div class="p-1.5 bg-white/80 rounded-lg"><p class="font-bold ${s.roi >= 10 ? 'text-green-600' : s.roi >= 2 ? 'text-teal-600' : s.roi > 0 ? 'text-amber-600' : 'text-red-600'}">${s.roi ? s.roi + 'x' : '—'}</p><p class="text-slate-400">Sample ROI</p></div>
+        <div class="p-1.5 bg-slate-50 rounded-lg border border-slate-100"><p class="font-bold">${fmtCurrency(s.cost)}</p><p class="text-slate-400">Chi phí mẫu</p></div>
+        <div class="p-1.5 bg-slate-50 rounded-lg border border-slate-100"><p class="font-bold">${s.revenue ? fmt(s.revenue) : '—'}</p><p class="text-slate-400">Doanh thu</p></div>
+        <div class="p-1.5 bg-slate-50 rounded-lg border border-slate-100"><p class="font-bold">${s.roi ? s.roi + 'x' : '—'}</p><p class="text-slate-400">Sample ROI</p></div>
       </div>
     </button>`;
 }
@@ -199,15 +199,15 @@ function renderSampleRoiPipeline() {
       ['ROI mẫu theo lần gửi', 'chart-sample-roi', 'sm'],
       ['Phân bổ trạng thái', 'chart-sample-status', 'sm']
     ], 3)}
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-      <div class="p-3 rounded-xl bg-teal-50 border border-teal-100"><p class="text-[10px] text-teal-700 uppercase font-semibold">Tổng gửi mẫu</p><p class="text-xl font-bold text-teal-900">${stats.total}</p></div>
-      <div class="p-3 rounded-xl bg-green-50 border border-green-100"><p class="text-[10px] text-green-700 uppercase font-semibold">Tỷ lệ convert</p><p class="text-xl font-bold text-green-900">${stats.convPct}%</p><p class="text-[10px] text-slate-500">${stats.converted.length}/${stats.total} có doanh thu</p></div>
-      <div class="p-3 rounded-xl bg-white border border-slate-200"><p class="text-[10px] text-slate-500 uppercase font-semibold">ROI trung bình</p><p class="text-xl font-bold text-zzp-700">${stats.avgRoi}x</p><p class="text-[10px] text-slate-500">${fmt(stats.totalRev)} / ${fmt(stats.totalCost)}</p></div>
-      <div class="p-3 rounded-xl bg-red-50 border border-red-100"><p class="text-[10px] text-red-700 uppercase font-semibold">Cần cắt</p><p class="text-xl font-bold text-red-900">${stats.noContent.length}</p><p class="text-[10px] text-slate-500">Chưa tạo nội dung</p></div>
-    </div>
+    ${dsStatGrid([
+      { label: 'Tổng gửi mẫu', value: stats.total, tone: 'info' },
+      { label: 'Tỷ lệ convert', value: stats.convPct + '%', hint: `${stats.converted.length}/${stats.total} có doanh thu`, tone: 'success' },
+      { label: 'ROI trung bình', value: stats.avgRoi + 'x', hint: `${fmt(stats.totalRev)} / ${fmt(stats.totalCost)}`, tone: 'brand' },
+      { label: 'Cần cắt', value: stats.noContent.length, hint: 'Chưa tạo nội dung', tone: 'danger' }
+    ])}
     <div class="mb-2 flex items-center justify-between gap-2">
-      <p class="text-xs font-semibold text-teal-800 uppercase flex items-center gap-1">${icon('git-branch', 14)} Quy trình ROI mẫu thử</p>
-      <button type="button" onclick="runAutomationFlow('FLOW_SAMPLE')" class="text-xs px-3 py-1.5 bg-teal-600 text-white rounded-lg inline-flex items-center gap-1 hover:bg-teal-700">${icon('play', 12)} Chạy quy trình mẫu → doanh thu</button>
+      <p class="text-xs font-semibold text-slate-600 uppercase flex items-center gap-1">${icon('git-branch', 14)} Quy trình ROI mẫu thử</p>
+      <button type="button" onclick="runAutomationFlow('FLOW_SAMPLE')" class="ds-btn ds-btn--primary ds-btn--sm">${icon('play', 12)} Chạy quy trình</button>
     </div>
     ${renderSamplePipelineFlow(stats)}
     <p class="text-[10px] text-slate-400 mb-3 uppercase tracking-wide">Kanban theo trạng thái · bấm thẻ để xem chi tiết mẫu</p>
@@ -250,9 +250,9 @@ function renderInventoryGaugeCards() {
         const daily = Math.round(p.sold30d / 30) || 1;
         const days = Math.round(p.stock / daily);
         const pct = Math.min(100, (p.stock / (daily * 30)) * 100);
-        const bg = days < 7 ? 'border-red-200 bg-red-50/40' : days < 14 ? 'border-amber-200 bg-amber-50/40' : 'border-slate-200 bg-white';
+        const bg = days < 7 ? 'border-slate-300' : 'border-slate-200';
         return `
-        <button type="button" onclick="openDetail('product','${p.id}')" class="ui-product-card text-left p-4 rounded-xl border-2 ${bg} hover:shadow-md transition-shadow">
+        <button type="button" onclick="openDetail('product','${p.id}')" class="ui-product-card text-left p-4 rounded-xl border ${bg} bg-white hover:border-slate-300 transition-colors">
           <div class="flex items-start gap-3">
             <div class="shrink-0">${productThumb(p, 16)}</div>
             <div class="flex-1 min-w-0">
@@ -262,9 +262,9 @@ function renderInventoryGaugeCards() {
             ${days < 7 ? badge('Thiếu hàng', 'critical') : badge('OK', 'ok')}
           </div>
           <div class="mt-3 h-2 bg-slate-100 rounded-full overflow-hidden">
-            <div class="h-full rounded-full ${days < 7 ? 'bg-red-500' : days < 14 ? 'bg-amber-500' : 'bg-green-500'}" style="width:${pct}%"></div>
+            <div class="h-full rounded-full bg-slate-600" style="width:${pct}%;${days < 7 ? 'background:var(--ds-danger)' : days < 14 ? 'background:var(--ds-warning)' : ''}"></div>
           </div>
-          <p class="mt-2 text-xs font-bold ${days < 7 ? 'text-red-600' : days < 14 ? 'text-amber-600' : 'text-green-600'}">${p.stock} sp tồn</p>
+          <p class="mt-2 text-xs font-bold text-slate-700">${p.stock} sp tồn</p>
         </button>`;
       }).join('')}
     </div>`;
@@ -278,16 +278,16 @@ function renderAffiliateSamFunnel() {
     { step: 'M', label: 'Mở rộng vĩ mô', desc: 'Mở rộng KOC ROI > 3x', count: ZZP_DATA.kocs.filter(k => k.tier === 'Macro').length, pg: 'koc' }
   ];
   return `
-    <div class="mb-6 p-5 rounded-2xl border border-rose-200 bg-gradient-to-br from-rose-50/80 to-white">
-      <p class="text-xs font-semibold text-rose-700 uppercase mb-4">${icon('target', 14)} Chiến lược SAM — Sample → Affiliate → Macro</p>
+    <div class="mb-6 p-4 rounded-xl border border-slate-200 bg-white">
+      <p class="text-xs font-semibold text-slate-600 uppercase mb-4">${icon('target', 14)} Chiến lược SAM — Sample → Affiliate → Macro</p>
       <div class="flex flex-wrap items-center gap-2">
         ${sam.map((s, i) => `
-          ${i ? `<span class="text-rose-300 hidden sm:inline">${icon('chevron-right', 20)}</span>` : ''}
-          <button type="button" onclick="navigate('${s.pg}')" class="flex-1 min-w-[140px] p-4 rounded-xl border-2 border-rose-200 bg-white hover:border-rose-400 text-left">
-            <span class="w-8 h-8 rounded-full bg-rose-600 text-white font-bold text-sm inline-flex items-center justify-center">${s.step}</span>
+          ${i ? `<span class="text-slate-300 hidden sm:inline">${icon('chevron-right', 20)}</span>` : ''}
+          <button type="button" onclick="navigate('${s.pg}')" class="flex-1 min-w-[140px] p-4 rounded-xl border border-slate-200 bg-slate-50 hover:border-slate-300 text-left">
+            <span class="w-8 h-8 rounded-full bg-slate-800 text-white font-bold text-sm inline-flex items-center justify-center">${s.step}</span>
             <p class="font-semibold text-sm mt-2">${s.label}</p>
             <p class="text-[10px] text-slate-500 mt-0.5">${s.desc}</p>
-            <p class="text-lg font-bold text-rose-700 mt-1">${s.count}</p>
+            <p class="text-lg font-bold text-slate-800 mt-1">${s.count}</p>
           </button>`).join('')}
       </div>
     </div>`;
@@ -342,9 +342,9 @@ function renderProductLifecycleMonitor() {
     review: ZZP_DATA.products.filter(p => p.status === 'review')
   };
   const statusUi = {
-    active: { border: 'border-green-200', badge: 'ok' },
-    low_stock: { border: 'border-red-300', badge: 'critical' },
-    review: { border: 'border-purple-300', badge: 'purple' }
+    active: { border: 'border-slate-200', badge: 'ok' },
+    low_stock: { border: 'border-slate-300', badge: 'critical' },
+    review: { border: 'border-slate-200', badge: 'purple' }
   };
   return `
     <div class="mb-4 flex flex-wrap gap-2">
@@ -354,9 +354,9 @@ function renderProductLifecycleMonitor() {
       ${ZZP_DATA.products.map(p => {
         const margin = ((p.price - p.cost) / p.price * 100).toFixed(0);
         const ui = statusUi[p.status] || { border: 'border-slate-200', badge: 'muted' };
-        const marginTone = Number(margin) >= 50 ? 'text-green-600' : Number(margin) >= 30 ? 'text-slate-800' : 'text-amber-600';
+        const marginTone = '';
         return `
-        <button type="button" onclick="openDetail('product','${p.id}')" class="ui-product-card text-left p-4 rounded-xl border-2 ${ui.border} bg-white hover:shadow-md transition-shadow">
+        <button type="button" onclick="openDetail('product','${p.id}')" class="ui-product-card text-left p-4 rounded-xl border ${ui.border} bg-white hover:border-slate-300 transition-colors">
           <div class="flex items-start gap-3">
             <div class="shrink-0">${productThumb(p, 16)}</div>
             <div class="flex-1 min-w-0">
@@ -369,7 +369,7 @@ function renderProductLifecycleMonitor() {
           </div>
           <div class="ui-metric-grid mt-4">
             <div class="ui-metric-cell"><p class="val">${fmtCurrency(p.price).replace('₫', '').trim()}</p><p class="lbl">Giá</p></div>
-            <div class="ui-metric-cell"><p class="val ${p.stock < 100 ? 'text-red-600' : ''}">${p.stock}</p><p class="lbl">Tồn</p></div>
+            <div class="ui-metric-cell"><p class="val ${p.stock < 100 ? 'font-bold' : ''}">${p.stock}</p><p class="lbl">Tồn</p></div>
             <div class="ui-metric-cell"><p class="val">${p.sold30d}</p><p class="lbl">Bán 30d</p></div>
             <div class="ui-metric-cell"><p class="val ${marginTone}">${margin}%</p><p class="lbl">Margin</p></div>
           </div>
@@ -386,15 +386,15 @@ function renderReturnsCaseTimeline() {
     ${chartGrid([['Nguyên nhân hoàn/hủy', 'chart-return-reason', 'sm']], 1)}
     <div class="grid lg:grid-cols-3 gap-4 mb-6">
       ${Object.entries(reasons).map(([reason, count]) => `
-        <div class="p-4 rounded-xl border border-orange-200 bg-orange-50/50">
-          <p class="text-2xl font-bold text-orange-800">${count}</p>
+        <div class="p-4 rounded-xl border border-slate-200 bg-white">
+          <p class="text-2xl font-bold text-slate-800">${count}</p>
           <p class="text-xs text-slate-600 mt-1">${reason}</p>
         </div>`).join('')}
     </div>
-    <div class="space-y-4 relative before:absolute before:left-4 before:top-2 before:bottom-2 before:w-0.5 before:bg-orange-100">
+    <div class="space-y-4 relative before:absolute before:left-4 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
       ${ZZP_DATA.returns.map(r => `
         <div class="flex gap-4 pl-10 relative">
-          <span class="absolute left-2.5 w-3 h-3 rounded-full ${r.status === 'refunded' ? 'bg-green-500' : r.status === 'pending_review' ? 'bg-amber-500' : 'bg-blue-500'} ring-4 ring-white"></span>
+          <span class="absolute left-2.5 w-3 h-3 rounded-full bg-slate-400 ring-4 ring-white"></span>
           <div class="flex-1 p-4 rounded-xl border border-slate-200 bg-white">
             <div class="flex flex-wrap justify-between gap-2">
               <div>
@@ -414,20 +414,20 @@ function renderReturnsCaseTimeline() {
 function renderDataHubPipeline() {
   return `
     ${chartGrid([['Độ trễ đồng bộ', 'chart-sync-latency', 'sm'], ['Dữ liệu theo nguồn', 'chart-sync-records', 'sm']])}
-    <div class="mb-6 p-5 rounded-2xl border border-cyan-200 bg-gradient-to-r from-cyan-50 to-white overflow-x-auto">
-      <p class="text-xs font-semibold text-cyan-800 uppercase mb-4 flex items-center gap-1">${icon('refresh-cw', 14)} Trạng thái đồng bộ</p>
+    <div class="mb-6 p-4 rounded-xl border border-slate-200 bg-white overflow-x-auto">
+      <p class="text-xs font-semibold text-slate-600 uppercase mb-4 flex items-center gap-1">${icon('refresh-cw', 14)} Trạng thái đồng bộ</p>
       <div class="flex items-center gap-2 min-w-max pb-2">
         ${ZZP_DATA.dataSync.map((d, i) => `
-          ${i ? `<div class="flex flex-col items-center px-1"><div class="h-0.5 w-8 bg-cyan-300"></div><span class="text-[9px] text-cyan-600">${d.latency}</span></div>` : ''}
-          <button type="button" onclick="showToast('Sync ${d.source}: ${d.status}')" class="p-3 rounded-xl border-2 ${d.status === 'live' ? 'border-green-300 bg-green-50' : 'border-cyan-200 bg-white'} min-w-[100px] text-center hover:shadow-md">
+          ${i ? `<div class="flex flex-col items-center px-1"><div class="h-0.5 w-8 bg-slate-200"></div><span class="text-[9px] text-slate-500">${d.latency}</span></div>` : ''}
+          <button type="button" onclick="showToast('Sync ${d.source}: ${d.status}')" class="p-3 rounded-xl border border-slate-200 bg-slate-50 min-w-[100px] text-center hover:border-slate-300">
             <p class="text-[10px] font-bold truncate">${d.source.split(' ')[0]}</p>
             ${badge(d.status, d.status)}
             <p class="text-xs font-semibold mt-1">${(d.records / 1000).toFixed(1)}k</p>
           </button>`).join('')}
-        <div class="flex flex-col items-center px-1"><div class="h-0.5 w-8 bg-cyan-300"></div></div>
-        <div class="p-4 rounded-xl border-2 border-zzp-400 bg-zzp-50 text-center min-w-[90px]">
+        <div class="flex flex-col items-center px-1"><div class="h-0.5 w-8 bg-slate-200"></div></div>
+        <div class="p-4 rounded-xl border border-slate-300 bg-slate-50 text-center min-w-[90px]">
           <p class="text-[10px] font-bold">ZZP</p>
-          <p class="text-xs text-zzp-700">Data Warehouse</p>
+          <p class="text-xs text-slate-600">Data Warehouse</p>
         </div>
       </div>
     </div>
@@ -442,24 +442,24 @@ function renderCreatorScorecardGrid() {
     ${chartGrid([['KOC Score ranking', 'chart-creator-score', 'sm'], ['ROI creator', 'chart-creator-roi', 'sm']])}
     <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
       ${sorted.map((k, i) => `
-        <button type="button" onclick="openDetail('koc','${k.id}')" class="text-left p-5 rounded-2xl border-2 ${i === 0 ? 'border-amber-300 bg-amber-50/40' : 'border-slate-200 bg-white'} hover:shadow-lg transition-all">
+        <button type="button" onclick="openDetail('koc','${k.id}')" class="text-left p-5 rounded-xl border ${i === 0 ? 'border-slate-300' : 'border-slate-200'} bg-white hover:border-slate-300 transition-colors">
           <div class="flex justify-between items-start">
             <div>
-              ${i === 0 ? `<span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500 text-white font-medium">#1 Nhà sáng tạo hàng đầu</span>` : `<span class="text-xs text-slate-400">#${i + 1}</span>`}
+              ${i === 0 ? `<span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-white font-medium">#1 Nhà sáng tạo hàng đầu</span>` : `<span class="text-xs text-slate-400">#${i + 1}</span>`}
               <p class="font-bold text-lg mt-1">${k.name}</p>
               <p class="text-xs text-slate-500">${k.tier} · ${k.videos} videos</p>
             </div>
             <div class="text-center">
-              <p class="text-3xl font-black ${k.score >= 80 ? 'text-green-600' : 'text-amber-600'}">${k.score}</p>
+              <p class="text-3xl font-black text-slate-800">${k.score}</p>
               <p class="text-[10px] text-slate-400">Score</p>
             </div>
           </div>
           <div class="grid grid-cols-3 gap-2 mt-4 text-center text-xs">
-            <div class="p-2 rounded-lg bg-slate-50"><p class="font-bold">${fmt(k.gmv30d)}</p><p class="text-slate-400">GMV</p></div>
-            <div class="p-2 rounded-lg bg-slate-50"><p class="font-bold">${k.roi ? k.roi + 'x' : '—'}</p><p class="text-slate-400">ROI</p></div>
-            <div class="p-2 rounded-lg bg-slate-50"><p class="font-bold">${k.cvr ? k.cvr + '%' : '—'}</p><p class="text-slate-400">CVR</p></div>
+            <div class="p-2 rounded-lg bg-slate-50 border border-slate-100"><p class="font-bold">${fmt(k.gmv30d)}</p><p class="text-slate-400">GMV</p></div>
+            <div class="p-2 rounded-lg bg-slate-50 border border-slate-100"><p class="font-bold">${k.roi ? k.roi + 'x' : '—'}</p><p class="text-slate-400">ROI</p></div>
+            <div class="p-2 rounded-lg bg-slate-50 border border-slate-100"><p class="font-bold">${k.cvr ? k.cvr + '%' : '—'}</p><p class="text-slate-400">CVR</p></div>
           </div>
-          <p class="text-xs text-zzp-600 mt-3 font-medium">${k.score >= 90 ? '→ Nâng tier Macro+' : k.score >= 70 ? '→ Duy trì hợp tác' : '→ Review hoặc cắt'}</p>
+          <p class="text-xs text-slate-600 mt-3 font-medium">${k.score >= 90 ? '→ Nâng tier Macro+' : k.score >= 70 ? '→ Duy trì hợp tác' : '→ Review hoặc cắt'}</p>
         </button>`).join('')}
     </div>`;
 }
@@ -494,8 +494,8 @@ function renderNotificationInbox() {
       <div class="lg:col-span-2 space-y-2">
         <p class="text-xs font-semibold text-slate-500 uppercase mb-3">Hộp thư thông báo</p>
         ${ZZP_DATA.alerts.map((a, i) => `
-          <button type="button" onclick="openDetail('alert','${a.id}')" class="w-full flex gap-3 p-4 rounded-xl border ${a.read ? 'border-slate-100 bg-slate-50/50 opacity-70' : 'border-slate-200 bg-white shadow-sm'} text-left hover:border-zzp-200">
-            <div class="w-10 h-10 rounded-full ${a.severity === 'critical' ? 'bg-red-100 text-red-600' : a.severity === 'warning' ? 'bg-amber-100 text-amber-600' : 'bg-blue-100 text-blue-600'} flex items-center justify-center shrink-0">${icon(a.severity === 'critical' ? 'alert-octagon' : 'bell', 18)}</div>
+          <button type="button" onclick="openDetail('alert','${a.id}')" class="w-full flex gap-3 p-3 rounded-xl border ${a.read ? 'border-slate-100 bg-slate-50/50 opacity-70' : 'border-slate-200 bg-white'} text-left hover:border-slate-300">
+            <div class="w-9 h-9 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">${icon(a.severity === 'critical' ? 'alert-octagon' : 'bell', 16)}</div>
             <div class="flex-1 min-w-0">
               <div class="flex justify-between gap-2">
                 <p class="font-medium text-sm truncate">${a.title}</p>
@@ -509,7 +509,7 @@ function renderNotificationInbox() {
       <div>
         ${card('Kênh thông báo', `
           <div class="space-y-3">${['Cảnh báo trong app','Cảnh báo email','Cảnh báo Zalo','Webhook'].map(ch => `
-            <label class="flex items-center justify-between p-3 bg-slate-50 rounded-lg cursor-pointer hover:bg-zzp-50">
+            <label class="flex items-center justify-between p-3 bg-slate-50 rounded-lg cursor-pointer hover:bg-slate-100 border border-slate-100">
               <span class="text-sm flex items-center gap-2">${icon(ch.includes('Zalo') ? 'message-circle' : ch.includes('Email') ? 'mail' : ch.includes('Webhook') ? 'webhook' : 'bell', 14)} ${viLabel(ch)}</span>
               <input type="checkbox" checked class="rounded text-zzp-600">
             </label>`).join('')}

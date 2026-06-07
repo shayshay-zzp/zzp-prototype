@@ -28,7 +28,7 @@ function renderInventoryTabAlerts() {
         const left = getProductStockDays(p);
         return `<tr ${rowClick('product', p.id)} class="border-b border-slate-50">
           <td class="py-3 px-3">${p.name.slice(0, 24)}</td>
-          <td class="py-3 px-3 ${left <= 3 ? 'text-red-600 font-bold' : left <= 7 ? 'text-amber-600 font-bold' : ''}">${p.stock}</td>
+          <td class="py-3 px-3 ${left <= 7 ? 'font-bold' : ''}">${p.stock}</td>
           <td class="px-3">${d}/ngày</td>
           <td class="px-3">${left} ngày</td>
         </tr>`;

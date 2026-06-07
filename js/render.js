@@ -277,35 +277,35 @@ PAGES.optimization = () => {
   return modulePage('Tối ưu', 'Growth Optimizers', 'Tối ưu danh mục, ngân sách, KOC, nội dung và khuyến mãi', `
     <div class="grid lg:grid-cols-2 gap-6">
       ${card('Tối ưu danh mục sản phẩm', `
-        <div class="space-y-3">
-          <div class="p-3 bg-green-50 rounded-lg"><p class="font-medium text-sm flex items-center gap-2">${icon('arrow-up-circle',14,'text-green-600')} Mở rộng: Serum VC, Kem chống nắng</p><p class="text-xs text-slate-600">Tăng tồn kho +30%, tăng ngân sách quảng cáo</p></div>
-          <div class="p-3 bg-amber-50 rounded-lg"><p class="font-medium text-sm flex items-center gap-2">${icon('sliders-horizontal',14,'text-amber-600')} Tối ưu: Mặt nạ Collagen</p><p class="text-xs text-slate-600">Nhập kho khẩn + chuyển quảng cáo sang Affiliate</p></div>
-          <div class="p-3 bg-red-50 rounded-lg"><p class="font-medium text-sm flex items-center gap-2">${icon('wrench',14,'text-red-600')} Sửa: Son dưỡng môi P006</p><p class="text-xs text-slate-600">Cập nhật tin đăng + tuân thủ</p></div>
+        <div class="ds-stack-sm">
+          ${dsTip('success', 'Mở rộng: Serum VC, Kem chống nắng', 'Tăng tồn kho +30%, tăng ngân sách quảng cáo')}
+          ${dsTip('warning', 'Tối ưu: Mặt nạ Collagen', 'Nhập kho khẩn + chuyển quảng cáo sang Affiliate')}
+          ${dsTip('danger', 'Sửa: Son dưỡng môi P006', 'Cập nhật tin đăng + tuân thủ')}
         </div>`)}
       ${card('Khám phá & gợi ý KOC', `
-        <div class="space-y-3">
-          <div class="p-3 border rounded-lg"><p class="font-medium text-sm">@skintips_daily — Khớp 87%</p><p class="text-xs text-slate-600">ROI 3.5x · Gợi ý: Nâng hạng Trung bình → Vĩ mô</p></div>
-          <div class="p-3 border rounded-lg"><p class="font-medium text-sm">@newcreator_test — Khớp 32%</p><p class="text-xs text-slate-600">Chưa tạo nội dung · Gợi ý: Chờ hoặc cắt</p></div>
+        <div class="ds-stack-sm">
+          <div class="ds-action-row"><div class="ds-action-row-main"><p class="ds-action-row-title">@skintips_daily — Khớp 87%</p><p class="ds-action-row-desc">ROI 3.5x · Nâng hạng Trung bình → Vĩ mô</p></div></div>
+          <div class="ds-action-row"><div class="ds-action-row-main"><p class="ds-action-row-title">@newcreator_test — Khớp 32%</p><p class="ds-action-row-desc">Chưa tạo nội dung · Chờ hoặc cắt</p></div></div>
         </div>`)}
       ${card('Nhân rộng nội dung thành công', `
         <p class="text-sm text-slate-600 mb-3">Phân tích video thành công và đề xuất nhân rộng:</p>
-        <div class="p-3 bg-zzp-50 rounded-lg"><p class="font-medium">Pattern: "Routine 3 bước" (V001)</p><p class="text-xs mt-1">→ Tạo 3 video tương tự với K002, K005, K001</p><p class="text-xs text-green-600 mt-1">Dự kiến +18M GMV</p></div>`)}
+        ${dsTip('brand', 'Pattern: "Routine 3 bước" (V001)', 'Tạo 3 video tương tự với K002, K005, K001 · Dự kiến +18M GMV')}`)}
       ${card('Tối ưu chiến dịch & ngân sách', `
-        <div class="space-y-2 text-sm">
-          <div class="flex justify-between p-2 bg-slate-50 rounded"><span>Spark Ads Serum VC</span><span class="text-green-600">+30% ngân sách</span></div>
-          <div class="flex justify-between p-2 bg-slate-50 rounded"><span>Quảng cáo sản phẩm Mặt nạ</span><span class="text-red-600">Tạm dừng · chuyển 8M sang Affiliate</span></div>
-          <div class="flex justify-between p-2 bg-slate-50 rounded"><span>Flash Sale 6/6 Bundle</span><span class="text-blue-600">Tạo bundle P001+P005</span></div>
+        <div class="ds-stack-sm">
+          <div class="ds-action-row"><div class="ds-action-row-main"><p class="ds-action-row-title">Spark Ads Serum VC</p></div><span class="ds-action-row-val">+30% ngân sách</span></div>
+          <div class="ds-action-row"><div class="ds-action-row-main"><p class="ds-action-row-title">Quảng cáo sản phẩm Mặt nạ</p></div><span class="ds-action-row-val">Tạm dừng · chuyển 8M</span></div>
+          <div class="ds-action-row"><div class="ds-action-row-main"><p class="ds-action-row-title">Flash Sale 6/6 Bundle</p></div><span class="ds-action-row-val">Bundle P001+P005</span></div>
         </div>`)}
       ${card('Tự động hóa chiến lược giảm giá', `
         <p class="text-sm text-slate-600">AI đề xuất chiến lược giá tối ưu:</p>
-        <div class="mt-3 space-y-2 text-sm">
+        <div class="mt-3 space-y-2 text-sm text-slate-700">
           <p>• BEAUTY20: Giữ nguyên (ROAS tốt)</p>
           <p>• NEW50K: Giảm xuống 30K (CVR thấp)</p>
           <p>• Voucher chỉ live 15% cho Mega Live 6/6</p>
         </div>`)}
       ${card('Giữ chân khách hàng', `
-        <p class="text-sm text-slate-600">Chiến dịch thu hút lại 456 KH có nguy cơ rời:</p>
-        <div class="mt-3 p-3 bg-blue-50 rounded-lg text-sm"><p class="font-medium">Gửi voucher FREESHIP + Mini Kit 99K</p><p class="text-xs text-slate-500 mt-1">Dự kiến thu hút lại 12% · +8,5M GMV</p></div>`)}
+        <p class="text-sm text-slate-600 mb-3">Chiến dịch thu hút lại 456 KH có nguy cơ rời:</p>
+        ${dsTip('brand', 'Gửi voucher FREESHIP + Mini Kit 99K', 'Dự kiến thu hút lại 12% · +8,5M GMV')}`)}
     </div>`);
 };
 
