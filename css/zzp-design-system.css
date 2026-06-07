@@ -86,11 +86,21 @@ body.zzp-app {
 }
 
 .zzp-sidebar-brand {
-  padding: var(--ds-space-5) var(--ds-space-5) var(--ds-space-4);
+  padding: 18px 20px 14px;
   border-bottom: 1px solid var(--ds-border);
 }
 
-.zzp-brand-lockup { display: flex; align-items: center; gap: 12px; }
+.zzp-brand-lockup {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+  width: 100%; padding: 0; border: none; background: none;
+  cursor: pointer; text-align: left; font-family: inherit;
+}
+.zzp-brand-lockup:hover .zzp-brand-logo { opacity: .88; }
+
+.zzp-brand-logo {
+  display: block; width: auto; height: 36px; max-width: 100%;
+  object-fit: contain;
+}
 
 .zzp-brand-icon {
   width: 42px; height: 42px;
@@ -102,7 +112,7 @@ body.zzp-app {
 }
 
 .zzp-brand-title { margin: 0; font-size: 16px; font-weight: 700; color: var(--ds-text); letter-spacing: -.02em; }
-.zzp-brand-sub { margin: 2px 0 0; font-size: 11px; color: var(--ds-text-muted); }
+.zzp-brand-sub { margin: 0; font-size: 11px; color: var(--ds-text-muted); line-height: 1.35; }
 
 .zzp-nav { flex: 1; overflow-y: auto; padding: 12px 10px; }
 .zzp-nav-section { margin-bottom: 16px; }

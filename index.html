@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ZZP — Nền tảng vận hành TikTok Shop</title>
+  <link rel="icon" href="assets/logo.png" type="image/png">
   <link rel="stylesheet" href="css/zzp-design-system.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -27,13 +28,10 @@
   <div id="app" class="zzp-shell">
     <aside id="sidebar" class="zzp-sidebar">
       <div class="zzp-sidebar-brand">
-        <div class="zzp-brand-lockup">
-          <div class="zzp-brand-icon"><i data-lucide="layers" class="w-5 h-5"></i></div>
-          <div>
-            <h1 class="zzp-brand-title">Nền tảng ZZP</h1>
-            <p class="zzp-brand-sub">Vận hành TikTok Shop</p>
-          </div>
-        </div>
+        <button type="button" class="zzp-brand-lockup" onclick="navigate('dashboard')" aria-label="ZZP — Tổng quan">
+          <img src="assets/logo.png" alt="ZZP" class="zzp-brand-logo" width="256" height="108">
+          <p class="zzp-brand-sub">Vận hành TikTok Shop</p>
+        </button>
       </div>
       <nav id="nav-menu" class="zzp-nav"></nav>
       <div class="zzp-sidebar-foot">Bản demo v2.0 · Dữ liệu mẫu</div>
