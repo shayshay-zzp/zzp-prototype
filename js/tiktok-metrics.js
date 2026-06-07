@@ -336,11 +336,11 @@ function getModuleMetrics(pageId) {
     ],
     executive: [
       { l: 'GMV', v: fmt(s.gmv), highlight: true },
-      { l: 'Settlement', v: fmt(f.settlementAmount) },
+      { l: 'Thanh toán đã nhận', v: fmt(f.settlementAmount) },
       { l: 'OAV', v: fmtCurrency(s.avgOrderValue) },
-      { l: 'Units sold', v: s.unitsSold.toLocaleString('vi-VN') },
-      { l: 'Gross revenue', v: fmt(s.grossRevenue) },
-      { l: 'Platform fee', v: fmt(f.feeAmount) }
+      { l: 'Số lượng bán', v: s.unitsSold.toLocaleString('vi-VN') },
+      { l: 'Doanh thu gộp', v: fmt(s.grossRevenue) },
+      { l: 'Phí nền tảng', v: fmt(f.feeAmount) }
     ],
     revenue: [
       { l: 'GMV tổng', v: fmt(s.gmv), highlight: true },
@@ -351,12 +351,12 @@ function getModuleMetrics(pageId) {
       { l: 'Page views', v: fmt(s.productPageViews) }
     ],
     profit: [
-      { l: 'Net sales', v: fmt(f.netSalesAmount), highlight: true },
-      { l: 'Settlement', v: fmt(f.settlementAmount) },
-      { l: 'Aff commission', v: fmt(f.affiliateCommission) },
-      { l: 'Platform fee', v: fmt(f.platformCommission) },
-      { l: 'Unsettled', v: fmt(f.unsettledAmount), color: 'text-amber-600' },
-      { l: 'Margin', v: calcProfit().margin + '%', color: 'text-green-600' }
+      { l: 'Doanh thu thuần', v: fmt(f.netSalesAmount), highlight: true },
+      { l: 'Thanh toán đã nhận', v: fmt(f.settlementAmount) },
+      { l: 'Hoa hồng affiliate', v: fmt(f.affiliateCommission) },
+      { l: 'Phí nền tảng', v: fmt(f.platformCommission) },
+      { l: 'Chưa quyết toán', v: fmt(f.unsettledAmount) },
+      { l: 'Biên lợi nhuận', v: calcProfit().margin + '%' }
     ],
     affiliate: [
       { l: 'Aff GMV', v: fmt(a.totalGmv), highlight: true },
@@ -479,12 +479,12 @@ function getModuleMetrics(pageId) {
       { l: 'Benchmark', v: '4.8%', sub: '↓ tốt hơn' }
     ],
     finance: [
-      { l: 'Settlement', v: fmt(f.settlementAmount), highlight: true },
-      { l: 'Revenue', v: fmt(f.revenueAmount) },
-      { l: 'Fees', v: fmt(f.feeAmount) },
-      { l: 'Unsettled', v: fmt(f.unsettledAmount), color: 'text-amber-600' },
-      { l: 'Aff comm', v: fmt(f.affiliateCommission) },
-      { l: 'Shipping', v: fmt(f.shippingCostAmount) }
+      { l: 'Thanh toán đã nhận', v: fmt(f.settlementAmount), highlight: true },
+      { l: 'Doanh thu', v: fmt(f.revenueAmount) },
+      { l: 'Phí', v: fmt(f.feeAmount) },
+      { l: 'Chưa quyết toán', v: fmt(f.unsettledAmount) },
+      { l: 'Hoa hồng affiliate', v: fmt(f.affiliateCommission) },
+      { l: 'Phí vận chuyển', v: fmt(f.shippingCostAmount) }
     ],
     costs: [
       { l: 'COGS', v: fmt(ZZP_DATA.costs.cogs) },
@@ -561,7 +561,7 @@ function renderTtsMetricsStrip(pageId, opts = {}) {
         ${metrics.map(m => `
           <div class="ds-metric-cell${m.highlight ? ' ds-metric-cell--highlight' : ''}">
             <p class="ds-metric-cell-val${m.highlight || m.color ? ' is-brand' : ''}">${m.v}</p>
-            <p class="ds-metric-cell-lbl">${m.l}</p>
+            <p class="ds-metric-cell-lbl">${typeof viMetric === 'function' ? viMetric(m.l) : m.l}</p>
             ${m.sub ? `<p class="ds-metric-cell-sub">${m.sub}</p>` : ''}
           </div>`).join('')}
       </div>
@@ -699,18 +699,10 @@ function renderTtsBreakdownTable(pageId) {
 
 function renderTtsFinanceStrip() {
   const f = TTS_METRICS.finance;
-  return `
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
-      ${[
-        ['Settlement', fmt(f.settlementAmount), TTS_API.statements],
-        ['Platform commission', fmt(f.platformCommission), 'platform_commission_amount'],
-        ['Affiliate commission', fmt(f.affiliateCommission), 'affiliate_commission_amount'],
-        ['Unsettled', fmt(f.unsettledAmount), TTS_API.transactions]
-      ].map(([l, v, api]) => `
-        <div class="p-3 rounded-lg border border-slate-100 bg-slate-50/50">
-          <p class="text-slate-500">${l}</p>
-          <p class="font-bold text-slate-800 mt-0.5">${v}</p>
-          <p class="text-[9px] text-slate-400 font-mono mt-1 truncate">${api}</p>
-        </div>`).join('')}
-    </div>`;
+  return dsStatGrid([
+    { label: 'Thanh toán đã nhận', value: fmt(f.settlementAmount), hint: 'Quyết toán kỳ gần nhất', tone: 'brand' },
+    { label: 'Phí nền tảng', value: fmt(f.platformCommission), tone: 'warning' },
+    { label: 'Hoa hồng affiliate', value: fmt(f.affiliateCommission), tone: 'info' },
+    { label: 'Chưa quyết toán', value: fmt(f.unsettledAmount), hint: f.unsettledOrders + ' đơn chờ', tone: 'danger' }
+  ]);
 }

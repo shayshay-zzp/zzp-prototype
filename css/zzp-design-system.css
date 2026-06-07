@@ -434,20 +434,48 @@ body.zzp-app {
 .ds-tab-panel { display: flex; flex-direction: column; gap: 14px; }
 
 .ds-tab-brief {
-  margin-bottom: 12px;
-  padding: 10px 14px;
-  background: var(--ds-bg-subtle);
+  margin-bottom: 14px;
+  background: var(--ds-surface);
   border: 1px solid var(--ds-border);
-  border-radius: var(--ds-radius-md);
+  border-radius: var(--ds-radius-lg);
+  overflow: hidden;
 }
-.ds-tab-brief--compact .ds-tab-brief-line {
-  margin: 0; font-size: 13px; line-height: 1.45; color: var(--ds-text);
+.ds-tab-brief-head { padding: 14px 16px 12px; }
+.ds-tab-brief-goal {
+  margin: 0; font-size: 14px; font-weight: 600; line-height: 1.45;
+  letter-spacing: -.01em; color: var(--ds-text);
 }
-.ds-tab-brief--compact .ds-tab-brief-meta {
-  margin: 4px 0 0; font-size: 11px; line-height: 1.45; color: var(--ds-text-muted);
+.ds-tab-brief-role {
+  margin: 5px 0 0; font-size: 11px; line-height: 1.4; color: var(--ds-text-muted);
 }
-.ds-tab-brief--compact .ds-tab-brief-meta strong {
-  font-weight: 600; color: var(--ds-text-secondary);
+.ds-tab-brief-cols {
+  display: grid; grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--ds-border-subtle);
+  background: var(--ds-bg-subtle);
+}
+@media (max-width: 640px) {
+  .ds-tab-brief-cols { grid-template-columns: 1fr; }
+  .ds-tab-brief-col + .ds-tab-brief-col { border-left: none; border-top: 1px solid var(--ds-border-subtle); }
+}
+.ds-tab-brief-col { padding: 12px 16px 14px; min-width: 0; }
+.ds-tab-brief-col + .ds-tab-brief-col { border-left: 1px solid var(--ds-border-subtle); }
+.ds-tab-brief-label {
+  margin: 0 0 8px; font-size: 10px; font-weight: 700;
+  letter-spacing: .07em; text-transform: uppercase; color: var(--ds-text-muted);
+}
+.ds-tab-brief-items {
+  margin: 0; padding-left: 1.15em;
+  list-style: disc; font-size: 12px; line-height: 1.55; color: var(--ds-text);
+}
+.ds-tab-brief-items li { padding-left: 2px; }
+.ds-tab-brief-items li + li { margin-top: 6px; }
+.ds-tab-brief-items li::marker { color: var(--ds-text-muted); font-size: .85em; }
+.ds-tab-brief-empty { list-style: none; padding-left: 0; color: var(--ds-text-muted); font-style: italic; }
+.ds-tab-brief-note {
+  margin: 0; padding: 10px 16px 12px;
+  border-top: 1px solid var(--ds-border-subtle);
+  font-size: 11px; line-height: 1.55; color: var(--ds-text-muted);
+  background: var(--ds-surface);
 }
 
 /* ── Kanban board (flex — tránh grid min-width chồng cột) ── */
@@ -967,6 +995,20 @@ body.zzp-app {
 .ui-badge--dark { background: var(--ds-text); color: #fff; }
 .ui-badge--ads { background: var(--ds-accent); color: #fff; }
 .ui-badge--affiliate { background: var(--ds-brand); color: #fff; }
+
+.ds-filter-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.ds-filter-pill {
+  display: inline-flex; align-items: center;
+  padding: 6px 12px; border-radius: 999px;
+  border: 1px solid var(--ds-border); background: var(--ds-surface);
+  font-family: inherit; font-size: 12px; font-weight: 600;
+  color: var(--ds-text-secondary); cursor: pointer;
+  transition: background .12s, border-color .12s, color .12s;
+}
+.ds-filter-pill:hover { border-color: var(--ds-text-muted); color: var(--ds-text); }
+.ds-filter-pill.is-active {
+  background: var(--ds-text); border-color: var(--ds-text); color: #fff;
+}
 
 .ui-icon-box { display: inline-flex; align-items: center; justify-content: center; border-radius: 10px; flex-shrink: 0; }
 .ui-metric-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 4px; }

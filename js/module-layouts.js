@@ -21,6 +21,22 @@ function layoutPrdBadge(pageId) {
   return '';
 }
 
+let productLifecycleTab = 'all';
+
+function selectProductLifecycleTab(key) {
+  productLifecycleTab = key;
+  renderCurrentView();
+}
+
+function getProductLifecycleGroups() {
+  return {
+    all: ZZP_DATA.products,
+    active: ZZP_DATA.products.filter(p => p.status === 'active'),
+    low_stock: ZZP_DATA.products.filter(p => p.status === 'low_stock' || p.stock < 100),
+    review: ZZP_DATA.products.filter(p => p.status === 'review')
+  };
+}
+
 /* —— Onboarding: timeline dọc (khác dashboard lộ trình 3 bước) —— */
 function renderOnboardingTimeline() {
   return dsTimelineChecklist(ZZP_DATA.checklist, renderChecklistRow);
@@ -335,28 +351,29 @@ function renderProductLifecycleMonitor() {
     { key: 'low_stock', label: 'Sắp hết' },
     { key: 'review', label: 'Chờ duyệt' }
   ];
-  const groups = {
-    all: ZZP_DATA.products,
-    active: ZZP_DATA.products.filter(p => p.status === 'active'),
-    low_stock: ZZP_DATA.products.filter(p => p.status === 'low_stock' || p.stock < 100),
-    review: ZZP_DATA.products.filter(p => p.status === 'review')
-  };
+  const groups = getProductLifecycleGroups();
+  const activeKey = groups[productLifecycleTab] ? productLifecycleTab : 'all';
+  const list = groups[activeKey];
   const statusUi = {
     active: { border: 'border-slate-200', badge: 'ok' },
     low_stock: { border: 'border-slate-300', badge: 'critical' },
     review: { border: 'border-slate-200', badge: 'purple' }
   };
   return `
-    <div class="mb-4 flex flex-wrap gap-2">
-      ${tabs.map(t => `<span class="ui-badge ${t.key === 'all' ? 'ui-badge--brand' : 'ui-badge--muted'}">${t.label} (${groups[t.key].length})</span>`).join('')}
+    <div class="ds-filter-pills mb-4">
+      ${tabs.map(t => `
+        <button type="button" onclick="selectProductLifecycleTab('${t.key}')"
+          class="ds-filter-pill${activeKey === t.key ? ' is-active' : ''}"
+          aria-pressed="${activeKey === t.key}">
+          ${t.label} (${groups[t.key].length})
+        </button>`).join('')}
     </div>
     <div class="ui-card-grid">
-      ${ZZP_DATA.products.map(p => {
+      ${list.length ? list.map(p => {
         const margin = ((p.price - p.cost) / p.price * 100).toFixed(0);
         const ui = statusUi[p.status] || { border: 'border-slate-200', badge: 'muted' };
-        const marginTone = '';
         return `
-        <button type="button" onclick="openDetail('product','${p.id}')" class="ui-product-card text-left p-4 rounded-xl border ${ui.border} bg-white hover:border-slate-300 transition-colors">
+        <button type="button" onclick="openDetail('product','${p.id}')" class="ui-product-card text-left p-4 rounded-xl border ${ui.border} bg-white hover:border-slate-300 transition-colors cursor-pointer">
           <div class="flex items-start gap-3">
             <div class="shrink-0">${productThumb(p, 16)}</div>
             <div class="flex-1 min-w-0">
@@ -371,10 +388,10 @@ function renderProductLifecycleMonitor() {
             <div class="ui-metric-cell"><p class="val">${fmtCurrency(p.price).replace('₫', '').trim()}</p><p class="lbl">Giá</p></div>
             <div class="ui-metric-cell"><p class="val ${p.stock < 100 ? 'font-bold' : ''}">${p.stock}</p><p class="lbl">Tồn</p></div>
             <div class="ui-metric-cell"><p class="val">${p.sold30d}</p><p class="lbl">Bán 30d</p></div>
-            <div class="ui-metric-cell"><p class="val ${marginTone}">${margin}%</p><p class="lbl">Margin</p></div>
+            <div class="ui-metric-cell"><p class="val">${margin}%</p><p class="lbl">Margin</p></div>
           </div>
         </button>`;
-      }).join('')}
+      }).join('') : '<p class="text-sm text-slate-500 col-span-full py-8 text-center">Không có sản phẩm trong nhóm này</p>'}
     </div>`;
 }
 
